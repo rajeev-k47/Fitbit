@@ -21,22 +21,30 @@ import net.runner.fitbit.userDetails.UserDetailComposable
 
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
+    private var email =""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val intent = intent
+        val emailLink = intent.data.toString()
         auth = Firebase.auth
+        if(email.isNotEmpty()){
+            chechAuth(email,emailLink,auth)
+        }
         setContent {
             FitbitTheme {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = "signUpScreen"
+                    startDestination = if (auth.currentUser==null)"signUpScreen" else "userPreferencesData"
                 ) {
                     composable(route = "signUpScreen") {
-                        SignUpComposable(navController, activity = this@MainActivity)
+                        SignUpComposable(navController, activity = this@MainActivity){data ->
+                            email=data
+                        }
                     }
-                    composable(route = "userDetails") {
+                    composable(route = "userPreferencesData") {
                         UserDetailComposable(navController)
                     }
 
@@ -71,3 +79,18 @@ class MainActivity : ComponentActivity() {
 
 }
 
+fun chechAuth(email:String,emailLink:String,auth: FirebaseAuth){
+    if (auth.isSignInWithEmailLink(emailLink)) {
+        auth.signInWithEmailLink(email, emailLink)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("TAG","Successfully signed in with email link!")
+                    val result = task.result
+                    Log.d("gri",result.toString())
+                } else {
+                    Log.e("TAG","Error signing in with email link", task.exception)
+                }
+            }
+    }
+
+}
