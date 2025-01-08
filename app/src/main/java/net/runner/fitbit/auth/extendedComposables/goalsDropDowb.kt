@@ -30,6 +30,56 @@ import net.runner.fitbit.ui.theme.lightText
 
 @Composable
 fun DropdownMenuGoals(
+    selectedOptions: Set<String>,
+    options: List<String>,
+    onOptionSelected: (Set<String>) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier.fillMaxWidth()) {
+        TextButton(
+            onClick = { expanded = true},
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.textButtonColors(
+                contentColor = lightText
+            ),
+            border = BorderStroke(1.dp, lightText),
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Text("Goal Type : ", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(selectedOptions.joinToString(", "), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Icon(imageVector = Icons.Filled.KeyboardArrowDown, contentDescription = "")
+            }
+        }
+
+
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.background(background.copy(0.7f))
+        ) {
+
+            options.forEach { option ->
+                val isSelected = option in selectedOptions
+                DropdownMenuItem(text = { Text(option) }, onClick = {
+                    val newSelection = if (isSelected) {
+                        selectedOptions - option
+                    } else {
+                        selectedOptions + option
+                    }
+                    onOptionSelected(newSelection)
+                },
+
+                )
+            }
+        }
+    }
+}
+@Composable
+fun DropdownMenuGoalsTime(
     selectedOption: String,
     options: List<String>,
     onOptionSelected: (String) -> Unit
@@ -49,7 +99,7 @@ fun DropdownMenuGoals(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                Text("Goal Type : ", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text("Time Frame : ", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 Text(selectedOption, fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Icon(imageVector = Icons.Filled.KeyboardArrowDown, contentDescription = "")
             }
@@ -67,7 +117,7 @@ fun DropdownMenuGoals(
                     expanded = false
                 },
 
-                )
+                    )
             }
         }
     }
