@@ -1,5 +1,6 @@
 package net.runner.fitbit
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -29,23 +30,35 @@ class MainActivity : ComponentActivity() {
         val intent = intent
         val emailLink = intent.data.toString()
         auth = Firebase.auth
+
         if(email.isNotEmpty()){
             chechAuth(email,emailLink,auth)
         }
+        val sharedPreferences = this.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        val userExists =
+            try {
+                sharedPreferences.getString("user_exists_${auth.currentUser?.uid.toString()}", null)
+            } catch (e: Exception) {
+                "false"
+            }
+
         setContent {
             FitbitTheme {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = if (auth.currentUser==null)"signUpScreen" else "userPreferencesData"
+                    startDestination = if (auth.currentUser==null)"signUpScreen" else if (userExists == "true") "dashBoardBuddy" else "userDetails"
                 ) {
                     composable(route = "signUpScreen") {
                         SignUpComposable(navController, activity = this@MainActivity){data ->
                             email=data
                         }
                     }
-                    composable(route = "userPreferencesData") {
+                    composable(route = "userDetails") {
                         UserDetailComposable(navController)
+                    }
+                    composable(route = "dashBoardBuddy") {
+
                     }
 
                 }
