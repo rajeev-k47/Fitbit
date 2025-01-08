@@ -28,7 +28,8 @@ fun DatabaseEntryBuddy(
         "email" to email,
         "gender" to gender,
         "timeFrame" to timeFrame,
-        "targetValue" to targetValue
+        "targetValue" to targetValue,
+        "accountType" to "Workoutbuddy"
     )
 
     db.collection("users")
@@ -38,7 +39,7 @@ fun DatabaseEntryBuddy(
            onresult("success")
             val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
             val editor = sharedPreferences.edit()
-            editor.putString("user_exists_${auth.uid}", true.toString())
+            editor.putString("user_exists_${auth.uid}", "buddy")
             editor.apply()
 
         }
