@@ -65,7 +65,7 @@ fun SignUpComposable(navController: NavController,activity: Activity,returnData:
         val authListener = FirebaseAuth.AuthStateListener{ auth ->
             val user = auth.currentUser
             if (user != null) {
-                navController.navigate("userPreferencesData") {
+                navController.navigate("userDetails") {
                     popUpTo("signUpScreen") { inclusive = true }
                 }
             }
