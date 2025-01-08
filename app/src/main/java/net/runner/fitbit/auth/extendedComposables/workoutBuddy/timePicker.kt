@@ -1,4 +1,4 @@
-package net.runner.fitbit.auth.extendedComposables
+package net.runner.fitbit.auth.extendedComposables.workoutBuddy
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults

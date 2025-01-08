@@ -1,7 +1,5 @@
 package net.runner.fitbit.userDetails
 
-import android.util.Log
-import android.util.Patterns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -10,7 +8,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,12 +20,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
@@ -53,12 +44,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.launch
 import net.runner.fitbit.R
-import net.runner.fitbit.auth.authFunctions.EmailLinkAuth
-import net.runner.fitbit.auth.extendedComposables.FitnessGoalsForm
-import net.runner.fitbit.auth.extendedComposables.Gender
-import net.runner.fitbit.auth.extendedComposables.OrganizerGoals
+import net.runner.fitbit.auth.extendedComposables.workoutBuddy.FitnessGoalsForm
+import net.runner.fitbit.auth.extendedComposables.workoutBuddy.Gender
+import net.runner.fitbit.auth.extendedComposables.organizer.OrganizerGoals
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
@@ -76,8 +65,8 @@ fun UserDetailComposable(navController: NavController) {
         }
     }
 
-    var WorkoutBuddy by remember { mutableStateOf(false) }
-    var Organizer by remember { mutableStateOf(false) }
+    var WorkoutBuddy by rememberSaveable { mutableStateOf(false) }
+    var Organizer by rememberSaveable { mutableStateOf(false) }
 
     LazyColumn(
         modifier = Modifier
@@ -115,7 +104,6 @@ fun UserDetailComposable(navController: NavController) {
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .size(150.dp)
-                        .padding(16.dp)
                         .border(2.dp, Color.Gray, CircleShape)
                         .clip(CircleShape)
                         .clickable { pickImage.launch("image/*") }
@@ -164,7 +152,6 @@ fun UserDetailComposable(navController: NavController) {
                 value = email!!,
                 onValueChange = {},
                 readOnly = true,
-                placeholder = { Text(text = "Email", color = lightBlueText, fontSize = 17.sp) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
@@ -199,7 +186,7 @@ fun UserDetailComposable(navController: NavController) {
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "Workout Buddy", color = lightText, fontSize = 17.sp)
+                    Text(text = "Workout Buddy", color = lightText, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                     Checkbox(
                         checked = WorkoutBuddy,
                         onCheckedChange = {
@@ -215,7 +202,7 @@ fun UserDetailComposable(navController: NavController) {
                     )
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "Organizer", color = lightText, fontSize = 17.sp)
+                    Text(text = "Organizer", color = lightText, fontSize = 17.sp, fontWeight = FontWeight.Bold)
                     Checkbox(
                         checked = Organizer,
                         onCheckedChange = {
@@ -236,7 +223,7 @@ fun UserDetailComposable(navController: NavController) {
             item { FitnessGoalsForm(username ,email!!,gender,navController) }
         }
         if (Organizer) {
-            item { OrganizerGoals() }
+            item { OrganizerGoals(username ,email!!,gender,navController) }
         }
     }
 }
