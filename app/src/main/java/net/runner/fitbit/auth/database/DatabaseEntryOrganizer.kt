@@ -1,0 +1,43 @@
+package net.runner.fitbit.auth.database
+
+import android.content.Context
+import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import net.runner.fitbit.auth.extendedComposables.organizer.OrganizerGroupData
+
+fun DataBaseEntryOrganizer(
+    groupData: OrganizerGroupData,
+    facilities:Set<String>,
+    orgStartTime:String,
+    orgEndTime: String,
+    context: Context,
+    onresult: (String) -> Unit
+) {
+    val auth = FirebaseAuth.getInstance()
+    val db = FirebaseFirestore.getInstance()
+
+    val userData = hashMapOf(
+        "email" to auth.currentUser?.email.toString()
+        ,"facilities" to facilities.toList()
+        ,"groupData" to groupData
+        ,"orgStartTime" to orgStartTime
+        ,"orgEndTime" to orgEndTime
+        ,"accountType" to "Organizer"
+    )
+
+    db.collection("users")
+        .document(auth.uid.toString())
+        .set(userData)
+        .addOnSuccessListener { documentReference ->
+            Log.d("TAG", "DocumentSnapshot added with ID: ${documentReference.toString()}")
+            onresult("success")
+            val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putString("user_exists_${auth.uid}", "org")
+            editor.apply()
+        }
+        .addOnFailureListener { e ->
+            Log.w("TAG", "Error adding document", e)
+        }
+}
