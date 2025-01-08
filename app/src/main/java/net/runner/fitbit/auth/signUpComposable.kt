@@ -1,5 +1,6 @@
 package net.runner.fitbit.auth
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,11 +31,13 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,18 +45,24 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import net.runner.fitbit.R
+import net.runner.fitbit.auth.authFunctions.gOauthClient
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpComposable(navController: NavController) {
+fun SignUpComposable(navController: NavController,activity: Activity) {
+    val context = LocalContext.current
 
     var emailText by rememberSaveable {
         mutableStateOf("")
     }
+    val coroutineScope = rememberCoroutineScope()
 
     Box (
         modifier = Modifier
@@ -109,7 +118,14 @@ fun SignUpComposable(navController: NavController) {
                         shape = RoundedCornerShape(12.dp),
                         colors = CardDefaults.cardColors(
                             containerColor = Color.White
-                        )
+                        ),
+                        onClick = {
+                            println("scope")
+                            coroutineScope.launch(Dispatchers.Main) {
+
+                                gOauthClient(activity)
+                            }
+                        }
 
                     ) {
                         Row(
