@@ -1,4 +1,5 @@
 [versions]
+accompanistCoil = "0.13.0"
 agp = "8.5.2"
 kotlin = "1.9.0"
 coreKtx = "1.15.0"
@@ -15,6 +16,7 @@ navigationCompose = "2.8.5"
 firebaseAuthKtx = "23.1.0"
 
 [libraries]
+accompanist-coil = { module = "com.google.accompanist:accompanist-coil", version.ref = "accompanistCoil" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
