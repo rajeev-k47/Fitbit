@@ -1,4 +1,4 @@
-package net.runner.fitbit.auth.extendedComposables
+package net.runner.fitbit.auth.extendedComposables.workoutBuddy
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -12,7 +12,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -32,6 +31,7 @@ import net.runner.fitbit.ui.theme.lightText
 fun DropdownMenuGoals(
     selectedOptions: Set<String>,
     options: List<String>,
+    org:Boolean,
     onOptionSelected: (Set<String>) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -49,7 +49,7 @@ fun DropdownMenuGoals(
                 verticalAlignment = Alignment.CenterVertically
             ) {
 
-                Text("Goal Type : ", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(if (org){"Facilities : "}else{"Goal Type : "}, fontSize = 16.sp, fontWeight = FontWeight.Bold)
                 Text(selectedOptions.joinToString(", "), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Icon(imageVector = Icons.Filled.KeyboardArrowDown, contentDescription = "")
             }
