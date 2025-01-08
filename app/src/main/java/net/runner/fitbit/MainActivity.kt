@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = if (auth.currentUser==null)"signUpScreen" else if (userExists == "true") "dashBoardBuddy" else "userDetails"
+                    startDestination = if (auth.currentUser==null)"signUpScreen" else if (userExists == "buddy") "dashBoardBuddy" else if (userExists == "org") "dashBoardOrganizer" else "userDetails"
                 ) {
                     composable(route = "signUpScreen") {
                         SignUpComposable(navController, activity = this@MainActivity){data ->
@@ -58,6 +58,9 @@ class MainActivity : ComponentActivity() {
                         UserDetailComposable(navController)
                     }
                     composable(route = "dashBoardBuddy") {
+
+                    }
+                    composable(route = "dashBoardOrganizer") {
 
                     }
 
