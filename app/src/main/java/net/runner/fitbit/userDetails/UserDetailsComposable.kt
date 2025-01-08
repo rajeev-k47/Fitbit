@@ -1,5 +1,6 @@
 package net.runner.fitbit.userDetails
 
+import android.util.Log
 import android.util.Patterns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,12 +16,17 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -51,6 +57,7 @@ import kotlinx.coroutines.launch
 import net.runner.fitbit.R
 import net.runner.fitbit.auth.authFunctions.EmailLinkAuth
 import net.runner.fitbit.auth.extendedComposables.FitnessGoalsForm
+import net.runner.fitbit.auth.extendedComposables.Gender
 import net.runner.fitbit.auth.extendedComposables.OrganizerGoals
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightBlueText
@@ -59,10 +66,9 @@ import net.runner.fitbit.ui.theme.lightText
 @Composable
 fun UserDetailComposable(navController: NavController) {
     var imageUri by rememberSaveable { mutableStateOf<String?>(null) }
-    var username by rememberSaveable {
-        mutableStateOf("")
-    }
+    var username by rememberSaveable { mutableStateOf("") }
     val email = FirebaseAuth.getInstance().currentUser?.email
+    var gender by rememberSaveable { mutableStateOf("") }
 
     val pickImage = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
@@ -73,160 +79,164 @@ fun UserDetailComposable(navController: NavController) {
     var WorkoutBuddy by remember { mutableStateOf(false) }
     var Organizer by remember { mutableStateOf(false) }
 
-
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(background)){
-        Column (
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-        ){
-            Column (
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(background)
+            .statusBarsPadding(),
+        contentPadding = PaddingValues(horizontal = 30.dp, vertical = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        item {
+            Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .weight(0.1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ){
-
-                Text(text = "Details", modifier = Modifier.padding(10.dp), color = Color.White, fontWeight = FontWeight.Bold, fontSize = 26.sp)
-            }
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 30.dp)
-                    .weight(0.7f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-//                verticalArrangement = Arrangement.Center
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp),
+                contentAlignment = Alignment.Center
             ) {
-                if (imageUri != null) {
-                    Image(
-                        painter = rememberImagePainter(data = imageUri),
-                        contentDescription = "Selected User Image",
-                        contentScale = ContentScale.Crop
-                        ,
-                        modifier = Modifier
-                            .size(150.dp)
-                            .padding(16.dp)
-                            .border(2.dp, Color.Gray, CircleShape)
-                            .clip(CircleShape)
-                            .clickable { pickImage.launch("image/*") }
-                        ,
+                Text(
+                    text = "Details",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 26.sp
+                )
+            }
+
+        }
+        item {
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+        item {
+            if (imageUri != null) {
+                Image(
+                    painter = rememberImagePainter(data = imageUri),
+                    contentDescription = "Selected User Image",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(150.dp)
+                        .padding(16.dp)
+                        .border(2.dp, Color.Gray, CircleShape)
+                        .clip(CircleShape)
+                        .clickable { pickImage.launch("image/*") }
+                )
+            } else {
+                Image(
+                    painter = painterResource(id = R.drawable.user),
+                    contentDescription = "Default User Image",
+                    modifier = Modifier
+                        .size(150.dp)
+                        .clickable { pickImage.launch("image/*") },
+                    contentScale = ContentScale.Crop
+                )
+            }
+        }
+        item {
+            Spacer(modifier = Modifier.height(15.dp))
+        }
+        item {
+            TextField(
+                value = username,
+                onValueChange = { text -> username = text },
+                placeholder = { Text(text = "Name", color = lightBlueText, fontSize = 17.sp) },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = lightText.copy(alpha = 0.1f),
+                    unfocusedContainerColor = lightText.copy(alpha = 0.1f),
+                    focusedIndicatorColor = Color.Red.copy(alpha = 0.5f),
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                ),
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.username),
+                        contentDescription = "",
+                        modifier = Modifier.size(24.dp),
+                        tint = lightBlueText
                     )
                 }
-                else {
-                    Image(
-                        painter = painterResource(id = R.drawable.user),
-                        contentDescription = "Default User Image",
-                        modifier = Modifier
-                            .size(150.dp)
-                            .clickable { pickImage.launch("image/*") },
-                        contentScale = ContentScale.Crop
+            )
+        }
+        item {
+            TextField(
+                value = email!!,
+                onValueChange = {},
+                readOnly = true,
+                placeholder = { Text(text = "Email", color = lightBlueText, fontSize = 17.sp) },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = lightText.copy(alpha = 0.1f),
+                    unfocusedContainerColor = lightText.copy(alpha = 0.1f),
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    focusedTextColor = lightText.copy(alpha = 0.7f),
+                    unfocusedTextColor = lightText.copy(0.7f)
+                ),
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.mail),
+                        contentDescription = "",
+                        modifier = Modifier.size(24.dp),
+                        tint = lightBlueText
                     )
                 }
-
-                Spacer(modifier = Modifier.size(30.dp))
-
-                TextField(
-                    value = username,
-                    onValueChange = {text-> username = text},
-                    placeholder = {
-                        Text(text = "Name", color = lightBlueText, fontSize = 17.sp)
-                    },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = lightText.copy(alpha = 0.1f),
-                        unfocusedContainerColor = lightText.copy(alpha = 0.1f),
-                        focusedIndicatorColor = Color.Red.copy(alpha = 0.5f),
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                    ),
-                    leadingIcon = {
-                        Icon(painter = painterResource(id = R.drawable.username), contentDescription = "", modifier = Modifier.size(24.dp), tint = lightBlueText)
-                    }
-                )
-                Spacer(modifier = Modifier.size(10.dp))
-
-                TextField(
-                    value = email!!,
-                    onValueChange = {},
-                    readOnly = true,
-                    placeholder = {
-                        Text(text = "Email", color = lightBlueText, fontSize = 17.sp)
-                    },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = lightText.copy(alpha = 0.1f),
-                        unfocusedContainerColor = lightText.copy(alpha = 0.1f),
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        focusedTextColor = lightText.copy(alpha = 0.7f),
-                        unfocusedTextColor = lightText.copy(0.7f)
-                    ),
-                    leadingIcon = {
-                            Icon(painter = painterResource(id = R.drawable.mail), contentDescription = "", modifier = Modifier.size(24.dp), tint = lightBlueText)
-                    }
-                )
-                Spacer(modifier = Modifier.size(20.dp))
-                Row (
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceAround
-                ){
-                    Row (
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        Text(text = "Workout Buddy", color = lightText, fontSize = 17.sp)
-                        Checkbox(checked = WorkoutBuddy, onCheckedChange = {
-                            if(Organizer && !WorkoutBuddy){
-                                Organizer=!Organizer
+            )
+        }
+        item {
+            Gender{
+                gender=it
+            }
+        }
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceAround
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = "Workout Buddy", color = lightText, fontSize = 17.sp)
+                    Checkbox(
+                        checked = WorkoutBuddy,
+                        onCheckedChange = {
+                            if (Organizer && !WorkoutBuddy) {
+                                Organizer = !Organizer
                             }
-                            WorkoutBuddy= !WorkoutBuddy
-                        },colors = CheckboxDefaults.colors(
+                            WorkoutBuddy = !WorkoutBuddy
+                        },
+                        colors = CheckboxDefaults.colors(
                             checkedColor = lightBlueText,
                             uncheckedColor = lightText
-
-                        ))
-                    }
-                    Row (
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        Text(text = "Organizer", color = lightText, fontSize = 17.sp)
-                        Checkbox(
-                            checked = Organizer, onCheckedChange = {
-                                if(WorkoutBuddy && !Organizer){
-                                    WorkoutBuddy=!WorkoutBuddy
-                                }
-                                Organizer= !Organizer
-                               },
-                            colors = CheckboxDefaults.colors(
-                                checkedColor = lightBlueText,
-                                uncheckedColor = lightText
-
-                            )
                         )
-                    }
-
+                    )
                 }
-                Spacer(modifier = Modifier.size(20.dp))
-
-                if(WorkoutBuddy){
-                    FitnessGoalsForm()
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(text = "Organizer", color = lightText, fontSize = 17.sp)
+                    Checkbox(
+                        checked = Organizer,
+                        onCheckedChange = {
+                            if (WorkoutBuddy && !Organizer) {
+                                WorkoutBuddy = !WorkoutBuddy
+                            }
+                            Organizer = !Organizer
+                        },
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = lightBlueText,
+                            uncheckedColor = lightText
+                        )
+                    )
                 }
-                if(Organizer){
-                    OrganizerGoals()
-                }
-
-
-
             }
-
+        }
+        if (WorkoutBuddy) {
+            item { FitnessGoalsForm(username ,email!!,gender,navController) }
+        }
+        if (Organizer) {
+            item { OrganizerGoals() }
         }
     }
 }
