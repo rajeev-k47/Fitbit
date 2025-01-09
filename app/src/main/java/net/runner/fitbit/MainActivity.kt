@@ -21,6 +21,7 @@ import net.runner.fitbit.auth.database.checkIfAccountExists
 import net.runner.fitbit.sharedPreference.getTempEmail
 import net.runner.fitbit.sharedPreference.removeTempEmail
 import net.runner.fitbit.sharedPreference.tempEmailSignUp
+import net.runner.fitbit.splashScreen.splashScreen
 import net.runner.fitbit.ui.theme.FitbitTheme
 import net.runner.fitbit.userDetails.UserDetailComposable
 
@@ -38,18 +39,11 @@ class MainActivity : ComponentActivity() {
         if(email.isNotEmpty()&&emailLink.toString().isNotEmpty()){
             chechAuth(email,emailLink?.query.toString(),auth,this@MainActivity)
         }
-        val sharedPreferences = this.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val userExists =
-            try {
-                sharedPreferences.getString("user_exists_${auth.currentUser?.uid.toString()}", null)
-            } catch (e: Exception) {
-                "false"
-            }
 
         setContent {
             FitbitTheme {
                 val navController = rememberNavController()
-                var startDestination = "signUpScreen"
+                var startDestination = "splashScreen"
                 if (auth.currentUser != null) {
                     checkIfAccountExists(auth.currentUser!!.email?:""){exists, accountType ->
                         if (exists) {
@@ -63,11 +57,16 @@ class MainActivity : ComponentActivity() {
                             startDestination = "userDetails"
                         }
                     }
+                }else{
+                    startDestination = "signUpScreen"
                 }
                 NavHost(
                     navController = navController,
                     startDestination = startDestination
                 ) {
+                    composable(route = "splashScreen") {
+                        splashScreen()
+                    }
                     composable(route = "signUpScreen") {
                         SignUpComposable(navController, activity = this@MainActivity)
                     }
