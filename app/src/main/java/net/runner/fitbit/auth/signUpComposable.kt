@@ -1,6 +1,7 @@
 package net.runner.fitbit.auth
 
 import android.app.Activity
+import android.util.Log
 import android.util.Patterns
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,21 +54,41 @@ import kotlinx.coroutines.launch
 import net.runner.fitbit.R
 import net.runner.fitbit.auth.authFunctions.EmailLinkAuth
 import net.runner.fitbit.auth.authFunctions.gOauthClient
+import net.runner.fitbit.auth.database.checkIfAccountExists
+import net.runner.fitbit.sharedPreference.tempEmailSignUp
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpComposable(navController: NavController,activity: Activity,returnData:(String)->Unit) {
+fun SignUpComposable(navController: NavController,activity: Activity) {
     val auth = FirebaseAuth.getInstance()
+    var accountstatus by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
 
     DisposableEffect(auth) {
         val authListener = FirebaseAuth.AuthStateListener{ auth ->
             val user = auth.currentUser
             if (user != null) {
-                navController.navigate("userDetails") {
-                    popUpTo("signUpScreen") { inclusive = true }
+                checkIfAccountExists(user.email.toString()){status,type->
+                    accountstatus=status
+                    Log.d("TAG","$accountstatus")
+                    if(accountstatus){
+                        if(type=="buddy"){
+
+                            navController.navigate("dashBoardBuddy"){
+                                popUpTo("signUpScreen") { inclusive =true }
+                            }
+                        }else{
+                            navController.navigate("dashBoardOrganizer"){
+                                popUpTo("signUpScreen") { inclusive =true }
+                            }
+                        }
+                    }else{
+                        navController.navigate("userDetails") {
+                            popUpTo("signUpScreen"){inclusive = true }
+                        }
+                    }
                 }
             }
         }
@@ -198,7 +220,7 @@ fun SignUpComposable(navController: NavController,activity: Activity,returnData:
                                         if(Patterns.EMAIL_ADDRESS.matcher(emailText).matches()){
                                             coroutineScope.launch{
                                                 EmailLinkAuth(emailText)
-                                                returnData(emailText)
+                                                tempEmailSignUp(emailText,context)
                                             }
                                         }
                                     },
