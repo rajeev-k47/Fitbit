@@ -32,10 +32,10 @@ fun DataBaseEntryOrganizer(
         .addOnSuccessListener { documentReference ->
             Log.d("TAG", "DocumentSnapshot added with ID: ${documentReference.toString()}")
             onresult("success")
-            val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.putString("user_exists_${auth.uid}", "org")
-            editor.apply()
+//            val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+//            val editor = sharedPreferences.edit()
+//            editor.putString("user_exists_${auth.uid}", "org")
+//            editor.apply()
         }
         .addOnFailureListener { e ->
             Log.w("TAG", "Error adding document", e)
