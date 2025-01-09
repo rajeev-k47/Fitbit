@@ -37,10 +37,6 @@ fun DatabaseEntryBuddy(
         .set(userData)
         .addOnSuccessListener { documentReference ->
            onresult("success")
-            val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.putString("user_exists_${auth.uid}", "buddy")
-            editor.apply()
 
         }
         .addOnFailureListener { e ->
