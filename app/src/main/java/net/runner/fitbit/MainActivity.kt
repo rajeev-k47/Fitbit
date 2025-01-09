@@ -17,6 +17,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import net.runner.fitbit.auth.SignUpComposable
+import net.runner.fitbit.sharedPreference.getTempEmail
+import net.runner.fitbit.sharedPreference.removeTempEmail
+import net.runner.fitbit.sharedPreference.tempEmailSignUp
 import net.runner.fitbit.ui.theme.FitbitTheme
 import net.runner.fitbit.userDetails.UserDetailComposable
 
@@ -28,11 +31,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         val intent = intent
-        val emailLink = intent.data.toString()
+        val emailLink = intent.data
+        email = getTempEmail(this@MainActivity).toString()
         auth = Firebase.auth
-
-        if(email.isNotEmpty()){
-            chechAuth(email,emailLink,auth)
+        if(email.isNotEmpty()&&emailLink.toString().isNotEmpty()){
+            chechAuth(email,emailLink?.query.toString(),auth,this@MainActivity)
         }
         val sharedPreferences = this.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
         val userExists =
@@ -50,9 +53,7 @@ class MainActivity : ComponentActivity() {
                     startDestination = if (auth.currentUser==null)"signUpScreen" else if (userExists == "buddy") "dashBoardBuddy" else if (userExists == "org") "dashBoardOrganizer" else "userDetails"
                 ) {
                     composable(route = "signUpScreen") {
-                        SignUpComposable(navController, activity = this@MainActivity){data ->
-                            email=data
-                        }
+                        SignUpComposable(navController, activity = this@MainActivity)
                     }
                     composable(route = "userDetails") {
                         UserDetailComposable(navController)
@@ -95,18 +96,21 @@ class MainActivity : ComponentActivity() {
 
 }
 
-fun chechAuth(email:String,emailLink:String,auth: FirebaseAuth){
+fun chechAuth(email:String,emailLink:String,auth: FirebaseAuth,context: Context){
     if (auth.isSignInWithEmailLink(emailLink)) {
         auth.signInWithEmailLink(email, emailLink)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d("TAG","Successfully signed in with email link!")
                     val result = task.result
+                    removeTempEmail(context)
                     Log.d("gri",result.toString())
                 } else {
                     Log.e("TAG","Error signing in with email link", task.exception)
                 }
             }
+    }else{
+        Log.d("TAG","Not signed in with email link")
     }
 
 }
