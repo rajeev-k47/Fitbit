@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import net.runner.fitbit.auth.SignUpComposable
+import net.runner.fitbit.auth.database.checkIfAccountExists
 import net.runner.fitbit.sharedPreference.getTempEmail
 import net.runner.fitbit.sharedPreference.removeTempEmail
 import net.runner.fitbit.sharedPreference.tempEmailSignUp
@@ -48,9 +49,24 @@ class MainActivity : ComponentActivity() {
         setContent {
             FitbitTheme {
                 val navController = rememberNavController()
+                var startDestination = "signUpScreen"
+                if (auth.currentUser != null) {
+                    checkIfAccountExists(auth.currentUser!!.email?:""){exists, accountType ->
+                        if (exists) {
+                            Log.d("gri",accountType.toString())
+                            startDestination = when (accountType) {
+                                "Workoutbuddy"-> "dashBoardBuddy"
+                                "Organizer"-> "dashBoardOrganizer"
+                                else-> "userDetails"
+                            }
+                        } else {
+                            startDestination = "userDetails"
+                        }
+                    }
+                }
                 NavHost(
                     navController = navController,
-                    startDestination = if (auth.currentUser==null)"signUpScreen" else if (userExists == "buddy") "dashBoardBuddy" else if (userExists == "org") "dashBoardOrganizer" else "userDetails"
+                    startDestination = startDestination
                 ) {
                     composable(route = "signUpScreen") {
                         SignUpComposable(navController, activity = this@MainActivity)
