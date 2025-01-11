@@ -27,6 +27,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import net.runner.fitbit.WorkoutBuddyDashBoard.TopAppBar.Chatbot.ChatbotPanel
 import net.runner.fitbit.OrganizerDashboard.OrganizerDashBoard
 import net.runner.fitbit.Profiles.ProfileBuddy
 import net.runner.fitbit.WorkoutBuddyDashBoard.WorkoutBuddyDashBoard
@@ -104,6 +105,10 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(route = "profileBuddy") {
                         ProfileBuddy(navController,this@MainActivity)
+
+                    }
+                    composable(route = "chatBot") {
+                        ChatbotPanel(navController)
 
                     }
 
