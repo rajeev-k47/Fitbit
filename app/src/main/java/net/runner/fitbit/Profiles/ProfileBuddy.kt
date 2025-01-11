@@ -1,6 +1,8 @@
 package net.runner.fitbit.Profiles
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -22,6 +24,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -43,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -59,6 +63,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import net.runner.fitbit.Database.getUserData
 import net.runner.fitbit.R
 import net.runner.fitbit.auth.database.getProfileImageUrl
+import net.runner.fitbit.supportedconnections
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
@@ -174,7 +179,7 @@ fun ProfileBuddy(navController: NavController,context:Context) {
                             .diskCachePolicy(CachePolicy.ENABLED)
                             .build(),
                         modifier = Modifier
-                            .fillMaxWidth(0.25f)
+                            .width(100.dp)
                             .fillMaxHeight()
                             .clip(RoundedCornerShape(20.dp))
                             .border(
@@ -286,17 +291,46 @@ fun ProfileBuddy(navController: NavController,context:Context) {
                         Spacer(modifier = Modifier.height(20.dp))
 
                         if(userData["connections"] != null){
-                            for ((key, value) in userData["connections"] as Map<*, *>) {
-                                Log.d("userData", "Key: $key, Value: $value")
-                                Text(
-                                    text = "Connections : $value",
-                                    fontSize = 15.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.White,
-                                )
+                            Text(
+                                text = "Connections :",
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                            )
+                            val connections = userData["connections"] as Map<*, *>
+                            LazyRow(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                verticalAlignment = Alignment.CenterVertically){
+                                items(connections.size) {index->
+                                    val key = connections.keys.toList()[index]
+                                    val value = connections.values.toList()[index]
+
+                                    if(key.toString() in supportedconnections){
+                                        if(key=="instagram"){
+                                            connectionButton(context,"https://www.instagram.com/${value}",value.toString(), painterResource(id = R.drawable.instagram))
+                                        }
+                                        if (key=="x"){
+                                            connectionButton(context,"https://www.x.com/${value}",value.toString(), painterResource(id = R.drawable.x))
+                                        }
+                                        if (key=="facebook"){
+                                            connectionButton(context,"https://www.facebook.com/${value}",value.toString(), painterResource(id = R.drawable.facebook))
+                                        }
+                                        if (key=="linkedin"){
+                                            connectionButton(context,"https://www.linkedin.com/in/${value}",value.toString(), painterResource(id = R.drawable.linkedin))
+                                        }
+                                        if (key=="reddit"){
+                                            connectionButton(context,"https://www.reddit.com/user/${value}",value.toString(), painterResource(id = R.drawable.reddit))
+                                        }
+
+                                    }
+
+                                }
+
                             }
 
                         }
+
 
 
                     }
@@ -310,6 +344,37 @@ fun ProfileBuddy(navController: NavController,context:Context) {
     }
     }
 
+}
+
+@Composable
+fun connectionButton(context: Context,url: String,value: String,icon: Painter) {
+    Button(
+        onClick = {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            context.startActivity(intent)
+        },
+        contentPadding = PaddingValues(10.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = lightBlueText.copy(0.1f),
+        ),
+        border = BorderStroke(0.5.dp, Color.White.copy(0.2f))
+    ) {
+        Row (
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+
+            Image(
+                painter = icon,
+                contentDescription = "icon",
+                modifier = Modifier
+                    .size(22.dp)
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(text = "@${value}", color = lightText, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+        }
+    }
 }
 
 fun getFormatedTime(dateString: String): String {
