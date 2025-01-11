@@ -82,7 +82,10 @@ fun TopAppBarComposable(navController: NavController) {
                 Icon(
                     painter = painterResource(id = R.drawable.ai),
                     contentDescription = "ai",
-                    modifier = Modifier.size(26.dp).clip(CircleShape).padding(1.dp).clickable {  }
+                    modifier = Modifier.size(26.dp).clip(CircleShape).padding(1.dp).clickable {
+                        navController.navigate("chatBot")
+
+                    }
                     , tint = lightBlueText
                 )
                 Spacer(modifier = Modifier.width(6.dp))
