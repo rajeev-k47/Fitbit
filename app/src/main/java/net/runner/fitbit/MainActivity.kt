@@ -7,6 +7,11 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -16,6 +21,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import net.runner.fitbit.OrganizerDashboard.OrganizerDashBoard
+import net.runner.fitbit.WorkoutBuddyDashBoard.WorkoutBuddyDashBoard
 import net.runner.fitbit.auth.SignUpComposable
 import net.runner.fitbit.auth.database.checkIfAccountExists
 import net.runner.fitbit.sharedPreference.getTempEmail
@@ -43,7 +50,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             FitbitTheme {
                 val navController = rememberNavController()
-                var startDestination = "splashScreen"
+                var startDestination by rememberSaveable { mutableStateOf("splashScreen") }
                 if (auth.currentUser != null) {
                     checkIfAccountExists(auth.currentUser!!.email?:""){exists, accountType ->
                         if (exists) {
@@ -74,9 +81,10 @@ class MainActivity : ComponentActivity() {
                         UserDetailComposable(navController)
                     }
                     composable(route = "dashBoardBuddy") {
-
+                        WorkoutBuddyDashBoard()
                     }
                     composable(route = "dashBoardOrganizer") {
+                        OrganizerDashBoard()
 
                     }
 
