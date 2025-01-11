@@ -81,7 +81,7 @@ fun SignUpComposable(navController: NavController,activity: Activity) {
                     accountstatus=status
                     Log.d("TAG","$accountstatus")
                     if(accountstatus){
-                        if(type=="buddy"){
+                        if(type=="Workoutbuddy"){
 
                             navController.navigate("dashBoardBuddy"){
                                 popUpTo("signUpScreen") { inclusive =true }
@@ -127,7 +127,7 @@ fun SignUpComposable(navController: NavController,activity: Activity) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Image(painter = painterResource(id = R.drawable.logo_heading_cropped), contentDescription = "" )
+                Image(painter = painterResource(id = R.drawable.logo1), contentDescription = "" , modifier = Modifier.size(340.dp))
             }
             Column(
                 modifier = Modifier

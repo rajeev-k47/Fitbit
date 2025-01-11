@@ -1,24 +1,26 @@
 package net.runner.fitbit.splashScreen
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.navigation.NavController
-import kotlinx.coroutines.delay
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import net.runner.fitbit.R
 
 @Composable
 fun splashScreen() {
 
-    var timer by remember { mutableStateOf(2) }
-    LaunchedEffect(Unit) {
-        while (timer > 0) {
-            delay(1000)
-            timer--
-        }
-
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(Color.Black)){
+        Image(painter = painterResource(id = R.drawable.logo1), contentDescription = "Logo", modifier = Modifier.size(300.dp).align(Alignment.Center))
     }
+
 
 }
