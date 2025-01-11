@@ -2,6 +2,7 @@ package net.runner.fitbit
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -12,9 +13,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import coil.Coil
+import coil.ImageLoader
+import coil.request.CachePolicy
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.Firebase
@@ -22,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
 import net.runner.fitbit.OrganizerDashboard.OrganizerDashBoard
+import net.runner.fitbit.Profiles.ProfileBuddy
 import net.runner.fitbit.WorkoutBuddyDashBoard.WorkoutBuddyDashBoard
 import net.runner.fitbit.auth.SignUpComposable
 import net.runner.fitbit.auth.database.checkIfAccountExists
@@ -39,6 +46,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val imageLoader = ImageLoader.Builder(this)
+            .memoryCachePolicy(CachePolicy.ENABLED)
+            .diskCachePolicy(CachePolicy.ENABLED)
+            .build()
+
+        Coil.setImageLoader(imageLoader)
+
         val intent = intent
         val emailLink = intent.data
         email = getTempEmail(this@MainActivity).toString()
@@ -81,10 +96,14 @@ class MainActivity : ComponentActivity() {
                         UserDetailComposable(navController)
                     }
                     composable(route = "dashBoardBuddy") {
-                        WorkoutBuddyDashBoard()
+                        WorkoutBuddyDashBoard(navController)
                     }
                     composable(route = "dashBoardOrganizer") {
                         OrganizerDashBoard()
+
+                    }
+                    composable(route = "profileBuddy") {
+                        ProfileBuddy(navController,this@MainActivity)
 
                     }
 

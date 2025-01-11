@@ -1,5 +1,6 @@
 package net.runner.fitbit.auth.extendedComposables.workoutBuddy
 
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,7 +29,7 @@ import java.util.Locale
 @Composable
 fun FitnessGoalsForm(
     username:String,
-    email:String,
+    imageUri:Uri,
     gender:String,
     navController: NavController
 ) {
@@ -185,7 +186,7 @@ fun FitnessGoalsForm(
             val context = LocalContext.current
             Button(
                 onClick = {
-                    DatabaseEntryBuddy(goalType, selectedStartTime, selectedEndTime,username,email,gender,timeFrame,targetValue, context){
+                    DatabaseEntryBuddy(goalType, selectedStartTime, selectedEndTime,username,imageUri,gender,timeFrame,targetValue, context){
                         if(it=="success"){
                             navController.navigate("dashBoardBuddy"){
                                 popUpTo("userDetails") { inclusive = true }
