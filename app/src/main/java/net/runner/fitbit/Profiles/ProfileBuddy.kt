@@ -62,6 +62,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import net.runner.fitbit.Database.getUserData
 import net.runner.fitbit.R
+import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ExploreFragment.PeopleRelatedFeed
 import net.runner.fitbit.auth.database.getProfileImageUrl
 import net.runner.fitbit.supportedconnections
 import net.runner.fitbit.ui.theme.background
@@ -79,10 +80,6 @@ fun ProfileBuddy(navController: NavController,context:Context) {
     var userData by rememberSaveable {
         mutableStateOf(mutableMapOf<String, Any>())
     }
-//    var joiningDate by rememberSaveable {
-//        mutableStateOf("")
-//    }
-
 
     LaunchedEffect(Unit) {
         getProfileImageUrl{ url ->
@@ -90,13 +87,8 @@ fun ProfileBuddy(navController: NavController,context:Context) {
         }
         getUserData{
             userData = it
-            println(userData)
         }
     }
-//    LaunchedEffect(userData) {
-//        joiningDate=getFormatedTime(userData["joiningDate"].toString())
-//        Log.d("gri",userData["joiningDate"].toString())
-//    }
 
 
     Box(modifier = Modifier
@@ -140,7 +132,7 @@ fun ProfileBuddy(navController: NavController,context:Context) {
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.setting),
-                            contentDescription = "ai",
+                            contentDescription = "setting",
                             modifier = Modifier
                                 .size(20.dp)
                                 .clip(CircleShape)
