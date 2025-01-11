@@ -32,7 +32,7 @@ fun DatabaseEntryBuddy(
         "timeFrame" to timeFrame,
         "targetValue" to targetValue,
         "accountType" to "Workoutbuddy",
-        "joiningDate" to Calendar.getInstance().time,
+        "joiningDate" to Calendar.getInstance().time.toString(),
         "email" to auth.currentUser?.email.toString()
     )
 
