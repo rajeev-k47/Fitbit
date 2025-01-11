@@ -30,3 +30,10 @@ val statesOfIndia = listOf(
     "Uttarakhand",
     "West Bengal"
 )
+val supportedconnections = listOf(
+    "instagram",
+    "x",
+    "facebook",
+    "linkedin",
+    "reddit",
+)
