@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
+    id("kotlin-parcelize")
+
 }
 
 android {
@@ -25,6 +27,7 @@ android {
         val properties =  Properties()
         properties.load(project.rootProject.file("apikeys.properties").inputStream())
         buildConfigField("String","G_OAUTH_WEB_SERVER_CLIENT_ID","\"${properties.getProperty("G_OAUTH_WEB_SERVER_CLIENT_ID","")}\"")
+        buildConfigField("String","GENERATIVE_API_KEY","\"${properties.getProperty("GENERATIVE_API_KEY","")}\"")
     }
 
     buildTypes {
@@ -37,6 +40,7 @@ android {
             val properties =  Properties()
             properties.load(project.rootProject.file("apikeys.properties").inputStream())
             buildConfigField("String","G_OAUTH_WEB_SERVER_CLIENT_ID","\"${properties.getProperty("G_OAUTH_WEB_SERVER_CLIENT_ID","")}\"")
+            buildConfigField("String","GENERATIVE_API_KEY","\"${properties.getProperty("GENERATIVE_API_KEY","")}\"")
         }
     }
     compileOptions {
@@ -77,6 +81,7 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage.ktx)
     implementation(libs.play.services.location)
+    implementation(libs.generativeai)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -84,6 +89,7 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
 
