@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.storage.ktx)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -94,5 +95,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation ("io.github.shashank02051997:FancyToast:2.0.2")
+    implementation (libs.play.services.maps)
 
 }
