@@ -1,5 +1,6 @@
 package net.runner.fitbit.auth.extendedComposables.organizer
 
+import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.PressInteraction
@@ -44,14 +45,14 @@ data class OrganizerGroupData(
     var organizationState: String="",
     var organizationPostalCode: String="",
     var organizerName : String="",
-    var organizerEmail : String="",
+    var organizerImage : String="",
     var organizerGender : String="",
 )
 
 @Composable
 fun OrganizerCreateGroup(
     username: String,
-    email: String,
+    imageUri: Uri,
     gender: String,
     navController: NavController
 ) {
@@ -64,7 +65,6 @@ fun OrganizerCreateGroup(
             organizationState = "",
             organizationPostalCode = "",
             organizerName = username,
-            organizerEmail = email,
             organizerGender = gender
         ))
     }
@@ -257,7 +257,7 @@ fun OrganizerCreateGroup(
     }
     Spacer(modifier = Modifier.height(10.dp))
 
-    organizationWorkoutDetails(groupData,navController)
+    organizationWorkoutDetails(groupData,imageUri,navController)
 
 
 }

@@ -1,5 +1,6 @@
 package net.runner.fitbit.auth.extendedComposables.organizer
 
+import android.net.Uri
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,7 +44,7 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun organizationWorkoutDetails(groupData: OrganizerGroupData,navController: NavController) {
+fun organizationWorkoutDetails(groupData: OrganizerGroupData,imageUri: Uri,navController: NavController) {
     var facilities by rememberSaveable { mutableStateOf(setOf<String>()) }
     var orgStartTime by rememberSaveable { mutableStateOf("") }
     var orgEndTime by rememberSaveable { mutableStateOf("") }
@@ -165,11 +166,11 @@ fun organizationWorkoutDetails(groupData: OrganizerGroupData,navController: NavC
         onOptionSelected = { facilities = it }
     )
     Spacer(modifier = Modifier.height(30.dp))
-    if(groupData.organizationName.isNotEmpty()&&groupData.organizerEmail.isNotEmpty()&&groupData.organizationAddress.isNotEmpty()&&groupData.organizationCity.isNotEmpty()){
+    if(groupData.organizationName.isNotEmpty()&&groupData.organizationAddress.isNotEmpty()&&groupData.organizationCity.isNotEmpty()){
         val context = LocalContext.current
         Button(
             onClick = {
-                DataBaseEntryOrganizer(groupData, facilities, orgStartTime, orgEndTime, context){
+                DataBaseEntryOrganizer(groupData, facilities, orgStartTime, orgEndTime,imageUri,context){
                     if(it=="success"){
                         navController.navigate("dashBoardOrganizer"){
                             popUpTo("userDetails") { inclusive = true }

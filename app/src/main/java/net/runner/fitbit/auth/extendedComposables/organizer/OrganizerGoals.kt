@@ -1,5 +1,6 @@
 package net.runner.fitbit.auth.extendedComposables.organizer
 
+import android.net.Uri
 import android.util.Patterns
 import android.widget.Space
 import androidx.compose.foundation.layout.Arrangement
@@ -43,7 +44,7 @@ import net.runner.fitbit.ui.theme.lightText
 @Composable
 fun OrganizerGoals(
     username: String,
-    email: String,
+    imageUri: Uri,
     gender: String,
     navController: NavController
 ){
@@ -100,7 +101,7 @@ fun OrganizerGoals(
                 }
             }
         }else{
-            OrganizerCreateGroup(username,email,gender,navController)
+            OrganizerCreateGroup(username,imageUri,gender,navController)
         }
 
 
