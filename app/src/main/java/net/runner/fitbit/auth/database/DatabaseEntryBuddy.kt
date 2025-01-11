@@ -1,6 +1,7 @@
 package net.runner.fitbit.auth.database
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -10,7 +11,7 @@ fun DatabaseEntryBuddy(
     selectedStartTime: String,
     selectedEndTime: String,
     username: String,
-    email: String,
+    imageUri: Uri,
     gender: String,
     timeFrame: String,
     targetValue: String,
@@ -25,7 +26,6 @@ fun DatabaseEntryBuddy(
         "selectedStartTime" to selectedStartTime,
         "selectedEndTime" to selectedEndTime,
         "username" to username,
-        "email" to email,
         "gender" to gender,
         "timeFrame" to timeFrame,
         "targetValue" to targetValue,
@@ -37,6 +37,7 @@ fun DatabaseEntryBuddy(
         .set(userData)
         .addOnSuccessListener { documentReference ->
            onresult("success")
+           profileImageSaving(imageUri = imageUri)
 
         }
         .addOnFailureListener { e ->
