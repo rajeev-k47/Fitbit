@@ -48,7 +48,7 @@ data class NavigationItem(
 )
 
 @Composable
-fun BottomNavigationbarComposable(modifier: Modifier) {
+fun BottomNavigationbarComposable(modifier: Modifier,onselected:(String) -> Unit) {
 
     var selectedItem by rememberSaveable { mutableStateOf("Home") }
 
@@ -58,33 +58,37 @@ fun BottomNavigationbarComposable(modifier: Modifier) {
             label = "Home",
             filledIcon = painterResource(id = R.drawable.home_filled),
             unfilledIcon = painterResource(id = R.drawable.home_unfilled),
-            onclick = {}
+            onclick = {onselected("Home")}
         ),
         NavigationItem(
             label = "Explore",
             filledIcon = painterResource(id = R.drawable.explore_filled),
             unfilledIcon = painterResource(id = R.drawable.explore_unfilled),
             onclick = {
-                Log.d("TAG", "Explore clicked")
+                onselected("Explore")
             }
         ),
         NavigationItem(
             label = "",
             onclick = {
-
+                onselected("Create")
             }
         ),
         NavigationItem(
             label = "Activity",
             filledIcon = painterResource(id = R.drawable.activity_filled),
             unfilledIcon = painterResource(id = R.drawable.activity_unfilled),
-            onclick =   {}
+            onclick = {
+                onselected("Activity")
+            }
         ),
         NavigationItem(
             label = "Groups",
             filledIcon = painterResource(id = R.drawable.group_filled),
             unfilledIcon = painterResource(id = R.drawable.group_unfilled),
-            onclick = {}
+            onclick = {
+                onselected("Groups")
+            }
         )
     )
 
