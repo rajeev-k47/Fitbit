@@ -5,6 +5,8 @@ import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import net.runner.fitbit.auth.UserLocation.saveUserLocation
+import java.util.Calendar
 
 fun DatabaseEntryBuddy(
     goalType: Set<String>,
@@ -29,7 +31,9 @@ fun DatabaseEntryBuddy(
         "gender" to gender,
         "timeFrame" to timeFrame,
         "targetValue" to targetValue,
-        "accountType" to "Workoutbuddy"
+        "accountType" to "Workoutbuddy",
+        "joiningDate" to Calendar.getInstance().time,
+        "email" to auth.currentUser?.email.toString()
     )
 
     db.collection("users")
@@ -37,7 +41,10 @@ fun DatabaseEntryBuddy(
         .set(userData)
         .addOnSuccessListener { documentReference ->
            onresult("success")
-           profileImageSaving(imageUri = imageUri)
+            Log.d("gri",imageUri.toString())
+            profileImageSaving(imageUri = imageUri)
+            saveUserLocation(context)
+
 
         }
         .addOnFailureListener { e ->
