@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -216,6 +217,88 @@ fun ProfileBuddy(navController: NavController,context:Context) {
                             fontWeight = FontWeight.Bold,
                             color = lightText.copy(1f),
                         )
+                        Spacer(modifier = Modifier.height(15.dp))
+                        Row (
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Start,
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
+                            Text(
+                                text = "${userData["followers"].toString()} ",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                            )
+
+                            Text(
+                                text = "Followers",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = lightText.copy(1f),
+                            )
+                            Spacer(modifier = Modifier.width(5.dp))
+                            Text(
+                                text = "${userData["following"].toString()} ",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                            )
+
+                            Text(
+                                text = "Following",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = lightText.copy(1f),
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        Button(
+                            onClick = {
+
+                            },
+                            contentPadding = PaddingValues(10.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = lightBlueText.copy(0.1f),
+                            ),
+                            border = BorderStroke(0.5.dp, Color.White)
+                        ) {
+                            Row (
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+
+                                Icon(
+                                    imageVector = Icons.Default.Edit,
+                                    contentDescription = "ai",
+                                    modifier = Modifier
+                                        .size(22.dp)
+                                        .clip(CircleShape)
+                                        .padding(1.dp)
+                                    , tint = Color.White
+                                )
+                                Spacer(modifier = Modifier.width(5.dp))
+                                Text(text = "Edit Profile", color = Color.White, fontSize = 15.sp)
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(20.dp))
+
+                        if(userData["connections"] != null){
+                            for ((key, value) in userData["connections"] as Map<*, *>) {
+                                Log.d("userData", "Key: $key, Value: $value")
+                                Text(
+                                    text = "Connections : $value",
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                )
+                            }
+
+                        }
+
+
                     }
 
 
