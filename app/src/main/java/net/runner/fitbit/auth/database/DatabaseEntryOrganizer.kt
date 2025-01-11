@@ -1,6 +1,7 @@
 package net.runner.fitbit.auth.database
 
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -11,7 +12,7 @@ fun DataBaseEntryOrganizer(
     facilities:Set<String>,
     orgStartTime:String,
     orgEndTime: String,
-    context: Context,
+    imageUri:Uri,
     onresult: (String) -> Unit
 ) {
     val auth = FirebaseAuth.getInstance()
@@ -30,8 +31,9 @@ fun DataBaseEntryOrganizer(
         .document(auth.uid.toString())
         .set(userData)
         .addOnSuccessListener { documentReference ->
-            Log.d("TAG", "DocumentSnapshot added with ID: ${documentReference.toString()}")
             onresult("success")
+            profileImageSaving(imageUri)
+
 //            val sharedPreferences = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 //            val editor = sharedPreferences.edit()
 //            editor.putString("user_exists_${auth.uid}", "org")
