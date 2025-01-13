@@ -28,6 +28,7 @@ android {
         properties.load(project.rootProject.file("apikeys.properties").inputStream())
         buildConfigField("String","G_OAUTH_WEB_SERVER_CLIENT_ID","\"${properties.getProperty("G_OAUTH_WEB_SERVER_CLIENT_ID","")}\"")
         buildConfigField("String","GENERATIVE_API_KEY","\"${properties.getProperty("GENERATIVE_API_KEY","")}\"")
+        buildConfigField("String","DISTANCE_MATRIX_API_KEY","\"${properties.getProperty("DISTANCE_MATRIX_API_KEY","")}\"")
     }
 
     buildTypes {
@@ -41,6 +42,7 @@ android {
             properties.load(project.rootProject.file("apikeys.properties").inputStream())
             buildConfigField("String","G_OAUTH_WEB_SERVER_CLIENT_ID","\"${properties.getProperty("G_OAUTH_WEB_SERVER_CLIENT_ID","")}\"")
             buildConfigField("String","GENERATIVE_API_KEY","\"${properties.getProperty("GENERATIVE_API_KEY","")}\"")
+            buildConfigField("String","DISTANCE_MATRIX_API_KEY","\"${properties.getProperty("DISTANCE_MATRIX_API_KEY","")}\"")
         }
     }
     compileOptions {
