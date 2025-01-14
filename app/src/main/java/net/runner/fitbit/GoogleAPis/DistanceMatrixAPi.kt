@@ -7,10 +7,11 @@ import org.json.JSONObject
 import java.io.IOException
 
 fun fetchDistanceMatrix(
+    personEmail:String,
     origins: String,
     destinations: String,
     apiKey: String,
-    onSuccess: (distance: String,duration: String) -> Unit,
+    onSuccess: (distance: String,duration: String,email: String) -> Unit,
     onError: (Exception) -> Unit
 ) {
     val client = OkHttpClient()
@@ -39,7 +40,7 @@ fun fetchDistanceMatrix(
                         val element = elements.getJSONObject(0)
                         val distance = element.getJSONObject("distance").getString("text")
                         val duration = element.getJSONObject("duration").getString("text")
-                        onSuccess(distance, duration)
+                        onSuccess(distance, duration,personEmail)
                     } catch (e: Exception) {
                         onError(e)
                     }
