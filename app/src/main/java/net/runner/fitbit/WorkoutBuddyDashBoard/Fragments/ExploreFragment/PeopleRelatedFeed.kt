@@ -18,7 +18,7 @@ fun PeopleRelatedFeed(
 
             for (document in querySnapshot.documents) {
                 val userData = document.data
-                if(userData?.get("email")== FirebaseAuth.getInstance().currentUser?.email)continue
+                if(userData?.get("email")== FirebaseAuth.getInstance().currentUser?.email || userData?.get("accountType")!="Workoutbuddy")continue
                 val userGoals = userData?.get("goalType") as? List<String>?:continue
                 val matchingGoals = userGoals.intersect(currentUserGoals.toSet())
                 val similarityScore = matchingGoals.size
