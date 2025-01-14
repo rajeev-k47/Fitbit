@@ -154,7 +154,7 @@ fun ExploreFragmentComposable() {
         }
 
 
-        ExploreContent()
+        ExploreContent(selectedFilter,typeFilerPeopleSelected)
 
 
 
