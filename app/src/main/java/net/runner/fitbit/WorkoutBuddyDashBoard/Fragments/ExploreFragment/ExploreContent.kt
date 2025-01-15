@@ -84,34 +84,34 @@ fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean) {
             val personL = person.first["userLocation"] as MutableMap<String, String>
             val personLatitude = personL["latitude"].toString()
             val personLongitude = personL["longitude"].toString()
-            fetchDistanceMatrix(person.first["email"].toString(),"$latitude,$longitude","$personLatitude,$personLongitude",BuildConfig.DISTANCE_MATRIX_API_KEY, onSuccess = {
-                    pdistance, _,personemail ->
-                Log.d("gtr",pdistance)
-                peopleNearFeed = peopleNearFeed.map{
-                    if (it.personData.first["email"].toString() == personemail) {
-                        it.copy(distance = pdistance)
-                    } else {
-                        it
-                    }
-                }.sortedBy { person ->
-                    val distanceString = person.distance.trim()
-                    when {
-                        distanceString.endsWith("km") -> {
-                            distanceString.replace(" km", "").toDoubleOrNull()?.times(1000)
-                        }
-                        distanceString.endsWith("m") -> {
-                            distanceString.replace(" m", "").toDoubleOrNull()
-                        }
-                        else -> {
-                            Double.MAX_VALUE
-                        }
-                    } ?: Double.MAX_VALUE
-                }
-                Log.d("gtr", "Updated list: $peopleNearFeed")
-            }
-            ){
-                println(it)
-            }
+//            fetchDistanceMatrix(person.first["email"].toString(),"$latitude,$longitude","$personLatitude,$personLongitude",BuildConfig.DISTANCE_MATRIX_API_KEY, onSuccess = {
+//                    pdistance, _,personemail ->
+//                Log.d("gtr",pdistance)
+//                peopleNearFeed = peopleNearFeed.map{
+//                    if (it.personData.first["email"].toString() == personemail) {
+//                        it.copy(distance = pdistance)
+//                    } else {
+//                        it
+//                    }
+//                }.sortedBy { person ->
+//                    val distanceString = person.distance.trim()
+//                    when {
+//                        distanceString.endsWith("km") -> {
+//                            distanceString.replace(" km", "").toDoubleOrNull()?.times(1000)
+//                        }
+//                        distanceString.endsWith("m") -> {
+//                            distanceString.replace(" m", "").toDoubleOrNull()
+//                        }
+//                        else -> {
+//                            Double.MAX_VALUE
+//                        }
+//                    } ?: Double.MAX_VALUE
+//                }
+//                Log.d("gtr", "Updated list: $peopleNearFeed")
+//            }
+//            ){
+//                println(it)
+//            }
         }
     }
 
