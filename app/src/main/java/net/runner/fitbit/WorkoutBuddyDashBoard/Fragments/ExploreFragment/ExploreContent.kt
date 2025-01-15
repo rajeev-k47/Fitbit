@@ -1,5 +1,6 @@
 package net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ExploreFragment
 
+import android.os.Parcelable
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import kotlinx.android.parcel.Parcelize
 import net.runner.fitbit.BuildConfig
 import net.runner.fitbit.Database.getUserData
 import net.runner.fitbit.GoogleAPis.fetchDistanceMatrix
@@ -41,10 +43,11 @@ import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightText
 
+@Parcelize
 data class PeopleNearData(
     val personData: Pair<Map<String, Any>, Int>,
     var distance: String,
-)
+) : Parcelable
 
 @Composable
 fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean) {
@@ -154,12 +157,7 @@ fun PeopleExploreNearFeedCard(peopleNearData: PeopleNearData){
             modifier = Modifier
                 .padding(10.dp)
                 .size(58.dp)
-                .clip(RoundedCornerShape(15.dp))
-                .border(
-                    width = 1.dp,
-                    color = Color.White,
-                    shape = RoundedCornerShape(15.dp)
-                ),
+                .clip(RoundedCornerShape(15.dp)),
             contentScale = ContentScale.Crop
         )
 
@@ -222,12 +220,7 @@ fun PeopleExploreRelatedFeedCard(peopleData:List<Pair<Map<String, Any>, Int>>,in
                 modifier = Modifier
                     .padding(10.dp)
                     .size(58.dp)
-                    .clip(RoundedCornerShape(15.dp))
-                    .border(
-                        width = 1.dp,
-                        color = Color.White,
-                        shape = RoundedCornerShape(15.dp)
-                    ),
+                    .clip(RoundedCornerShape(15.dp)),
                 contentScale = ContentScale.Crop
             )
 
@@ -251,7 +244,7 @@ fun PeopleExploreRelatedFeedCard(peopleData:List<Pair<Map<String, Any>, Int>>,in
                         Spacer(modifier = Modifier.size(10.dp))
                     }
 
-                    Text(text = "Tagret : ${ peopleData[index].first["targetValue"].toString() }", color = Color.White, fontSize = 13.sp, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
+                    Text(text = "Target : ${ peopleData[index].first["targetValue"].toString() }", color = lightText, fontSize = 13.sp, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
                         .padding(end = 5.dp))
 
 //                    Text(text = "@${repo.owner!!.login!!}", color =BottomNavigationIconUnselected, fontSize = 15.sp)
