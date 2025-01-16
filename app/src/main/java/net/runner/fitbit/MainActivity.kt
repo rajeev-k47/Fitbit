@@ -34,6 +34,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.runner.fitbit.WorkoutBuddyDashBoard.TopAppBar.Chatbot.ChatbotPanel
 import net.runner.fitbit.OrganizerDashboard.OrganizerDashBoard
+import net.runner.fitbit.Profiles.EditProfileBuddy
 import net.runner.fitbit.Profiles.ProfileBuddy
 import net.runner.fitbit.WorkoutBuddyDashBoard.WorkoutBuddyDashBoard
 import net.runner.fitbit.auth.SignUpComposable
@@ -122,7 +123,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(route = "profileBuddy") {
                         ProfileBuddy(navController,this@MainActivity)
-
+                    }
+                    composable(route="editProfileScreen"){
+                        EditProfileBuddy(navController)
                     }
                     composable(route = "chatBot") {
                         ChatbotPanel(navController)

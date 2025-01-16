@@ -556,10 +556,14 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>){
                     .padding(horizontal = 10.dp, vertical = 3.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
+                    containerColor = lightText.copy(alpha = 0.1f),
                 ),
+                border = BorderStroke(
+                    0.5.dp,
+                    Color.White
+                )
             ) {
-                Text("Join", color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text("Join", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
 
         }
