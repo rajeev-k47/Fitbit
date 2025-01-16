@@ -8,7 +8,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +27,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -56,35 +54,26 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import coil.ImageLoader
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import coil.request.CachePolicy
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import net.runner.fitbit.Database.getUserData
 import net.runner.fitbit.R
-import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ExploreFragment.PeopleRelatedFeed
-import net.runner.fitbit.auth.database.getProfileImageUrl
 import net.runner.fitbit.supportedconnections
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Locale
 
 @Composable
 fun ProfileBuddy(navController: NavController,context:Context) {
     val auth = FirebaseAuth.getInstance()
-    var imageUrl by rememberSaveable{ mutableStateOf<String?>(null) }
 
     var userData by rememberSaveable {
         mutableStateOf(mutableMapOf<String, Any>())
     }
 
     LaunchedEffect(Unit) {
-        getProfileImageUrl{ url ->
-            imageUrl = url
-        }
         getUserData{
             userData = it
         }
@@ -161,9 +150,9 @@ fun ProfileBuddy(navController: NavController,context:Context) {
                         containerColor = lightText.copy(alpha = 0.1f)
                     )
                 ) {
-                    Log.d("debug-url",imageUrl.toString())
                     AsyncImage(
-                        model = imageUrl?.toUri() ?: auth.currentUser?.photoUrl,
+                        model = userData["profileImageUrl"].toString().toUri() ,
+//                            ?: auth.currentUser?.photoUrl,
                         contentDescription = "",
                         contentScale = ContentScale.Crop,
                         imageLoader = ImageLoader.Builder(context)
@@ -252,7 +241,9 @@ fun ProfileBuddy(navController: NavController,context:Context) {
 
                         Button(
                             onClick = {
-
+                                navController.navigate("editProfileScreen"){
+                                    popUpTo("profileBuddy"){ inclusive = true }
+                                }
                             },
                             contentPadding = PaddingValues(10.dp),
                             shape = RoundedCornerShape(12.dp),
