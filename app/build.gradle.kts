@@ -29,6 +29,7 @@ android {
         buildConfigField("String","G_OAUTH_WEB_SERVER_CLIENT_ID","\"${properties.getProperty("G_OAUTH_WEB_SERVER_CLIENT_ID","")}\"")
         buildConfigField("String","GENERATIVE_API_KEY","\"${properties.getProperty("GENERATIVE_API_KEY","")}\"")
         buildConfigField("String","DISTANCE_MATRIX_API_KEY","\"${properties.getProperty("DISTANCE_MATRIX_API_KEY","")}\"")
+        buildConfigField("String","ONESIGNAL_APP_ID","\"${properties.getProperty("ONESIGNAL_APP_ID","")}\"")
     }
 
     buildTypes {
@@ -43,6 +44,7 @@ android {
             buildConfigField("String","G_OAUTH_WEB_SERVER_CLIENT_ID","\"${properties.getProperty("G_OAUTH_WEB_SERVER_CLIENT_ID","")}\"")
             buildConfigField("String","GENERATIVE_API_KEY","\"${properties.getProperty("GENERATIVE_API_KEY","")}\"")
             buildConfigField("String","DISTANCE_MATRIX_API_KEY","\"${properties.getProperty("DISTANCE_MATRIX_API_KEY","")}\"")
+            buildConfigField("String","ONESIGNAL_APP_ID","\"${properties.getProperty("ONESIGNAL_APP_ID","")}\"")
         }
     }
     compileOptions {
@@ -104,5 +106,6 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation ("io.github.shashank02051997:FancyToast:2.0.2")
     implementation (libs.play.services.maps)
+    implementation ("com.onesignal:OneSignal:[5.0.0, 5.99.99]")
 
 }

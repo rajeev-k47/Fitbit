@@ -27,6 +27,11 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.onesignal.OneSignal
+import com.onesignal.debug.LogLevel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.runner.fitbit.WorkoutBuddyDashBoard.TopAppBar.Chatbot.ChatbotPanel
 import net.runner.fitbit.OrganizerDashboard.OrganizerDashBoard
 import net.runner.fitbit.Profiles.ProfileBuddy
@@ -40,6 +45,8 @@ import net.runner.fitbit.splashScreen.splashScreen
 import net.runner.fitbit.ui.theme.FitbitTheme
 import net.runner.fitbit.userDetails.UserDetailComposable
 
+val ONESIGNAL_APP_ID = BuildConfig.ONESIGNAL_APP_ID
+
 class MainActivity : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
     private var email =""
@@ -47,6 +54,16 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+
+        OneSignal.Debug.logLevel = LogLevel.VERBOSE
+
+        OneSignal.initWithContext(this, ONESIGNAL_APP_ID)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            OneSignal.Notifications.requestPermission(true)
+        }
+
 
         val imageLoader = ImageLoader.Builder(this)
             .memoryCachePolicy(CachePolicy.ENABLED)
