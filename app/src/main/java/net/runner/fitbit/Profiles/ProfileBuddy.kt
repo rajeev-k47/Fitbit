@@ -283,26 +283,26 @@ fun ProfileBuddy(navController: NavController,context:Context) {
                             val connections = userData["connections"] as Map<*, *>
                             LazyRow(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                horizontalArrangement = Arrangement.spacedBy(4.dp),
                                 verticalAlignment = Alignment.CenterVertically){
                                 items(connections.size) {index->
                                     val key = connections.keys.toList()[index]
                                     val value = connections.values.toList()[index]
 
                                     if(key.toString() in supportedconnections){
-                                        if(key=="instagram"){
+                                        if(key=="instagram" && value.toString().isNotEmpty()){
                                             connectionButton(context,"https://www.instagram.com/${value}",value.toString(), painterResource(id = R.drawable.instagram))
                                         }
-                                        if (key=="x"){
+                                        if (key=="x"&&value.toString().isNotEmpty()){
                                             connectionButton(context,"https://www.x.com/${value}",value.toString(), painterResource(id = R.drawable.x))
                                         }
-                                        if (key=="facebook"){
+                                        if (key=="facebook" && value.toString().isNotEmpty()){
                                             connectionButton(context,"https://www.facebook.com/${value}",value.toString(), painterResource(id = R.drawable.facebook))
                                         }
-                                        if (key=="linkedin"){
+                                        if (key=="linkedin" && value.toString().isNotEmpty()){
                                             connectionButton(context,"https://www.linkedin.com/in/${value}",value.toString(), painterResource(id = R.drawable.linkedin))
                                         }
-                                        if (key=="reddit"){
+                                        if (key=="reddit" && value.toString().isNotEmpty()){
                                             connectionButton(context,"https://www.reddit.com/user/${value}",value.toString(), painterResource(id = R.drawable.reddit))
                                         }
 
