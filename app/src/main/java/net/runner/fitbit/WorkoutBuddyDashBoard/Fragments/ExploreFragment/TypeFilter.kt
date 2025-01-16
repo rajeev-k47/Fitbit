@@ -24,6 +24,11 @@ fun TypeFilter(selected: Boolean, title:String, Icon: Painter, onClick: (Boolean
             Text(text = title, color = Color.White.copy(0.8f), fontWeight = FontWeight.Bold, fontSize = 14.sp)
         },
         selected = selected,
+        colors = FilterChipDefaults.filterChipColors(
+            containerColor = if (selected) Color.White.copy(0.2f) else Color.Transparent,
+            selectedContainerColor = Color.White.copy(0.2f),
+            selectedLeadingIconColor = Color.Red,
+        ),
         leadingIcon = if (selected) {
             {
                 Icon(
