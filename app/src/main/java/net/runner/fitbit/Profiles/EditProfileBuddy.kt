@@ -118,7 +118,9 @@ fun EditProfileBuddy(navController: NavController){
             targetValue = it["targetValue"].toString()
             selectedEndTime = it["selectedEndTime"].toString()
             selectedStartTime = it["selectedStartTime"].toString()
-            //todo connections = it["connections"]
+            if(it["connections"]!=null){
+                connections = it["connections"] as MutableMap<String, String>
+            }
         }
     }
 
@@ -136,6 +138,9 @@ fun EditProfileBuddy(navController: NavController){
 
                 Button(
                     onClick = {
+                        navController.navigate("profileBuddy"){
+                            popUpTo("editProfileBuddy") { inclusive =true }
+                        }
                     },
                     contentPadding = PaddingValues(10.dp),
                     modifier = Modifier
@@ -154,6 +159,10 @@ fun EditProfileBuddy(navController: NavController){
 
                 Button(
                     onClick = {
+                        editProfileSave(imageUri,name,goalType,timeFrame,targetValue,selectedStartTime,selectedEndTime,connections)
+                        navController.navigate("profileBuddy"){
+                            popUpTo("editProfileBuddy") { inclusive =true }
+                        }
                     },
                     contentPadding = PaddingValues(10.dp),
                     modifier = Modifier
@@ -573,3 +582,4 @@ fun EditProfileBuddy(navController: NavController){
     }
 
 }
+
