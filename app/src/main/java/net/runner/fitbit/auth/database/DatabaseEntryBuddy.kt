@@ -33,7 +33,9 @@ fun DatabaseEntryBuddy(
         "targetValue" to targetValue,
         "accountType" to "Workoutbuddy",
         "joiningDate" to Calendar.getInstance().time.toString(),
-        "email" to auth.currentUser?.email.toString()
+        "email" to auth.currentUser?.email.toString(),
+        "followers" to 0,
+        "following" to 0
     )
 
     db.collection("users")

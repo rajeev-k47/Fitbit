@@ -14,6 +14,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import net.runner.fitbit.WorkoutBuddyDashBoard.BottomNavigationbar.BottomNavigationbarComposable
+import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ActivityFragment.ActivityFragmentComposable
+import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.CreateFragment.createContent
 import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ExploreFragment.ExploreFragmentComposable
 import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.HomeFragment.HomeFragment
 import net.runner.fitbit.ui.theme.background
@@ -23,6 +25,9 @@ import net.runner.fitbit.ui.theme.lightText
 fun WorkoutBuddyDashBoard(navController:NavController){
     
     var currentFragment by rememberSaveable { mutableStateOf("Home") }
+    var modalState by rememberSaveable {
+        mutableStateOf(false)
+    }
     
     Box(modifier = Modifier
         .fillMaxSize()
@@ -36,19 +41,26 @@ fun WorkoutBuddyDashBoard(navController:NavController){
                 ExploreFragmentComposable()
             }
             "Activity" -> {
-                Text(text = "Activity", color = lightText)
+                ActivityFragmentComposable()
             }
             "Groups" -> {
                 
             }
-            "Create" -> {
-                Text(text = "Create", color = lightText)
+        }
+
+        if(modalState){
+            createContent(modalStatus = modalState) {
+                modalState=it
             }
         }
        
 
         BottomNavigationbarComposable(Modifier.align(Alignment.BottomCenter)){
-            currentFragment = it
+            if(it!="Create"){
+                currentFragment = it
+            }else{
+                modalState = true
+            }
         }
 
     }

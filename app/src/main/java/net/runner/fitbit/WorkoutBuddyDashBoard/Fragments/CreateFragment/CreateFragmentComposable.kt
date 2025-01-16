@@ -29,10 +29,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
@@ -56,7 +58,7 @@ fun createContent(modalStatus:Boolean,onDismiss:(Boolean)->Unit) {
                 }
             },
             sheetState = sheetState,
-            scrimColor = Color.Black.copy(0.1f),
+            scrimColor = Color.White.copy(0.05f),
             containerColor = background,
             modifier = Modifier
                 .wrapContentHeight()
@@ -92,7 +94,7 @@ fun createContent(modalStatus:Boolean,onDismiss:(Boolean)->Unit) {
                                     containerColor = lightBlueText.copy(0.1f),
                                 ),
                             ) {
-                                Icon(imageVector = Icons.Default.Add, contentDescription = "", modifier = Modifier.size(26.dp), tint = lightText)
+                                Icon(painter = if(label=="Create Post") painterResource(id = R.drawable.create_post) else painterResource(id = R.drawable.chat), contentDescription = "", modifier = Modifier.size(26.dp), tint = lightText)
                             }
                             Spacer(modifier = Modifier.height(5.dp))
                             Text(text = label, color = lightText, fontSize = 14.sp, fontWeight = FontWeight.Bold)

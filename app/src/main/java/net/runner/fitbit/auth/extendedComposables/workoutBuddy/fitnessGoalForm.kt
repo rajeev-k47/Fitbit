@@ -34,7 +34,7 @@ fun FitnessGoalsForm(
     navController: NavController
 ) {
     var goalType by remember { mutableStateOf(setOf<String>()) }
-    var targetValue by remember { mutableStateOf("5") }
+    var targetValue by remember { mutableStateOf("") }
     var timeFrame by remember { mutableStateOf("1 month") }
     var selectedStartTime by rememberSaveable { mutableStateOf("") }
     var selectedEndTime by rememberSaveable { mutableStateOf("") }
@@ -81,6 +81,9 @@ fun FitnessGoalsForm(
                 focusedTextColor = lightText.copy(alpha = 0.7f),
                 unfocusedTextColor = lightText.copy(0.7f)
             ),
+            placeholder = {
+                Text("e.g. Lose 5 Kg", color = lightBlueText.copy(0.4f))
+            },
             leadingIcon = {
                 Icon(painter = painterResource(id = R.drawable.dumbell), contentDescription = "", modifier = Modifier.size(24.dp), tint = lightBlueText)
             }

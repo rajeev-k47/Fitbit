@@ -166,7 +166,7 @@ fun organizationWorkoutDetails(groupData: OrganizerGroupData,imageUri: Uri,navCo
         onOptionSelected = { facilities = it }
     )
     Spacer(modifier = Modifier.height(30.dp))
-    if(groupData.organizationName.isNotEmpty()&&groupData.organizationAddress.isNotEmpty()&&groupData.organizationCity.isNotEmpty()){
+    if(groupData.organizationName.isNotEmpty()&&groupData.organizationAddress.isNotEmpty()&&groupData.organizationCity.isNotEmpty()&&facilities.isNotEmpty()){
         val context = LocalContext.current
         Button(
             onClick = {

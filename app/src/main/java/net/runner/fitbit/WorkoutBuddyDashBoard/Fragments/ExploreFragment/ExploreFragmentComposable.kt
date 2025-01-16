@@ -58,7 +58,7 @@ fun ExploreFragmentComposable() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 10.dp),
+            .padding(horizontal = 10.dp).padding(top = 5.dp),
         horizontalAlignment = Alignment.Start
     ){
 
