@@ -161,7 +161,7 @@ fun EditProfileBuddy(navController: NavController){
                     onClick = {
                         editProfileSave(imageUri,name,goalType,timeFrame,targetValue,selectedStartTime,selectedEndTime,connections)
                         navController.navigate("profileBuddy"){
-                            popUpTo("editProfileBuddy") { inclusive =true }
+                            popUpTo("editProfileScreen") { inclusive =true }
                         }
                     },
                     contentPadding = PaddingValues(10.dp),
