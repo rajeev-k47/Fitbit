@@ -86,6 +86,7 @@ dependencies {
     implementation(libs.firebase.storage.ktx)
     implementation(libs.play.services.location)
     implementation(libs.generativeai)
+    implementation(libs.firebase.messaging)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
