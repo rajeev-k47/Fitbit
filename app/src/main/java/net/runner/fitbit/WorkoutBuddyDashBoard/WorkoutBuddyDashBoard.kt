@@ -17,6 +17,7 @@ import net.runner.fitbit.WorkoutBuddyDashBoard.BottomNavigationbar.BottomNavigat
 import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ActivityFragment.ActivityFragmentComposable
 import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.CreateFragment.createContent
 import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ExploreFragment.ExploreFragmentComposable
+import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.GroupsFragment.GroupFragmentComposable
 import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.HomeFragment.HomeFragment
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightText
@@ -44,7 +45,7 @@ fun WorkoutBuddyDashBoard(navController:NavController){
                 ActivityFragmentComposable()
             }
             "Groups" -> {
-                
+                GroupFragmentComposable(navController)
             }
         }
 
