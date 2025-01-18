@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import com.google.firebase.firestore.FirebaseFirestore
 
 data class GroupStatus(
-    val groupId: String = "",
-    val status: String =""
+    val groupId: String,
+    val status: Any
 )
 fun SaveAndUpdateBuddyGroups(userId: String, group:GroupStatus) {
 
@@ -18,7 +18,9 @@ fun SaveAndUpdateBuddyGroups(userId: String, group:GroupStatus) {
             if (document.exists()) {
                 val userData = document.data
                 println( userData?.get("groups"))
-                val groups = userData?.get("groups") as? MutableList<GroupStatus> ?: mutableListOf()
+                val groups = (userData?.get("groups") as? List<Map<String, Any>>)?.map {
+                    GroupStatus(it["groupId"] as String, it["status"] as Any)
+                }?.toMutableList() ?: mutableListOf()
                 if (!groups.any { it.groupId == group.groupId }) {
                     groups.add(group)
                 }

@@ -38,7 +38,7 @@ fun WorkoutBuddyDashBoard(navController:NavController){
                 HomeFragment(navController = navController)
             }
             "Explore" -> {
-                ExploreFragmentComposable()
+                ExploreFragmentComposable(navController = navController)
             }
             "Activity" -> {
                 ActivityFragmentComposable()
