@@ -14,16 +14,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -53,9 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import net.runner.fitbit.Database.getUserData
 import net.runner.fitbit.R
 import net.runner.fitbit.auth.extendedComposables.workoutBuddy.DropdownMenuGoals
@@ -139,7 +134,7 @@ fun EditProfileBuddy(navController: NavController){
                 Button(
                     onClick = {
                         navController.navigate("profileBuddy"){
-                            popUpTo("editProfileBuddy") { inclusive =true }
+                            popUpTo("editProfileScreen") { inclusive =true }
                         }
                     },
                     contentPadding = PaddingValues(10.dp),

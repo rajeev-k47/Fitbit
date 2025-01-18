@@ -29,7 +29,8 @@ fun DataBaseEntryOrganizer(
         ,"orgEndTime" to orgEndTime
         ,"accountType" to "Organizer"
         ,"joiningDate" to Calendar.getInstance().time.toString(),
-        "email" to auth.currentUser?.email.toString()
+        "email" to auth.currentUser?.email.toString(),
+        "groupId" to auth.uid.toString()
 
     )
 
