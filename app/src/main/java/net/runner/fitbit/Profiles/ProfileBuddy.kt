@@ -57,6 +57,7 @@ import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import com.google.firebase.auth.FirebaseAuth
 import net.runner.fitbit.Database.getUserData
+import net.runner.fitbit.Firebase.fcmTokenSave
 import net.runner.fitbit.R
 import net.runner.fitbit.supportedconnections
 import net.runner.fitbit.ui.theme.background
@@ -103,6 +104,7 @@ fun ProfileBuddy(navController: NavController,context:Context) {
 
                     Button(
                         onClick = {
+                            fcmTokenSave(false)
                             auth.signOut()
                             navController.navigate("signUpScreen"){
                                 popUpTo("profileBuddy"){ inclusive = true }

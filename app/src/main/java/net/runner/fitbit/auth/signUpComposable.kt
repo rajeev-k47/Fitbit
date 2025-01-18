@@ -52,13 +52,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.shashank.sony.fancytoastlib.FancyToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.runner.fitbit.Firebase.fcmTokenSave
 import net.runner.fitbit.R
 import net.runner.fitbit.auth.authFunctions.EmailLinkAuth
 import net.runner.fitbit.auth.authFunctions.gOauthClient
 import net.runner.fitbit.auth.database.checkIfAccountExists
+import net.runner.fitbit.auth.database.getfcmToken
 import net.runner.fitbit.sharedPreference.tempEmailSignUp
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightBlueText
@@ -81,9 +84,11 @@ fun SignUpComposable(navController: NavController,activity: Activity) {
                     accountstatus=status
                     Log.d("TAG","$accountstatus")
                     if(accountstatus){
+                        fcmTokenSave(true)
                         if(type=="Workoutbuddy"){
 
                             navController.navigate("dashBoardBuddy"){
+
                                 popUpTo("signUpScreen") { inclusive =true }
                             }
                         }else{
