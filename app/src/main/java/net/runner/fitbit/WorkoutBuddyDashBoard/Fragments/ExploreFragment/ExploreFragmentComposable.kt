@@ -34,13 +34,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
 
 @Composable
-fun ExploreFragmentComposable() {
+fun ExploreFragmentComposable(navController: NavController){
 
     var query by rememberSaveable { mutableStateOf("") }
 
@@ -48,7 +49,6 @@ fun ExploreFragmentComposable() {
     var typeFilerPeopleSelected by rememberSaveable { mutableStateOf(true) }
     var selectedFilter by rememberSaveable { mutableStateOf("Related") }
     var tabitems by rememberSaveable { mutableStateOf(listOf("Related", "Near you")) }
-
 
 
 
@@ -154,7 +154,7 @@ fun ExploreFragmentComposable() {
         }
 
 
-        ExploreContent(selectedFilter,typeFilerPeopleSelected)
+        ExploreContent(selectedFilter,typeFilerPeopleSelected,navController)
 
 
 
