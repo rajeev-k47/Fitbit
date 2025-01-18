@@ -95,8 +95,14 @@ fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean,navCont
                 }
             }
             GroupsRelatedFeed((userData["goalType"] as List<String>)){
-                groupRelatedFeed = it
-                groupNearFeed = it.map {group->
+                groupRelatedFeed = it.filterNot { group ->
+                    val userGroups = userData["groups"] as? List<Map<String, Any>> ?: return@filterNot false
+                    userGroups.any { userGroup -> userGroup["groupId"] == group.first["groupId"] }
+                }.map { group ->
+                    Pair(group.first,group.second)
+
+                }
+                groupNearFeed = groupRelatedFeed.map {group->
                     GroupNearData(GroupData = group, distance = "Calculating...")
                 }
             }
@@ -219,6 +225,9 @@ fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean,navCont
 fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavController){
     val orgData= groupNearData.GroupData.first["groupData"] as Map<*, *>
     val facilities = groupNearData.GroupData.first["facilities"] as List<String>
+    var joinStatus by rememberSaveable {
+        mutableStateOf(false)
+    }
 
     Spacer(modifier = Modifier.height(10.dp))
     Card(
@@ -240,11 +249,15 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
 
     ) {
         Row (
-            modifier = Modifier.fillMaxWidth().padding(8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ){
-            Icon(painter = painterResource(id = R.drawable.location), contentDescription = "", tint = lightText, modifier = Modifier.size(25.dp).padding(horizontal = 5.dp))
+            Icon(painter = painterResource(id = R.drawable.location), contentDescription = "", tint = lightText, modifier = Modifier
+                .size(25.dp)
+                .padding(horizontal = 5.dp))
             Text(text = "${groupNearData.distance}", color = lightText, fontSize = 14.sp, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier)
         }
         Column(
@@ -316,8 +329,14 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
                 onClick = {
                     val auth = FirebaseAuth.getInstance()
                     val userUid = auth.currentUser?.uid
-                    ManagerGroupJoining(userUid!!,groupNearData.GroupData.first["groupId"].toString()){
-                        navController.navigate("group/${groupNearData.GroupData.first["groupId"].toString()}")
+                    ManagerGroupJoining(userUid!!,groupNearData.GroupData.first["groupId"].toString()){private->
+                        if(private){
+                            joinStatus = true
+                        }else{
+                            navController.navigate("group/${groupNearData.GroupData.first["groupId"].toString()}"){
+                                popUpTo("dashBoardBuddy") { inclusive =false }
+                            }
+                        }
                     }
 
                 },
@@ -330,7 +349,7 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
                     containerColor = Color.White,
                 ),
             ) {
-                Text("Join", color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(if(joinStatus) "Requested" else "Join", color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
 
         }
@@ -469,6 +488,7 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
     val facilities = groupData.first["facilities"] as List<String>
     val auth = FirebaseAuth.getInstance()
     val userUid = auth.currentUser?.uid
+    var joinStatus by rememberSaveable { mutableStateOf(false) }
 
     Spacer(modifier = Modifier.height(10.dp))
     Card(
@@ -556,8 +576,17 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = {
-                    ManagerGroupJoining(userUid!!,groupData.first["groupId"].toString()){
-                        navController.navigate("group/${groupData.first["groupId"].toString()}")
+                    ManagerGroupJoining(userUid!!,groupData.first["groupId"].toString()){private->
+                        if(private){
+                            joinStatus = true
+                        }
+                        else{
+
+                            navController.navigate("group/${groupData.first["groupId"].toString()}"){
+                                popUpTo("dashBoardBuddy") { inclusive =false }
+                            }
+                        }
+
                     }
                 },
                 contentPadding = PaddingValues(0.dp),
@@ -573,7 +602,7 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
                     Color.White
                 )
             ) {
-                Text("Join", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(text = if(joinStatus) "Requested" else "Join", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
 
         }
