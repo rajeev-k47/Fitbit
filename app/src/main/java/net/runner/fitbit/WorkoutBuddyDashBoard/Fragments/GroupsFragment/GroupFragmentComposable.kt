@@ -52,6 +52,9 @@ fun GroupFragmentComposable(navController: NavController) {
     var userGroups by rememberSaveable {
         mutableStateOf(listOf<Map<String, Any>>())
     }
+    var filteredGroupData by rememberSaveable {
+        mutableStateOf(listOf<Map<String, Any>>())
+    }
     LaunchedEffect (Unit){
         val userId = FirebaseAuth.getInstance().currentUser?.uid
         GetUserGroups(userId.toString()){
@@ -63,6 +66,7 @@ fun GroupFragmentComposable(navController: NavController) {
             val groupId = group["groupId"]
             GetGroupData(groupId.toString()){
                 userGroupsData = (userGroupsData + it)
+                filteredGroupData = userGroupsData
             }
         }
     }
@@ -84,7 +88,13 @@ fun GroupFragmentComposable(navController: NavController) {
 
         TextField(
             value = searchGroupQuery,
-            onValueChange = { searchGroupQuery = it },
+            onValueChange = {
+                                searchGroupQuery = it
+                                filteredGroupData = userGroupsData.filter {group->
+                                    val orgName = (group["groupData"] as Map<String, String>)["organizationName"]!!
+                                    orgName.lowercase().contains(searchGroupQuery.lowercase())
+                                }
+                            },
             placeholder = { Text(text = "Search", color = lightBlueText, fontSize = 17.sp) },
             singleLine = true,
             modifier = Modifier
@@ -102,12 +112,12 @@ fun GroupFragmentComposable(navController: NavController) {
                 unfocusedIndicatorColor = Color.Transparent
             )
         )
-        Spacer(modifier = Modifier.height(10.dp))
 
         LazyColumn(
             Modifier.fillMaxWidth()
         ) {
-            items(userGroupsData.size){index->
+            items(filteredGroupData.size)
+            {index->
 
 
                 Row(
@@ -170,6 +180,8 @@ fun GroupFragmentComposable(navController: NavController) {
 
                 }
             }
+            item { Spacer(modifier = Modifier.height(70.dp)) }
+
         }
 
 
