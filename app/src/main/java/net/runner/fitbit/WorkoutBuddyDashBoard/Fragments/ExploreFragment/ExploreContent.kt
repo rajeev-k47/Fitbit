@@ -1,7 +1,6 @@
 package net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ExploreFragment
 
 import android.os.Parcelable
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,12 +40,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.parcel.Parcelize
-import net.runner.fitbit.BuildConfig
 import net.runner.fitbit.Database.getUserData
-import net.runner.fitbit.GoogleAPis.fetchDistanceMatrix
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightText
@@ -63,7 +62,7 @@ data class GroupNearData(
 ) : Parcelable
 
 @Composable
-fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean) {
+fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean,navController: NavController) {
     var userData by rememberSaveable {
         mutableStateOf(mutableMapOf<String, Any>())
     }
@@ -202,11 +201,11 @@ fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean) {
         else if(!typeFilerPeopleSelected && selectedFilter=="Related"){
             items(groupRelatedFeed.size){index->
                 
-                GroupExploreRelatedFeedCard(groupRelatedFeed[index])
+                GroupExploreRelatedFeedCard(groupRelatedFeed[index],navController)
             }
         }else if(!typeFilerPeopleSelected && selectedFilter=="Near you"){
             items(groupNearFeed.size){index->
-                GroupExploreNearFeedCard(groupNearFeed[index])
+                GroupExploreNearFeedCard(groupNearFeed[index],navController)
                 
             }
         }
@@ -217,7 +216,7 @@ fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean) {
 }
 
 @Composable
-fun GroupExploreNearFeedCard(groupNearData: GroupNearData){
+fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavController){
     val orgData= groupNearData.GroupData.first["groupData"] as Map<*, *>
     val facilities = groupNearData.GroupData.first["facilities"] as List<String>
 
@@ -315,6 +314,12 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData){
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = {
+                    val auth = FirebaseAuth.getInstance()
+                    val userUid = auth.currentUser?.uid
+                    ManagerGroupJoining(userUid!!,groupNearData.GroupData.first["groupId"].toString()){
+                        navController.navigate("group/${groupNearData.GroupData.first["groupId"].toString()}")
+                    }
+
                 },
                 contentPadding = PaddingValues(0.dp),
                 modifier = Modifier
@@ -459,9 +464,11 @@ fun PeopleExploreRelatedFeedCard(peopleData:List<Pair<Map<String, Any>, Int>>,in
 }
 
 @Composable
-fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>){
+fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navController: NavController){
     val orgData= groupData.first["groupData"] as Map<*, *>
     val facilities = groupData.first["facilities"] as List<String>
+    val auth = FirebaseAuth.getInstance()
+    val userUid = auth.currentUser?.uid
 
     Spacer(modifier = Modifier.height(10.dp))
     Card(
@@ -549,6 +556,9 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>){
             Spacer(modifier = Modifier.height(8.dp))
             Button(
                 onClick = {
+                    ManagerGroupJoining(userUid!!,groupData.first["groupId"].toString()){
+                        navController.navigate("group/${groupData.first["groupId"].toString()}")
+                    }
                 },
                 contentPadding = PaddingValues(0.dp),
                 modifier = Modifier
