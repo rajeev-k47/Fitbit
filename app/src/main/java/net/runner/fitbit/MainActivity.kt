@@ -129,7 +129,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(route = "chatBot") {
                         ChatbotPanel(navController)
-
+                    }
+                    composable(route="group/{groupId}",arguments = listOf(navArgument("groupId") { type = NavType.StringType })) {
+                        backStackEntry -> navController.navigate("group/${backStackEntry.arguments?.getString("groupId")}")
                     }
 
                 }
