@@ -19,6 +19,7 @@ val statesOfIndia = listOf(
     "Meghalaya",
     "Mizoram",
     "Nagaland",
+    "New Delhi",
     "Odisha",
     "Punjab",
     "Rajasthan",

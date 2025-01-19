@@ -6,7 +6,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.IOException
 
-fun makeGroupJoinRequest(userId:String,groupId:String) {
+fun makeGroupJoinRequest(userId:String,groupId:String,onResponse:(String)->Unit) {
     val client = OkHttpClient()
     println(userId)
     println(groupId)
@@ -28,6 +28,7 @@ fun makeGroupJoinRequest(userId:String,groupId:String) {
         override fun onResponse(call: Call, response: Response) {
             if (response.isSuccessful) {
                 val responseBody = response.body?.string()
+                onResponse(responseBody.toString())
                 println("Response: $responseBody")
             } else {
                 println("Error: ${response}")

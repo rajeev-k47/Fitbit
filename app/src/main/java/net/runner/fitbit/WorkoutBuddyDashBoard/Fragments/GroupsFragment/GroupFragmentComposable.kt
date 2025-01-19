@@ -55,13 +55,18 @@ fun GroupFragmentComposable(navController: NavController) {
     var filteredGroupData by rememberSaveable {
         mutableStateOf(listOf<Map<String, Any>>())
     }
+    var isLoaded by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect (Unit){
         val userId = FirebaseAuth.getInstance().currentUser?.uid
-        GetUserGroups(userId.toString()){
-            userGroups=it
+        if(userGroups.isEmpty()){
+
+            GetUserGroups(userId.toString()){
+                userGroups=it
+            }
         }
     }
     LaunchedEffect (userGroups){
+        if(isLoaded)return@LaunchedEffect
         userGroups.forEach { group->
             val groupId = group["groupId"]
             GetGroupData(groupId.toString()){
@@ -69,6 +74,10 @@ fun GroupFragmentComposable(navController: NavController) {
                 filteredGroupData = userGroupsData
             }
         }
+        if(userGroups.isNotEmpty()){
+            isLoaded=true
+        }
+
     }
 
     Column(
@@ -118,6 +127,8 @@ fun GroupFragmentComposable(navController: NavController) {
         ) {
             items(filteredGroupData.size)
             {index->
+                val groupId = filteredGroupData[index]["groupId"]
+                val groupStatus = userGroups.firstOrNull{it["groupId"] == groupId }?.get("status")
 
 
                 Row(
@@ -127,7 +138,7 @@ fun GroupFragmentComposable(navController: NavController) {
                         .fillMaxWidth()
                 ){
                     AsyncImage(
-                        model = userGroupsData[index]["profileImageUrl"],
+                        model = filteredGroupData[index]["profileImageUrl"],
                         contentDescription = "avatar",
                         placeholder = rememberAsyncImagePainter(R.drawable.user),
                         error = rememberAsyncImagePainter(R.drawable.user),
@@ -169,12 +180,17 @@ fun GroupFragmentComposable(navController: NavController) {
 
                     Button(
                         onClick = {
+                            if (groupStatus != "Pending"){
+                                navController.navigate("group/${groupId}"){
+                                    popUpTo("dashboardBuddy"){inclusive = false}
+                                }
+                            }
                         },
                         modifier = Modifier.padding(end = 14.dp),
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = lightText.copy(alpha = 0.1f))
                     ) {
-                        Text(text = "View", color = lightText, fontWeight =  FontWeight.Bold)
+                        Text(text = if(groupStatus == "Pending") "Requested" else "View", color = lightText, fontWeight =  FontWeight.Bold)
                     }
 
 

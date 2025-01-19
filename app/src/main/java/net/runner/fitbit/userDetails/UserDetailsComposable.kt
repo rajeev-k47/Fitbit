@@ -136,6 +136,9 @@ fun UserDetailComposable(navController: NavController) {
             }
         }
         item {
+            Text(text = "* Choose the organization profile if you are an Organizer", color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Light)
+        }
+        item {
             Spacer(modifier = Modifier.height(15.dp))
         }
         item {
