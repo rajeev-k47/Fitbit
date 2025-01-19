@@ -1,7 +1,11 @@
 package net.runner.fitbit.auth.extendedComposables.organizer
 
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,6 +19,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
@@ -25,12 +31,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import net.runner.fitbit.auth.database.DataBaseEntryOrganizer
 import net.runner.fitbit.auth.database.DatabaseEntryBuddy
 import net.runner.fitbit.auth.extendedComposables.workoutBuddy.DropdownMenuGoals
@@ -50,6 +59,14 @@ fun organizationWorkoutDetails(groupData: OrganizerGroupData,imageUri: Uri,navCo
     var orgEndTime by rememberSaveable { mutableStateOf("") }
     var orgFromTimePickerState by rememberSaveable { mutableStateOf(false) }
     var orgToTimePickerState by rememberSaveable { mutableStateOf(false) }
+    var orgPrivacy by rememberSaveable { mutableStateOf(false) }
+    var orgBanner by rememberSaveable {mutableStateOf(Uri.EMPTY)}
+
+    val pickImage = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        if (uri != null) {
+            orgBanner = uri
+        }
+    }
 
 
     HorizontalDivider(color = lightBlueText.copy(0.4f))
@@ -58,9 +75,47 @@ fun organizationWorkoutDetails(groupData: OrganizerGroupData,imageUri: Uri,navCo
     Text("About Organization", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = lightText)
 
     Spacer(modifier = Modifier.height(10.dp))
+    Box(modifier = Modifier.fillMaxWidth()){
+        Text("Org Banner :", fontSize = 16.sp, color = lightText, fontWeight = FontWeight.Bold, modifier = Modifier
+            .align(Alignment.CenterStart)
+            .padding(start = 10.dp))
+    }
+    Spacer(modifier = Modifier.height(10.dp))
+    Box (
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(140.dp)
+            .clip(RoundedCornerShape(15.dp))
+            .background(lightText.copy(0.1f))
+            .clickable {
+                pickImage.launch("image/*")
+            }
+    ){
+        if(orgBanner != Uri.EMPTY){
+
+            AsyncImage(
+                model = orgBanner,
+                contentDescription = "banner",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(140.dp)
+                    .clip(RoundedCornerShape(15.dp))
+                    .background(lightText.copy(0.1f))
+                ,
+                contentScale = ContentScale.Crop
+            )
+        }else{
+            Text(text = "Upload Banner", color = lightText, fontSize = 20.sp, modifier = Modifier.align(Alignment.Center), fontWeight = FontWeight.Bold)
+        }
+
+    }
+
+    Spacer(modifier = Modifier.height(10.dp))
 
     Box(modifier = Modifier.fillMaxWidth()){
-        Text("Timings :", fontSize = 16.sp, color = lightText, fontWeight = FontWeight.Bold, modifier = Modifier.align(Alignment.CenterStart).padding(start = 10.dp))
+        Text("Timings :", fontSize = 16.sp, color = lightText, fontWeight = FontWeight.Bold, modifier = Modifier
+            .align(Alignment.CenterStart)
+            .padding(start = 10.dp))
     }
 
     Spacer(modifier = Modifier.height(5.dp))
@@ -157,6 +212,38 @@ fun organizationWorkoutDetails(groupData: OrganizerGroupData,imageUri: Uri,navCo
         }
     }
     Spacer(modifier = Modifier.height(10.dp))
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Private", color = lightText, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+            Checkbox(
+                checked = orgPrivacy,
+                onCheckedChange = {
+                    orgPrivacy = !orgPrivacy
+                },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = lightBlueText,
+                    uncheckedColor = lightText
+                )
+            )
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Public", color = lightText, fontSize = 17.sp, fontWeight = FontWeight.Bold)
+            Checkbox(
+                checked = !orgPrivacy,
+                onCheckedChange = {
+                    orgPrivacy = !orgPrivacy
+                },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = lightBlueText,
+                    uncheckedColor = lightText
+                )
+            )
+        }
+    }
 
 
     DropdownMenuGoals(
@@ -170,7 +257,7 @@ fun organizationWorkoutDetails(groupData: OrganizerGroupData,imageUri: Uri,navCo
         val context = LocalContext.current
         Button(
             onClick = {
-                DataBaseEntryOrganizer(groupData, facilities, orgStartTime, orgEndTime,imageUri,context){
+                DataBaseEntryOrganizer(groupData, orgBanner,facilities, orgStartTime, orgEndTime,orgPrivacy,imageUri,context){
                     if(it=="success"){
                         navController.navigate("dashBoardOrganizer"){
                             popUpTo("userDetails") { inclusive = true }
