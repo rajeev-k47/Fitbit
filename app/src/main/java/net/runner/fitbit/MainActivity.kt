@@ -32,6 +32,7 @@ import com.onesignal.debug.LogLevel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.runner.fitbit.Firebase.fcmTokenSave
 import net.runner.fitbit.WorkoutBuddyDashBoard.TopAppBar.Chatbot.ChatbotPanel
 import net.runner.fitbit.OrganizerDashboard.OrganizerDashBoard
 import net.runner.fitbit.Profiles.EditProfileBuddy
@@ -89,6 +90,8 @@ class MainActivity : ComponentActivity() {
                     checkIfAccountExists(auth.currentUser!!.email?:""){exists, accountType ->
                         if (exists) {
                             Log.d("gri",accountType.toString())
+                            fcmTokenSave(true)
+
                             startDestination = when (accountType) {
                                 "Workoutbuddy"-> "dashBoardBuddy"
                                 "Organizer"-> "dashBoardOrganizer"
