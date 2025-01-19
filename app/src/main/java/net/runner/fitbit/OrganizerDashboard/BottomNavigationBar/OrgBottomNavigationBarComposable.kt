@@ -128,7 +128,7 @@ fun OrgBottomNavigationBarComposable(modifier: Modifier,onselected:(String)->Uni
             navigationItems.forEach { item ->
                 if(item.label.isNotEmpty()&&(isPrivate||item.label!="Requests")){
                     Box(
-                        modifier = Modifier.size(50.dp),
+                        modifier = Modifier.size(55.dp),
                         contentAlignment = Alignment.Center
                     ){
 

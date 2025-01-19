@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import net.runner.fitbit.OrganizerDashboard.BottomNavigationBar.OrgBottomNavigationBarComposable
+import net.runner.fitbit.OrganizerDashboard.OrgFragments.MembersFragment.MembersFragmentComposable
 import net.runner.fitbit.OrganizerDashboard.OrgFragments.OrgHomeFragment.OrgHomeFragment
 import net.runner.fitbit.OrganizerDashboard.OrgFragments.RequestsFragment.RequestsFragmentComposable
 import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.CreateFragment.createContent
@@ -33,8 +34,8 @@ fun OrganizerDashBoard(navController: NavController){
             "Home" -> {
                 OrgHomeFragment(navController)
             }
-            "Explore" -> {
-//                ExploreFragmentComposable(navController = navController)
+            "Members" -> {
+                MembersFragmentComposable()
             }
             "Activity" -> {
 //                ActivityFragmentComposable()
