@@ -8,8 +8,6 @@ import java.io.IOException
 
 fun makeGroupJoinRequest(userId:String,groupId:String,onResponse:(String)->Unit) {
     val client = OkHttpClient()
-    println(userId)
-    println(groupId)
     val requestBody = JSONObject().apply {
         put("uid", userId)
         put("groupId", groupId)

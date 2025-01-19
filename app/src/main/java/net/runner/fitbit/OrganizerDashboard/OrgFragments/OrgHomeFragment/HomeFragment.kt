@@ -1,4 +1,4 @@
-package net.runner.fitbit.OrganizerDashboard.Fragments
+package net.runner.fitbit.OrganizerDashboard.OrgFragments.OrgHomeFragment
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn

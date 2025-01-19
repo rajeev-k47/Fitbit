@@ -42,23 +42,3 @@ fun SaveAndUpdateBuddyGroups(userId: String, group:GroupStatus) {
             println("Error fetching user data: ${e.message}")
         }
 }
-fun updateGroupStatus(userId: String, groupId: String, newStatus: String) {
-    val firestore = FirebaseFirestore.getInstance()
-
-    firestore.collection("users")
-        .document(userId)
-        .get()
-        .addOnSuccessListener { document ->
-            if (document.exists()) {
-                val userData = document.data
-                val groups = userData?.get("groups") as? List<GroupStatus> ?: emptyList()
-                val updatedGroups = groups.map { if (it.groupId == groupId) it.copy(status = newStatus) else it }
-
-//                saveGroupStatusToFirebase(userId, updatedGroups)
-            }
-        }
-        .addOnFailureListener { e ->
-            e.printStackTrace()
-            println("Error fetching user data: ${e.message}")
-        }
-}
