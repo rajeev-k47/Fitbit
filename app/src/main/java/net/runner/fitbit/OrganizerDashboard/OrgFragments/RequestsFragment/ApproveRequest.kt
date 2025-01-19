@@ -25,9 +25,7 @@ fun ApproveRequest(userId:String){
                     println("Error: ${e.message}")
                 }
             println(userId)
-            userDocRef.update("users", users + userId).addOnSuccessListener {
-                updateGroupStatusOnUser(userId, groupId, "Accepted")
-            }
+            updateUsers(userId, groupId)
 
         }
         .addOnFailureListener { exception ->
@@ -35,6 +33,31 @@ fun ApproveRequest(userId:String){
 
 
 
+}
+fun updateUsers(userId: String, groupId: String) {
+    val db = FirebaseFirestore.getInstance()
+    val groupCollection = db.collection("users")
+    val groupDocument = groupCollection.document(groupId)
+
+    groupDocument.get().addOnSuccessListener { document ->
+        if (document != null) {
+            val users = document.get("users") as? List<String> ?: emptyList()
+            val updatedUsers =
+                if (users.contains(userId)) users
+                else{
+                    users + userId
+                }
+            groupDocument.update("users", updatedUsers)
+                .addOnSuccessListener {
+                    updateGroupStatusOnUser(userId, groupId, "Accepted")
+                }
+                .addOnFailureListener { e ->
+                    e.printStackTrace()
+                    println("Error: ${e.message}")
+                }
+        }
+    }.addOnFailureListener { exception ->
+    }
 }
 fun updateGroupStatusOnUser(userId: String, groupId: String, newStatus: String) {
     val firestore = FirebaseFirestore.getInstance()
