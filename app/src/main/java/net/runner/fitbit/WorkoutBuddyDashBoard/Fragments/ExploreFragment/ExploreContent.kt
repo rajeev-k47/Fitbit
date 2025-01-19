@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -228,6 +229,7 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
     var joinStatus by rememberSaveable {
         mutableStateOf(false)
     }
+    val context = LocalContext.current
 
     Spacer(modifier = Modifier.height(10.dp))
     Card(
@@ -272,6 +274,7 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
 
                 AsyncImage(
                     model = groupNearData.GroupData.first["profileImageUrl"],
+                    error = painterResource(id = R.drawable.user),
                     contentDescription = "avatar",
                     modifier = Modifier
                         .padding(10.dp)
@@ -315,7 +318,7 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
             Spacer(modifier = Modifier.height(10.dp))
 
             AsyncImage(
-                model = groupNearData.GroupData.first["profileImageUrl"],
+                model = groupNearData.GroupData.first["banner"],
                 contentDescription = "avatar",
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
@@ -329,12 +332,14 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
                 onClick = {
                     val auth = FirebaseAuth.getInstance()
                     val userUid = auth.currentUser?.uid
-                    ManagerGroupJoining(userUid!!,groupNearData.GroupData.first["groupId"].toString()){private->
-                        if(private){
-                            joinStatus = true
-                        }else{
-                            navController.navigate("group/${groupNearData.GroupData.first["groupId"].toString()}"){
-                                popUpTo("dashBoardBuddy") { inclusive =false }
+                    if(!joinStatus){
+                        ManagerGroupJoining(context,userUid!!,groupNearData.GroupData.first["groupId"].toString()){private->
+                            if(private){
+                                joinStatus = true
+                            }else{
+                                navController.navigate("group/${groupNearData.GroupData.first["groupId"].toString()}"){
+                                    popUpTo("dashBoardBuddy") { inclusive =false }
+                                }
                             }
                         }
                     }
@@ -459,7 +464,7 @@ fun PeopleExploreRelatedFeedCard(peopleData:List<Pair<Map<String, Any>, Int>>,in
                         Spacer(modifier = Modifier.size(10.dp))
                     }
 
-                    Text(text = "Target : ${ peopleData[index].first["targetValue"].toString() }", color = lightText, fontSize = 13.sp, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
+                    Text(text = "Target : ${ peopleData[index].first["targetValue"].toString() }", color = lightText, fontSize = 13.sp,fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
                         .padding(end = 5.dp))
 
 //                    Text(text = "@${repo.owner!!.login!!}", color =BottomNavigationIconUnselected, fontSize = 15.sp)
@@ -489,6 +494,7 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
     val auth = FirebaseAuth.getInstance()
     val userUid = auth.currentUser?.uid
     var joinStatus by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Spacer(modifier = Modifier.height(10.dp))
     Card(
@@ -521,6 +527,7 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
 
                 AsyncImage(
                     model = groupData.first["profileImageUrl"],
+                    error = painterResource(id = R.drawable.user),
                     contentDescription = "avatar",
                     modifier = Modifier
                         .padding(10.dp)
@@ -564,7 +571,7 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
             Spacer(modifier = Modifier.height(10.dp))
 
             AsyncImage(
-                model = groupData.first["profileImageUrl"],
+                model = groupData.first["banner"],
                 contentDescription = "avatar",
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
@@ -574,9 +581,12 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(8.dp))
+
             Button(
                 onClick = {
-                    ManagerGroupJoining(userUid!!,groupData.first["groupId"].toString()){private->
+                    if(!joinStatus){
+
+                    ManagerGroupJoining(context,userUid!!,groupData.first["groupId"].toString()){private->
                         if(private){
                             joinStatus = true
                         }
@@ -587,6 +597,7 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
                             }
                         }
 
+                    }
                     }
                 },
                 contentPadding = PaddingValues(0.dp),

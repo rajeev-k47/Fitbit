@@ -173,7 +173,6 @@ fun ChatbotComposable() {
                 keyboardActions = KeyboardActions(
                     onSend = {
                         if (query.isNotBlank()) {
-                            if (query.isNotBlank()) {
                                 listMessages =
                                     listMessages
                                         .toMutableList()
@@ -196,7 +195,6 @@ fun ChatbotComposable() {
 
 
                                 }
-                            }
 
                         }
                     }
