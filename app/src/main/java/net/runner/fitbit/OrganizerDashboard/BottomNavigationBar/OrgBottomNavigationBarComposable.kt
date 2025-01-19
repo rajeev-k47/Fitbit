@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -35,6 +36,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import net.runner.fitbit.R
 import net.runner.fitbit.WorkoutBuddyDashBoard.BottomNavigationbar.NavigationItem
 import net.runner.fitbit.ui.theme.background
@@ -44,6 +47,20 @@ import net.runner.fitbit.ui.theme.lightText
 @Composable
 fun OrgBottomNavigationBarComposable(modifier: Modifier,onselected:(String)->Unit) {
     var selectedItem by rememberSaveable { mutableStateOf("Home") }
+    var isPrivate by rememberSaveable {
+        mutableStateOf(false)
+    }
+    LaunchedEffect(Unit) {
+        val db = FirebaseFirestore.getInstance()
+        val userUid = FirebaseAuth.getInstance().currentUser?.uid
+        if (userUid != null) {
+            db.collection("users").document(userUid).get()
+                .addOnSuccessListener { documentSnapshot ->
+                    isPrivate = documentSnapshot.getBoolean("private") ?: false
+                }
+        }
+    }
+
 
 
     val navigationItems = listOf(
@@ -54,11 +71,11 @@ fun OrgBottomNavigationBarComposable(modifier: Modifier,onselected:(String)->Uni
             onclick = {onselected("Home")}
         ),
         NavigationItem(
-            label = "Explore",
-            filledIcon = painterResource(id = R.drawable.explore_filled),
-            unfilledIcon = painterResource(id = R.drawable.explore_unfilled),
+            label = "Members",
+            filledIcon = painterResource(id = R.drawable.group_filled),
+            unfilledIcon = painterResource(id = R.drawable.group_unfilled),
             onclick = {
-                onselected("Explore")
+                onselected("Members")
             }
         ),
         NavigationItem(
@@ -75,12 +92,13 @@ fun OrgBottomNavigationBarComposable(modifier: Modifier,onselected:(String)->Uni
                 onselected("Activity")
             }
         ),
+
         NavigationItem(
             label = "Requests",
             filledIcon = painterResource(id = R.drawable.requests_filled),
             unfilledIcon = painterResource(id = R.drawable.requests_unfilled),
             onclick = {
-                onselected("Groups")
+                onselected("Requests")
             }
         )
     )
@@ -108,7 +126,7 @@ fun OrgBottomNavigationBarComposable(modifier: Modifier,onselected:(String)->Uni
             verticalAlignment = Alignment.CenterVertically
         ) {
             navigationItems.forEach { item ->
-                if(item.label.isNotEmpty()){
+                if(item.label.isNotEmpty()&&(isPrivate||item.label!="Requests")){
                     Box(
                         modifier = Modifier.size(50.dp),
                         contentAlignment = Alignment.Center
@@ -139,7 +157,7 @@ fun OrgBottomNavigationBarComposable(modifier: Modifier,onselected:(String)->Uni
                     }
 
                 }
-                else{
+                else if (isPrivate||item.label!="Requests"){
                     Button(
                         onClick = {
                             item.onclick()
