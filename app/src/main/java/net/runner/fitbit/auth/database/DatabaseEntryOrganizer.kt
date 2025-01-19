@@ -5,15 +5,18 @@ import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ExploreFragment.saveBannerImage
 import net.runner.fitbit.auth.UserLocation.saveUserLocation
 import net.runner.fitbit.auth.extendedComposables.organizer.OrganizerGroupData
 import java.util.Calendar
 
 fun DataBaseEntryOrganizer(
     groupData: OrganizerGroupData,
+    bannerUri:Uri,
     facilities:Set<String>,
     orgStartTime:String,
     orgEndTime: String,
+    orgPrivacy: Boolean,
     imageUri:Uri,
     context: Context,
     onresult: (String) -> Unit
@@ -30,7 +33,8 @@ fun DataBaseEntryOrganizer(
         ,"accountType" to "Organizer"
         ,"joiningDate" to Calendar.getInstance().time.toString(),
         "email" to auth.currentUser?.email.toString(),
-        "groupId" to auth.uid.toString()
+        "groupId" to auth.uid.toString(),
+        "private" to orgPrivacy
 
     )
 
@@ -40,6 +44,7 @@ fun DataBaseEntryOrganizer(
         .addOnSuccessListener { documentReference ->
             onresult("success")
             profileImageSaving(imageUri)
+            saveBannerImage(bannerUri)
             saveUserLocation(context)
 
 
