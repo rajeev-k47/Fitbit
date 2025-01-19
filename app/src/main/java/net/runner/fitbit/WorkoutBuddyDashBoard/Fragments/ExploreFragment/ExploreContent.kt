@@ -229,6 +229,10 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
     var joinStatus by rememberSaveable {
         mutableStateOf(false)
     }
+    var groupPrivacy by rememberSaveable {
+        mutableStateOf(groupNearData.GroupData.first["private"] as Boolean)
+    }
+
     val context = LocalContext.current
 
     Spacer(modifier = Modifier.height(10.dp))
@@ -304,9 +308,23 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
                         }
 
                     }
+                    Box(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
 
-                    Text(text = "by ${orgData["organizerName"].toString()}", color = lightText, fontSize = 13.sp, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
-                        .padding(end = 5.dp))
+                        Text(text = "by ${orgData["organizerName"].toString()}", color = lightText, fontSize = 13.sp, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
+                            .padding(end = 5.dp))
+                        if(groupPrivacy){
+
+                            Row(modifier = Modifier.align(Alignment.CenterEnd), verticalAlignment = Alignment.CenterVertically){
+                                Icon(painter = painterResource(id = R.drawable.privacy), contentDescription = "",Modifier.size(20.dp))
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(text = "Private", color = lightText, fontSize = 13.sp, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
+                                    .padding(end = 5.dp))
+                            }
+                        }
+                    }
+
                 }
 
             }
@@ -494,6 +512,9 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
     val auth = FirebaseAuth.getInstance()
     val userUid = auth.currentUser?.uid
     var joinStatus by rememberSaveable { mutableStateOf(false) }
+    var groupPrivacy by rememberSaveable {
+        mutableStateOf(groupData.first["private"] as Boolean)
+    }
     val context = LocalContext.current
 
     Spacer(modifier = Modifier.height(10.dp))
@@ -557,9 +578,22 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
                         }
 
                     }
+                    Box(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
 
-                    Text(text = "by ${orgData["organizerName"].toString()}", color = lightText, fontSize = 13.sp, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
-                        .padding(end = 5.dp))
+                        Text(text = "by ${orgData["organizerName"].toString()}", color = lightText, fontSize = 13.sp, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
+                            .padding(end = 5.dp))
+                        if(groupPrivacy){
+                            Row(modifier = Modifier.align(Alignment.CenterEnd), verticalAlignment = Alignment.CenterVertically){
+                                Icon(painter = painterResource(id = R.drawable.privacy), contentDescription = "",Modifier.size(20.dp))
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(text = "Private", color = lightText, fontSize = 13.sp, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
+                                    .padding(end = 5.dp))
+                            }
+                        }
+                    }
+
                 }
 
             }
