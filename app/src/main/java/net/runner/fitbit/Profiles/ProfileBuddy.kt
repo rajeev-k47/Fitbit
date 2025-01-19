@@ -122,12 +122,11 @@ fun ProfileBuddy(navController: NavController,context:Context) {
                         border = BorderStroke(0.5.dp, lightText.copy(0.4f))
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.setting),
-                            contentDescription = "setting",
+                            painter = painterResource(id = R.drawable.logout),
+                            contentDescription = "Logout",
                             modifier = Modifier
                                 .size(20.dp)
-                                .clip(CircleShape)
-                                .padding(1.dp)
+                                .padding(start = 2.dp)
                             , tint = lightBlueText
                         )
                     }

@@ -121,7 +121,7 @@ class MainActivity : ComponentActivity() {
                         WorkoutBuddyDashBoard(navController)
                     }
                     composable(route = "dashBoardOrganizer") {
-                        OrganizerDashBoard()
+                        OrganizerDashBoard(navController)
 
                     }
                     composable(route = "profileBuddy") {
