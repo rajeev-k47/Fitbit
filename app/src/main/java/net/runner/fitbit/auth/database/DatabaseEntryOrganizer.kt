@@ -1,8 +1,12 @@
 package net.runner.fitbit.auth.database
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ExploreFragment.saveBannerImage
@@ -45,6 +49,9 @@ fun DataBaseEntryOrganizer(
             onresult("success")
             profileImageSaving(imageUri)
             saveBannerImage(bannerUri)
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(context as Activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 100)
+            }
             saveUserLocation(context)
 
 
