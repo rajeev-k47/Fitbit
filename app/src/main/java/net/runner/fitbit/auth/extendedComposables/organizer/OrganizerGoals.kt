@@ -76,30 +76,30 @@ fun OrganizerGoals(
                 Text("Create New Group", color = background, fontWeight = FontWeight.Bold, fontSize = 15.sp)
             }
 
-            HorizontalDivider(color = lightBlueText, thickness = 1.dp, modifier = Modifier.padding(vertical = 10.dp))
-            Box(modifier = Modifier.fillMaxWidth()){
-                Row (
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.End
-                ){
-                    Text(text = "Or Continue without Group", color = lightBlueText, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Button(
-                        onClick = {
-                        },
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = lightText.copy(alpha = 0.2f),
-                        ),
-                        contentPadding = PaddingValues(0.dp),
-                        modifier = Modifier
-                            .size(35.dp)
-                    ) {
-                        Icon(painter = painterResource(id = R.drawable.arrow_right), contentDescription = "signUp", modifier = Modifier.size(22.dp), tint = lightBlueText)
-                    }
-                }
-            }
+//            HorizontalDivider(color = lightBlueText, thickness = 1.dp, modifier = Modifier.padding(vertical = 10.dp))
+//            Box(modifier = Modifier.fillMaxWidth()){
+//                Row (
+//                    modifier = Modifier.fillMaxWidth(),
+//                    verticalAlignment = Alignment.CenterVertically,
+//                    horizontalArrangement = Arrangement.End
+//                ){
+//                    Text(text = "Or Continue without Group", color = lightBlueText, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+//                    Spacer(modifier = Modifier.width(10.dp))
+//                    Button(
+//                        onClick = {
+//                        },
+//                        shape = RoundedCornerShape(12.dp),
+//                        colors = ButtonDefaults.buttonColors(
+//                            containerColor = lightText.copy(alpha = 0.2f),
+//                        ),
+//                        contentPadding = PaddingValues(0.dp),
+//                        modifier = Modifier
+//                            .size(35.dp)
+//                    ) {
+//                        Icon(painter = painterResource(id = R.drawable.arrow_right), contentDescription = "signUp", modifier = Modifier.size(22.dp), tint = lightBlueText)
+//                    }
+//                }
+//            }
         }else{
             OrganizerCreateGroup(username,imageUri,gender,navController)
         }

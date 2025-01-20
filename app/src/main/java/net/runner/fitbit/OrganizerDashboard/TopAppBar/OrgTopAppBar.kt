@@ -75,7 +75,7 @@ fun OrgTopAppBarComposable(navController: NavController) {
                     .size(35.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .clickable {
-
+                        navController.navigate("ProfileOrganizer")
                     },
                 contentScale = ContentScale.Crop
             )

@@ -46,7 +46,7 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.parcel.Parcelize
-import net.runner.fitbit.Database.getUserData
+import net.runner.fitbit.Database.getData
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightText
@@ -83,7 +83,7 @@ fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean,navCont
         mutableStateOf(listOf<GroupNearData>())
     }
     LaunchedEffect(Unit) {
-        getUserData{
+        getData{
             userData = it
             val location = it["userLocation"]
                     as MutableMap<String, String>

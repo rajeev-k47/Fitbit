@@ -51,7 +51,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import net.runner.fitbit.Database.getUserData
+import net.runner.fitbit.Database.getData
 import net.runner.fitbit.R
 import net.runner.fitbit.auth.extendedComposables.workoutBuddy.DropdownMenuGoals
 import net.runner.fitbit.auth.extendedComposables.workoutBuddy.DropdownMenuGoalsTime
@@ -104,7 +104,7 @@ fun EditProfileBuddy(navController: NavController){
     }
 
     LaunchedEffect(Unit) {
-        getUserData{
+        getData{
             userData = it
             imageUri = it["profileImageUrl"].toString().toUri()
             name = it["username"].toString()

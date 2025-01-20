@@ -3,7 +3,6 @@ package net.runner.fitbit.WorkoutBuddyDashBoard.TopAppBar.Chatbot
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import net.runner.fitbit.BuildConfig
-import net.runner.fitbit.Database.getUserData
 import net.runner.fitbit.Database.getUserDataSuspendable
 import java.time.LocalDate
 

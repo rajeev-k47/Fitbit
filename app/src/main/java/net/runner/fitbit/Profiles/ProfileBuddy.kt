@@ -3,7 +3,6 @@ package net.runner.fitbit.Profiles
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -56,7 +55,7 @@ import coil.ImageLoader
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import com.google.firebase.auth.FirebaseAuth
-import net.runner.fitbit.Database.getUserData
+import net.runner.fitbit.Database.getData
 import net.runner.fitbit.Firebase.fcmTokenSave
 import net.runner.fitbit.R
 import net.runner.fitbit.supportedconnections
@@ -75,7 +74,7 @@ fun ProfileBuddy(navController: NavController,context:Context) {
     }
 
     LaunchedEffect(Unit) {
-        getUserData{
+        getData{
             userData = it
         }
     }
