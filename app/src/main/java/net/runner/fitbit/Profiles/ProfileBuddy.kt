@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +27,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -66,7 +68,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
-fun ProfileBuddy(navController: NavController,context:Context) {
+fun ProfileBuddy(navController: NavController,context:Context,editEnabled:Boolean,profileId: String) {
     val auth = FirebaseAuth.getInstance()
 
     var userData by rememberSaveable {
@@ -74,7 +76,7 @@ fun ProfileBuddy(navController: NavController,context:Context) {
     }
 
     LaunchedEffect(Unit) {
-        getData{
+        getData(profileId.ifEmpty { "" }){
             userData = it
         }
     }
@@ -101,34 +103,63 @@ fun ProfileBuddy(navController: NavController,context:Context) {
                         .align(Alignment.CenterStart)
                         .padding(start = 10.dp))
 
-                    Button(
-                        onClick = {
-                            fcmTokenSave(false)
-                            auth.signOut()
-                            navController.navigate("signUpScreen"){
-                                popUpTo("profileBuddy"){ inclusive = true }
-                            }
+                    if(editEnabled) {
 
-                        },
-                        contentPadding = PaddingValues(0.dp),
-                        modifier = Modifier
-                            .size(34.dp)
-                            .align(Alignment.CenterEnd),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = lightBlueText.copy(0.1f),
-                        ),
-                        border = BorderStroke(0.5.dp, lightText.copy(0.4f))
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.logout),
-                            contentDescription = "Logout",
+                        Button(
+                            onClick = {
+                                fcmTokenSave(false)
+                                auth.signOut()
+                                navController.navigate("signUpScreen"){
+                                    popUpTo("profileBuddy"){ inclusive = true }
+                                }
+
+                            },
+                            contentPadding = PaddingValues(0.dp),
                             modifier = Modifier
-                                .size(20.dp)
-                                .padding(start = 2.dp)
-                            , tint = lightBlueText
-                        )
+                                .size(34.dp)
+                                .align(Alignment.CenterEnd),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = lightBlueText.copy(0.1f),
+                            ),
+                            border = BorderStroke(0.5.dp, lightText.copy(0.4f))
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.logout),
+                                contentDescription = "Logout",
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .padding(start = 2.dp)
+                                , tint = lightBlueText
+                            )
+                        }
                     }
+                    else{
+                        Button(
+                            onClick = {
+
+                            },
+                            contentPadding = PaddingValues(10.dp),
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = lightBlueText.copy(0.1f),
+                            ),
+                            border = BorderStroke(0.5.dp, Color.White)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Add,
+                                contentDescription = "Follow",
+                                modifier = Modifier
+                                    .size(23.dp)
+                                    , tint = Color.White
+                            )
+                            Spacer(modifier = Modifier.width(3.dp))
+                            Text(text = "Follow", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                        }
+                    }
+
                         Spacer(modifier = Modifier.width(6.dp))
 
 
@@ -187,14 +218,14 @@ fun ProfileBuddy(navController: NavController,context:Context) {
                     {
 
                         Text(
-                            text = auth.currentUser?.displayName ?: "",
+                            text = userData["username"].toString(),
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(
-                            text = "@${userData["username"].toString()} • Joined ${
+                            text = "@${userData["email"].toString()} • Joined ${
                                 getFormatedTime(
                                     userData["joiningDate"].toString()
                                 )
@@ -237,50 +268,144 @@ fun ProfileBuddy(navController: NavController,context:Context) {
                                 color = lightText.copy(1f),
                             )
                         }
+
                         Spacer(modifier = Modifier.height(20.dp))
-
-                        Button(
-                            onClick = {
-                                navController.navigate("editProfileScreen"){
-                                    popUpTo("profileBuddy"){ inclusive = true }
-                                }
-                            },
-                            contentPadding = PaddingValues(10.dp),
+                        Text(
+                            text = "Goals :",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
+                        Card (
+                            modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(12.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = lightBlueText.copy(0.1f),
+                            colors = CardDefaults.cardColors(
+                                containerColor = lightText.copy(0.1f)
                             ),
-                            border = BorderStroke(0.5.dp, Color.White)
-                        ) {
-                            Row (
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ){
+                        ){
 
-                                Icon(
-                                    imageVector = Icons.Default.Edit,
-                                    contentDescription = "ai",
-                                    modifier = Modifier
-                                        .size(22.dp)
-                                        .clip(CircleShape)
-                                        .padding(1.dp)
-                                    , tint = Color.White
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
-                                Text(text = "Edit Profile", color = Color.White, fontSize = 15.sp)
+                            Text(
+                                text = (userData["goalType"] as List<String>).joinToString(", "),
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = lightText.copy(1f),
+                                modifier = Modifier.padding(10.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(
+                            text = "Targets :",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
+                        Card (
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = lightText.copy(0.1f)
+                            ),
+                        ){
+
+                            Text(
+                                text = userData["targetValue"].toString() ,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = lightText.copy(1f),
+                                modifier = Modifier.padding(10.dp)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Text(
+                            text = "Bio :",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                        )
+
+                        Spacer(modifier = Modifier.height(5.dp))
+                        Card (
+                            modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 150.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = lightText.copy(0.1f)
+                            ),
+                        ){
+
+                            Text(
+                                text = if(userData["Bio"]!=null)userData["Bio"].toString() else "Hi ${userData["username"]}here, I joined this community for my Fitness and Health Goals." ,
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = lightText.copy(1f),
+                                modifier = Modifier.padding(10.dp)
+                            )
+                        }
+
+
+
+
+
+                        if(editEnabled){
+                            Spacer(modifier = Modifier.height(20.dp))
+
+                            Button(
+                                onClick = {
+                                    navController.navigate("editProfileScreen"){
+                                        popUpTo("profileBuddy"){ inclusive = true }
+                                    }
+                                },
+                                contentPadding = PaddingValues(10.dp),
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = lightBlueText.copy(0.1f),
+                                ),
+                                border = BorderStroke(0.5.dp, Color.White)
+                            ) {
+                                Row (
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ){
+
+                                    Icon(
+                                        imageVector = Icons.Default.Edit,
+                                        contentDescription = "ai",
+                                        modifier = Modifier
+                                            .size(22.dp)
+                                            .clip(CircleShape)
+                                            .padding(1.dp)
+                                        , tint = Color.White
+                                    )
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                    Text(text = "Edit Profile", color = Color.White, fontSize = 15.sp)
+                                }
                             }
                         }
+
+
 
                         Spacer(modifier = Modifier.height(20.dp))
 
                         if(userData["connections"] != null){
-                            Text(
-                                text = "Connections :",
-                                fontSize = 15.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White,
-                            )
+                            println(userData["connections"])
                             val connections = userData["connections"] as Map<*, *>
+                            var isconnections = false
+                            connections.forEach {
+                                if(it.value.toString().isNotEmpty()){
+                                    isconnections= true
+                                }
+                            }
+                            if(isconnections){
+
+                                Text(
+                                    text = "Connections :",
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                )
+                            }
                             LazyRow(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -288,7 +413,6 @@ fun ProfileBuddy(navController: NavController,context:Context) {
                                 items(connections.size) {index->
                                     val key = connections.keys.toList()[index]
                                     val value = connections.values.toList()[index]
-
                                     if(key.toString() in supportedconnections){
                                         if(key=="instagram" && value.toString().isNotEmpty()){
                                             connectionButton(context,"https://www.instagram.com/${value}",value.toString(), painterResource(id = R.drawable.instagram))
@@ -341,7 +465,7 @@ fun connectionButton(context: Context,url: String,value: String,icon: Painter) {
         colors = ButtonDefaults.buttonColors(
             containerColor = lightBlueText.copy(0.1f),
         ),
-        border = BorderStroke(0.5.dp, Color.White.copy(0.2f))
+        border = BorderStroke(0.5.dp, Color.White.copy(0.6f))
     ) {
         Row (
             horizontalArrangement = Arrangement.Center,
@@ -361,16 +485,17 @@ fun connectionButton(context: Context,url: String,value: String,icon: Painter) {
 }
 
 fun getFormatedTime(dateString: String): String {
-    val inputFormat = SimpleDateFormat("dd MMMM yyyy 'at' HH:mm:ss z", Locale.ENGLISH)
+    val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH)
 
-    try {
-
+    return try {
         val date = inputFormat.parse(dateString)
         val outputFormat = SimpleDateFormat("MMMM yyyy", Locale.ENGLISH)
-        return outputFormat.format(date)
-    }catch (e:Exception){
-        return ""
+        outputFormat.format(date)
+    } catch (e: Exception) {
+        ""
     }
+
+
 
 
 }
