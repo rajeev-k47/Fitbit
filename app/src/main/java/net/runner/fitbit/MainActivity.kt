@@ -33,6 +33,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.runner.fitbit.Firebase.fcmTokenSave
+import net.runner.fitbit.GroupPanel.GroupProfile
 import net.runner.fitbit.WorkoutBuddyDashBoard.TopAppBar.Chatbot.ChatbotPanel
 import net.runner.fitbit.OrganizerDashboard.OrganizerDashBoard
 import net.runner.fitbit.Profiles.EditOrgProfileScreen
@@ -127,7 +128,7 @@ class MainActivity : ComponentActivity() {
 
                     }
                     composable(route = "profileBuddy") {
-                        ProfileBuddy(navController,this@MainActivity)
+                        ProfileBuddy(navController,this@MainActivity,true,"")
                     }
                     composable(route="ProfileOrganizer") {
                         ProfileOrganizer(navController,this@MainActivity)
@@ -138,6 +139,16 @@ class MainActivity : ComponentActivity() {
                     composable(route="editOrgProfileScreen"){
                         EditOrgProfileScreen(navController)
                     }
+                    composable(route="profileBuddy/{profileId}",arguments = listOf(navArgument("profileId") { type = NavType.StringType })) {
+                        backStackEntry ->
+                        val profileId = backStackEntry.arguments?.getString("profileId")!!
+                        ProfileBuddy(
+                            navController = navController,
+                            context = this@MainActivity,
+                            editEnabled = false,
+                            profileId = profileId
+                        )
+                    }
 
                     composable(route = "chatBot") {
                         ChatbotPanel(navController)
@@ -145,6 +156,7 @@ class MainActivity : ComponentActivity() {
                     composable(route="group/{groupId}",arguments = listOf(navArgument("groupId") { type = NavType.StringType })) {
                         backStackEntry ->
                         val groupId = backStackEntry.arguments?.getString("groupId")
+                        GroupProfile(navController,groupId!!)
                     }
 
                 }
