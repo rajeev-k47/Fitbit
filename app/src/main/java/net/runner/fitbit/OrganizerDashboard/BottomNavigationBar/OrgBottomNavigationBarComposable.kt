@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -63,7 +65,7 @@ fun OrgBottomNavigationBarComposable(modifier: Modifier,onselected:(String)->Uni
 
 
 
-    val navigationItems = listOf(
+    val navigationItems = mutableListOf(
         NavigationItem(
             label = "Home",
             filledIcon = painterResource(id = R.drawable.home_filled),
@@ -102,6 +104,11 @@ fun OrgBottomNavigationBarComposable(modifier: Modifier,onselected:(String)->Uni
             }
         )
     )
+    if(!isPrivate){
+        val temp = navigationItems[2]
+        navigationItems[2] = navigationItems[3]
+        navigationItems[3] = temp
+    }
 
     Card(
         modifier = modifier
@@ -128,16 +135,18 @@ fun OrgBottomNavigationBarComposable(modifier: Modifier,onselected:(String)->Uni
             navigationItems.forEach { item ->
                 if(item.label.isNotEmpty()&&(isPrivate||item.label!="Requests")){
                     Box(
-                        modifier = Modifier.size(55.dp),
+                        modifier = Modifier.size(55.dp).clickable(
+                            onClick = {
+                                selectedItem = item.label
+                                item.onclick()
+                            },
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ),
                         contentAlignment = Alignment.Center
                     ){
 
                         Column(
-                            modifier = Modifier
-                                .clickable {
-                                    selectedItem = item.label
-                                    item.onclick()
-                                },
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Icon(
