@@ -127,7 +127,7 @@ fun EditOrgProfileScreen(navController: NavController) {
 
 
     LaunchedEffect(Unit) {
-        getData{
+        getData(""){
             groupData = it
             newGroupData = OrganizerGroupData(
                 organizationName = (it["groupData"] as Map<String, Any>)["organizationName"].toString(),

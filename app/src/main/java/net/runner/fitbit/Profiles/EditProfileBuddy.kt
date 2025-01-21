@@ -104,7 +104,7 @@ fun EditProfileBuddy(navController: NavController){
     }
 
     LaunchedEffect(Unit) {
-        getData{
+        getData(""){
             userData = it
             imageUri = it["profileImageUrl"].toString().toUri()
             name = it["username"].toString()

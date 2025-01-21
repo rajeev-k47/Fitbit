@@ -66,7 +66,7 @@ fun ProfileOrganizer(navController: NavController, context: Context) {
     }
 
     LaunchedEffect(Unit) {
-        getData{
+        getData(""){
             OrganizerData = it
         }
     }
@@ -223,7 +223,7 @@ fun ProfileOrganizer(navController: NavController, context: Context) {
                             )
 
                             Text(
-                                text = "Buddies",
+                                text = "Pending",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = lightText.copy(1f),

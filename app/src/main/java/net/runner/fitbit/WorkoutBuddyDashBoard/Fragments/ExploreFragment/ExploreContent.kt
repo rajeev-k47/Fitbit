@@ -83,7 +83,7 @@ fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean,navCont
         mutableStateOf(listOf<GroupNearData>())
     }
     LaunchedEffect(Unit) {
-        getData{
+        getData(""){
             userData = it
             val location = it["userLocation"]
                     as MutableMap<String, String>
@@ -195,14 +195,14 @@ fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean,navCont
 
             items(peopleRelatedFeed.size){index->
 
-            PeopleExploreRelatedFeedCard(peopleRelatedFeed,index)
+            PeopleExploreRelatedFeedCard(peopleRelatedFeed,index,navController)
 
             }
         }
         else if(typeFilerPeopleSelected && selectedFilter=="Near you"){
             items(peopleNearFeed.size){index->
 
-                PeopleExploreNearFeedCard(peopleNearFeed[index])
+                PeopleExploreNearFeedCard(peopleNearFeed[index],navController)
             }
         }
         else if(!typeFilerPeopleSelected && selectedFilter=="Related"){
@@ -380,7 +380,7 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
 }
 
 @Composable
-fun PeopleExploreNearFeedCard(peopleNearData: PeopleNearData){
+fun PeopleExploreNearFeedCard(peopleNearData: PeopleNearData,navController: NavController){
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start,
@@ -429,6 +429,7 @@ fun PeopleExploreNearFeedCard(peopleNearData: PeopleNearData){
 
         Button(
             onClick = {
+                navController.navigate("profileBuddy/${peopleNearData.personData.first["userId"].toString()}")
             },
             modifier = Modifier.padding(end = 14.dp),
             shape = RoundedCornerShape(10.dp),
@@ -443,7 +444,7 @@ fun PeopleExploreNearFeedCard(peopleNearData: PeopleNearData){
 
 
 @Composable
-fun PeopleExploreRelatedFeedCard(peopleData:List<Pair<Map<String, Any>, Int>>,index:Int) {
+fun PeopleExploreRelatedFeedCard(peopleData:List<Pair<Map<String, Any>, Int>>,index:Int,navController: NavController) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start,
@@ -492,6 +493,8 @@ fun PeopleExploreRelatedFeedCard(peopleData:List<Pair<Map<String, Any>, Int>>,in
 
             Button(
                 onClick = {
+                    navController.navigate("profileBuddy/${peopleData[index].first["userId"].toString()}")
+
                 },
                 modifier = Modifier.padding(end = 14.dp),
                 shape = RoundedCornerShape(10.dp),

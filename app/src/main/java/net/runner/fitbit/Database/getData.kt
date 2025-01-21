@@ -5,9 +5,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
-fun getData(onresult:(MutableMap<String,Any>)->Unit) {
+fun getData(id:String,onresult:(MutableMap<String,Any>)->Unit) {
     val db = FirebaseFirestore.getInstance()
-    val userUid = FirebaseAuth.getInstance().currentUser?.uid
+    val userUid = id.ifEmpty { FirebaseAuth.getInstance().currentUser?.uid }
 
     if (userUid != null) {
         val userDocRef = db.collection("users").document(userUid)
