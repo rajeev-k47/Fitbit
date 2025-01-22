@@ -1,6 +1,5 @@
 package net.runner.fitbit.WorkoutBuddyDashBoard.BottomNavigationbar
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable

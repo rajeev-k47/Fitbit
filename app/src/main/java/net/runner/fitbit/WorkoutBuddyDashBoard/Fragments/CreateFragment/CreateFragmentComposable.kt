@@ -33,7 +33,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import io.socket.client.IO
+import io.socket.client.Socket
 import kotlinx.coroutines.launch
+import net.runner.fitbit.Chat.SocketManager
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightBlueText
@@ -41,7 +45,7 @@ import net.runner.fitbit.ui.theme.lightText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun createContent(modalStatus:Boolean,onDismiss:(Boolean)->Unit) {
+fun createContent(modalStatus:Boolean,navController: NavController,onDismiss:(Boolean)->Unit) {
 
     val sheetState = rememberModalBottomSheetState()
     val coroutineScope = rememberCoroutineScope()
@@ -84,7 +88,44 @@ fun createContent(modalStatus:Boolean,onDismiss:(Boolean)->Unit) {
                         ) {
                             Button(
                                 onClick = {
+                                    if(label=="Create Post"){
+                                        navController.navigate("CreatePost")
+                                    }
 //                                    item.onclick()
+                                      println("sd")
+//                                    SocketManager.initialize("http://10.0.2.2:3000")
+//                                    SocketManager.connect()
+//                                    SocketManager.socket.on(Socket.EVENT_CONNECT) {
+//                                        println("Socket connected!")
+//                                    }
+//                                    SocketManager.socket.on(Socket.EVENT_CONNECT_ERROR) { args ->
+//                                        println("Connection error: ${args.firstOrNull()}")
+//                                    }
+//
+//                                    SocketManager.socket.on(Socket.EVENT_DISCONNECT) {
+//                                        println("Connection timeout!")
+//                                    }
+//
+//                                    SocketManager.sendMessage("message", "Hello from Android!")
+
+                                    val options = IO.Options().apply {
+                                        transports = arrayOf("polling", "websocket") // Match server transports
+                                        reconnection = true
+                                        forceNew = true
+                                    }
+
+                                    val socket = IO.socket("http://10.81.0.165:3000", options)
+
+                                    socket.on(Socket.EVENT_CONNECT) {
+                                        println("Connected to server")
+                                    }.on(Socket.EVENT_CONNECT_ERROR) { args ->
+                                        println("Connection error: ${args.firstOrNull()}")
+                                    }.on(Socket.EVENT_DISCONNECT) {
+                                        println("Disconnected from server")
+                                    }
+
+                                    socket.connect()
+
                                 },
                                 contentPadding = PaddingValues(0.dp),
                                 modifier = Modifier

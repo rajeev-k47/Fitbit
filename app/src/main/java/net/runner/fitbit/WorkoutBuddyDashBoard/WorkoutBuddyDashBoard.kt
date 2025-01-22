@@ -3,6 +3,7 @@ package net.runner.fitbit.WorkoutBuddyDashBoard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,7 +34,7 @@ fun WorkoutBuddyDashBoard(navController:NavController){
     Box(modifier = Modifier
         .fillMaxSize()
         .background(background)
-        .statusBarsPadding()){
+        .statusBarsPadding().navigationBarsPadding()){
         when (currentFragment) {
             "Home" -> {
                 HomeFragment(navController = navController)
@@ -50,13 +51,13 @@ fun WorkoutBuddyDashBoard(navController:NavController){
         }
 
         if(modalState){
-            createContent(modalStatus = modalState) {
+            createContent(modalStatus = modalState,navController) {
                 modalState=it
             }
         }
-       
 
-        BottomNavigationbarComposable(Modifier.align(Alignment.BottomCenter)){
+
+        BottomNavigationbarComposable(Modifier.align(Alignment.BottomCenter)) {
             if(it!="Create"){
                 currentFragment = it
             }else{
