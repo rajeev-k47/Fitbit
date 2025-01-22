@@ -5,7 +5,11 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,7 +20,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -24,6 +31,11 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,12 +49,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.google.firebase.auth.FirebaseAuth
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightText
 
 @Composable
 fun UserFeedComposable(context: Context, Feed: Map<String, Any>, FeedAuthors: Pair<Map<String, Any>, String>) {
+    var liked by rememberSaveable { mutableStateOf(false) }
 
     Spacer(modifier = Modifier.height(10.dp))
     Card(
@@ -103,18 +117,24 @@ fun UserFeedComposable(context: Context, Feed: Map<String, Any>, FeedAuthors: Pa
                         Row(
                             modifier = Modifier
                                 .weight(0.4f)
-                                .clickable {
+                                .clickable(
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = null
+                                ) {
                                     val redirectionLink =
-                                        FeedAuthors.first["referenceLink"].toString()
+                                        Feed["referenceLink"].toString()
                                     try {
                                         val intent = Intent(Intent.ACTION_VIEW)
                                         intent.data = Uri.parse(redirectionLink)
                                         context.startActivity(intent)
-                                    }catch (error:Exception){
-                                        Toast.makeText(context, "Invalid Link", Toast.LENGTH_SHORT).show()
+                                    } catch (error: Exception) {
+                                        Toast
+                                            .makeText(context, "Invalid Link", Toast.LENGTH_SHORT)
+                                            .show()
                                     }
                                 }
-                            , verticalAlignment = Alignment.CenterVertically
+                            , verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.End
                         ){
                             Icon(painter = painterResource(id = R.drawable.link), contentDescription = "",
                                 Modifier.size(18.dp))
@@ -135,39 +155,76 @@ fun UserFeedComposable(context: Context, Feed: Map<String, Any>, FeedAuthors: Pa
                 }
 
             }
+            Spacer(modifier = Modifier.height(15.dp))
 
-            Text(text = "Facilities :", color = Color.White, fontSize = 16.sp, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
+
+            Text(text = Feed["title"].toString(), color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 3, modifier = Modifier
                 .padding(horizontal = 10.dp))
-            Text(text =" facilities.joinToString", color = lightText, fontSize = 14.sp, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
-                .padding(horizontal = 10.dp))
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items((Feed["tags"] as? List<String> ?: emptyList()).size) { index ->
+                    Card (
+                        colors = CardColors(
+                            containerColor = lightText.copy(0.1f),
+                            contentColor = Color.White,
+                            disabledContentColor = Color.White,
+                            disabledContainerColor = Color.Red
+                        )
+                    ){
+                        Text("# ${(Feed["tags"] as List<String>)[index]}", fontSize = 14.sp, color = lightText, fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 10.dp, vertical = 3.dp))
+                    }
+
+
+                }
+            }
             Spacer(modifier = Modifier.height(10.dp))
 
             AsyncImage(
-                model = "groupNearDat",
-                contentDescription = "avatar",
+                model = "${Feed["bannerImageUri"]}",
+                contentDescription = "banner",
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
                     .fillMaxWidth()
                     .height(140.dp)
-                    .clip(RoundedCornerShape(15.dp)),
+                    .clip(RoundedCornerShape(15.dp))
+                    .border(0.5.dp, lightText.copy(0.4f), RoundedCornerShape(15.dp))
+                ,
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Button(
-                onClick = {
-
-
-                },
-                contentPadding = PaddingValues(0.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp, vertical = 3.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
+            Card (
+                colors = CardColors(
+                    containerColor = lightText.copy(0.1f),
+                    contentColor = Color.White,
+                    disabledContentColor = Color.White,
+                    disabledContainerColor = Color.Red
                 ),
-            ) {
-                Text("Join", color = Color.Black, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    modifier = Modifier.padding(horizontal = 10.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable(indication = LocalIndication.current, interactionSource = remember { MutableInteractionSource() }) {
+                        liked = !liked
+                        manageLikeStatus(FeedAuthors.second, FirebaseAuth.getInstance().currentUser!!.uid)
+
+                    }
+            ){
+                Row (
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+
+                ) {
+                    Icon(painter = if(!liked) painterResource(id = R.drawable.hand_unliked) else painterResource(id = R.drawable.hand_like), tint = lightText,contentDescription = "", modifier = Modifier.padding(10.dp)
+                        .size(18.dp)
+                        .align(Alignment.CenterVertically))
+                    Text(if (!liked) "Like" else "Liked", fontSize = 15.sp, color = lightText, fontWeight = FontWeight.Bold, modifier = Modifier.padding(end = 10.dp))
+                }
             }
 
         }
