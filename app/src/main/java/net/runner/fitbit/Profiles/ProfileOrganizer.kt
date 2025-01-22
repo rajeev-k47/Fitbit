@@ -58,7 +58,7 @@ import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
 
 @Composable
-fun ProfileOrganizer(navController: NavController, context: Context) {
+fun ProfileOrganizer(navController: NavController,orgId:String) {
     val auth = FirebaseAuth.getInstance()
 
     var OrganizerData by rememberSaveable {
@@ -66,7 +66,7 @@ fun ProfileOrganizer(navController: NavController, context: Context) {
     }
 
     LaunchedEffect(Unit) {
-        getData(""){
+        getData(orgId.ifEmpty { "" }){
             OrganizerData = it
         }
     }
@@ -93,34 +93,38 @@ fun ProfileOrganizer(navController: NavController, context: Context) {
                         .align(Alignment.CenterStart)
                         .padding(start = 10.dp))
 
-                    Button(
-                        onClick = {
-                            fcmTokenSave(false)
-                            auth.signOut()
-                            navController.navigate("signUpScreen"){
-                                popUpTo("ProfileOrganizer"){ inclusive = true }
-                            }
+                    if(orgId.isEmpty()){
 
-                        },
-                        contentPadding = PaddingValues(0.dp),
-                        modifier = Modifier
-                            .size(34.dp)
-                            .align(Alignment.CenterEnd),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = lightBlueText.copy(0.1f),
-                        ),
-                        border = BorderStroke(0.5.dp, lightText.copy(0.4f))
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.logout),
-                            contentDescription = "Logout",
+                        Button(
+                            onClick = {
+                                fcmTokenSave(false)
+                                auth.signOut()
+                                navController.navigate("signUpScreen"){
+                                    popUpTo("ProfileOrganizer"){ inclusive = true }
+                                }
+
+                            },
+                            contentPadding = PaddingValues(0.dp),
                             modifier = Modifier
-                                .size(20.dp)
-                                .padding(start = 2.dp)
-                            , tint = lightBlueText
-                        )
+                                .size(34.dp)
+                                .align(Alignment.CenterEnd),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = lightBlueText.copy(0.1f),
+                            ),
+                            border = BorderStroke(0.5.dp, lightText.copy(0.4f))
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.logout),
+                                contentDescription = "Logout",
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .padding(start = 2.dp)
+                                , tint = lightBlueText
+                            )
+                        }
                     }
+
                     Spacer(modifier = Modifier.width(6.dp))
 
 
@@ -147,10 +151,6 @@ fun ProfileOrganizer(navController: NavController, context: Context) {
 //                            ?: auth.currentUser?.photoUrl,
                         contentDescription = "",
                         contentScale = ContentScale.Crop,
-                        imageLoader = ImageLoader.Builder(context)
-                            .memoryCachePolicy(CachePolicy.ENABLED)
-                            .diskCachePolicy(CachePolicy.ENABLED)
-                            .build(),
                         modifier = Modifier
                             .width(100.dp)
                             .fillMaxHeight()
@@ -209,25 +209,28 @@ fun ProfileOrganizer(navController: NavController, context: Context) {
                             )
 
                             Text(
-                                text = "Buddies • ",
+                                text = "Buddies ",
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = lightText.copy(1f),
                             )
 
-                            Text(
-                                text = if((OrganizerData["pending"] != null))"${(OrganizerData["pending"] as List<String>).size} " else "0 " ,
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White,
-                            )
+                            if(orgId.isEmpty()){
 
-                            Text(
-                                text = "Pending",
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = lightText.copy(1f),
-                            )
+                                Text(
+                                    text = if((OrganizerData["pending"] != null))"• ${(OrganizerData["pending"] as List<String>).size} " else "• 0 " ,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                )
+                                Text(
+                                    text = "Pending",
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = lightText.copy(1f),
+                                )
+                            }
+
                         }
                         Spacer(modifier = Modifier.height(15.dp))
 
@@ -296,36 +299,38 @@ fun ProfileOrganizer(navController: NavController, context: Context) {
 
 
 
+                        if(orgId.isEmpty()) {
 
-                        Button(
-                            onClick = {
-                                navController.navigate("editOrgProfileScreen"){
-                                    popUpTo("ProfileOrganizer"){ inclusive = true }
+                            Button(
+                                onClick = {
+                                    navController.navigate("editOrgProfileScreen"){
+                                        popUpTo("ProfileOrganizer"){ inclusive = true }
+                                    }
+                                },
+                                contentPadding = PaddingValues(10.dp),
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = lightBlueText.copy(0.1f),
+                                ),
+                                border = BorderStroke(0.5.dp, Color.White)
+                            ) {
+                                Row (
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ){
+
+                                    Icon(
+                                        imageVector = Icons.Default.Edit,
+                                        contentDescription = "edit",
+                                        modifier = Modifier
+                                            .size(22.dp)
+                                            .clip(CircleShape)
+                                            .padding(1.dp)
+                                        , tint = Color.White
+                                    )
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                    Text(text = "Edit Profile", color = Color.White, fontSize = 15.sp)
                                 }
-                            },
-                            contentPadding = PaddingValues(10.dp),
-                            shape = RoundedCornerShape(12.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = lightBlueText.copy(0.1f),
-                            ),
-                            border = BorderStroke(0.5.dp, Color.White)
-                        ) {
-                            Row (
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ){
-
-                                Icon(
-                                    imageVector = Icons.Default.Edit,
-                                    contentDescription = "edit",
-                                    modifier = Modifier
-                                        .size(22.dp)
-                                        .clip(CircleShape)
-                                        .padding(1.dp)
-                                    , tint = Color.White
-                                )
-                                Spacer(modifier = Modifier.width(5.dp))
-                                Text(text = "Edit Profile", color = Color.White, fontSize = 15.sp)
                             }
                         }
 

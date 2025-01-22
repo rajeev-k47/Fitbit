@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -116,6 +117,7 @@ fun OrgBottomNavigationBarComposable(modifier: Modifier,onselected:(String)->Uni
             .padding(horizontal = 10.dp)
             .border(0.5.dp, lightText, shape = RoundedCornerShape(20.dp))
             .shadow(5.dp, shape = RoundedCornerShape(20.dp), spotColor = lightText)
+            .navigationBarsPadding()
         ,
         colors = CardDefaults.cardColors(
             containerColor = background

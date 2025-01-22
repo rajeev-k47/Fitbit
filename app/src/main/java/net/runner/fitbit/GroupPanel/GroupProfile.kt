@@ -137,11 +137,12 @@ fun GroupProfile(navController: NavController,groupId:String) {
                                 .size(35.dp)
                                 .align(Alignment.CenterVertically)
                         ) {
-                            Icon(painter = painterResource(id = R.drawable.chat_group), contentDescription = "signUp", modifier = Modifier.size(16.dp), tint = lightBlueText)
+                            Icon(painter = painterResource(id = R.drawable.chat_group), contentDescription = "chat", modifier = Modifier.size(16.dp), tint = lightBlueText)
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Button(
                             onClick = {
+                                navController.navigate("groupInfo/${groupId}")
                             },
                             shape = RoundedCornerShape(12.dp),
                             colors = ButtonDefaults.buttonColors(
@@ -152,7 +153,7 @@ fun GroupProfile(navController: NavController,groupId:String) {
                                 .size(35.dp)
                                 .align(Alignment.CenterVertically)
                         ) {
-                            Icon(imageVector = Icons.Filled.Info, contentDescription = "signUp", modifier = Modifier.size(22.dp), tint = lightBlueText)
+                            Icon(imageVector = Icons.Filled.Info, contentDescription = "info", modifier = Modifier.size(22.dp), tint = lightBlueText)
                         }
                     }
                 }

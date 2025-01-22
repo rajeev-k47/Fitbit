@@ -46,9 +46,9 @@ fun OrganizerDashBoard(navController: NavController){
         }
 
         if(modalState){
-            createContent(modalStatus = modalState) {
-                modalState=it
-            }
+//            createContent(modalStatus = modalState) {
+//                modalState=it
+//            }
         }
 
 

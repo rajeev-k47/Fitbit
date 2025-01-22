@@ -32,7 +32,9 @@ import com.onesignal.debug.LogLevel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.runner.fitbit.Chat.SocketManager
 import net.runner.fitbit.Firebase.fcmTokenSave
+import net.runner.fitbit.GroupPanel.GroupInfo
 import net.runner.fitbit.GroupPanel.GroupProfile
 import net.runner.fitbit.WorkoutBuddyDashBoard.TopAppBar.Chatbot.ChatbotPanel
 import net.runner.fitbit.OrganizerDashboard.OrganizerDashBoard
@@ -40,6 +42,7 @@ import net.runner.fitbit.Profiles.EditOrgProfileScreen
 import net.runner.fitbit.Profiles.EditProfileBuddy
 import net.runner.fitbit.Profiles.ProfileBuddy
 import net.runner.fitbit.Profiles.ProfileOrganizer
+import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.CreateFragment.CreatePostComposable
 import net.runner.fitbit.WorkoutBuddyDashBoard.WorkoutBuddyDashBoard
 import net.runner.fitbit.auth.SignUpComposable
 import net.runner.fitbit.auth.database.checkIfAccountExists
@@ -131,7 +134,12 @@ class MainActivity : ComponentActivity() {
                         ProfileBuddy(navController,this@MainActivity,true,"")
                     }
                     composable(route="ProfileOrganizer") {
-                        ProfileOrganizer(navController,this@MainActivity)
+                        ProfileOrganizer(navController,"")
+                    }
+                    composable(route="ProfileOrganizer/{profileId}",arguments = listOf(navArgument("profileId") { type = NavType.StringType })) {
+                        backStackEntry ->
+                        val profileId = backStackEntry.arguments?.getString("profileId")
+                        ProfileOrganizer(navController,profileId!!)
                     }
                     composable(route="editProfileScreen"){
                         EditProfileBuddy(navController)
@@ -149,6 +157,9 @@ class MainActivity : ComponentActivity() {
                             profileId = profileId
                         )
                     }
+                    composable("CreatePost"){
+                        CreatePostComposable(navController)
+                    }
 
                     composable(route = "chatBot") {
                         ChatbotPanel(navController)
@@ -157,6 +168,11 @@ class MainActivity : ComponentActivity() {
                         backStackEntry ->
                         val groupId = backStackEntry.arguments?.getString("groupId")
                         GroupProfile(navController,groupId!!)
+                    }
+                    composable(route="groupInfo/{groupId}",arguments = listOf(navArgument("groupId") { type = NavType.StringType })) {
+                        backStackEntry ->
+                        val groupId = backStackEntry.arguments?.getString("groupId")
+                        GroupInfo(navController,groupId!!)
                     }
 
                 }

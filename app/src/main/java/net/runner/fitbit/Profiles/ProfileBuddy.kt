@@ -336,7 +336,7 @@ fun ProfileBuddy(navController: NavController,context:Context,editEnabled:Boolea
                         ){
 
                             Text(
-                                text = if(userData["Bio"]!=null)userData["Bio"].toString() else "Hi ${userData["username"]}here, I joined this community for my Fitness and Health Goals." ,
+                                text = if(userData["Bio"]!=null)userData["Bio"].toString() else "Hi ${userData["username"]} here, I joined this community for my Fitness and Health Goals." ,
                                 fontSize = 15.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = lightText.copy(1f),

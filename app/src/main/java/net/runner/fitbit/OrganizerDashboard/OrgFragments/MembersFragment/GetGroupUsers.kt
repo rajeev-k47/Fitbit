@@ -3,11 +3,11 @@ package net.runner.fitbit.OrganizerDashboard.OrgFragments.MembersFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-fun getGroupUsers(callback: (List<String>) -> Unit) {
+fun getGroupUsers(grId:String,callback: (List<String>) -> Unit) {
     val db = FirebaseFirestore.getInstance()
     val usersCollection = db.collection("users")
 
-    val groupId = FirebaseAuth.getInstance().currentUser?.uid
+    val groupId = grId.ifEmpty { FirebaseAuth.getInstance().currentUser?.uid }
     if (groupId != null) {
         usersCollection.document(groupId)
             .get()

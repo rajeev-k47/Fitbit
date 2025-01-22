@@ -57,7 +57,7 @@ fun MembersFragmentComposable() {
     }
     var isLoaded by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect (Unit){
-        getGroupUsers {
+        getGroupUsers("") {
             Users = it
         }
     }
@@ -170,7 +170,7 @@ fun MembersFragmentComposable() {
 
                     Button(
                         onClick = {
-                            ApproveRequest(filteredUsersData[index]["userId"].toString())
+
                         },
                         modifier = Modifier.padding(end = 14.dp),
                         shape = RoundedCornerShape(10.dp),
