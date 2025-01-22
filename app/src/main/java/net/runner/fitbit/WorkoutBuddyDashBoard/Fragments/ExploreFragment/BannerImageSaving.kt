@@ -34,3 +34,30 @@ fun saveBannerImage(bannerImage: Uri) {
             Log.e("FirebaseStorage", "Error uploading image", exception)
         }
 }
+fun savePostBannerImage(bannerImage: Uri,postId:String) {
+    val storageRef = FirebaseStorage.getInstance().reference
+    val imageRef = storageRef.child("post_banner_images/${postId}.jpg")
+
+    imageRef.putFile(bannerImage)
+        .addOnSuccessListener {
+            imageRef.downloadUrl.addOnSuccessListener { uri ->
+                Log.d("FirebaseStorage", "Image uploaded successfully: $uri")
+                val db = FirebaseFirestore.getInstance()
+                val userUid = FirebaseAuth.getInstance().currentUser?.uid
+
+                if (userUid != null) {
+                    val userDocRef = db.collection("posts").document(postId)
+                    userDocRef.update("bannerImageUri", uri.toString())
+                        .addOnSuccessListener {
+                            Log.d("Firestore", "Image URL saved successfully")
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.e("Firestore", "Error saving image URL", exception)
+                        }
+                }
+            }
+        }
+        .addOnFailureListener { exception ->
+            Log.e("FirebaseStorage", "Error uploading image", exception)
+        }
+}
