@@ -8,11 +8,22 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -52,6 +63,7 @@ import net.runner.fitbit.sharedPreference.removeTempEmail
 import net.runner.fitbit.sharedPreference.tempEmailSignUp
 import net.runner.fitbit.splashScreen.splashScreen
 import net.runner.fitbit.ui.theme.FitbitTheme
+import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.userDetails.UserDetailComposable
 
 val ONESIGNAL_APP_ID = BuildConfig.ONESIGNAL_APP_ID
@@ -185,6 +197,11 @@ class MainActivity : ComponentActivity() {
                         backStackEntry ->
                         val uId = backStackEntry.arguments?.getString("userId")!!
                         ChatManager(uId = uId, groupChat = false,navController)
+                    }
+                    composable(route="UserChats") {
+                        Box(modifier = Modifier.fillMaxSize().background(background)){
+                            Text(text = "Yet to be implemented, You can manually navigate to group or user chat by opening their profile.",modifier = Modifier.align(Alignment.Center).padding(horizontal = 20.dp),color = Color.White,fontSize = 20.sp,fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+                        }
                     }
 
                 }

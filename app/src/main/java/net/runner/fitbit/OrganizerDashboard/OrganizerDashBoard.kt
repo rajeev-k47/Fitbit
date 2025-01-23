@@ -3,6 +3,7 @@ package net.runner.fitbit.OrganizerDashboard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,13 +30,13 @@ fun OrganizerDashBoard(navController: NavController){
     Box(modifier = Modifier
         .fillMaxSize()
         .background(background)
-        .statusBarsPadding()){
+        .statusBarsPadding().navigationBarsPadding()){
         when (currentFragment) {
             "Home" -> {
                 OrgHomeFragment(navController)
             }
             "Members" -> {
-                MembersFragmentComposable()
+                MembersFragmentComposable(navController)
             }
             "Activity" -> {
 //                ActivityFragmentComposable()

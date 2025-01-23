@@ -97,6 +97,9 @@ fun createContent(modalStatus:Boolean,navController: NavController,onDismiss:(Bo
 
                                         navController.navigate("CreatePost")
                                     }
+                                    else{
+                                        navController.navigate("UserChats")
+                                    }
 //                                    item.onclick()
                                       println("sd")
 //                                    SocketManager.initialize("http://10.0.2.2:3000")

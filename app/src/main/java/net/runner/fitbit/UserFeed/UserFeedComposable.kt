@@ -31,6 +31,7 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,6 +58,10 @@ import net.runner.fitbit.ui.theme.lightText
 @Composable
 fun UserFeedComposable(context: Context, Feed: Map<String, Any>, FeedAuthors: Pair<Map<String, Any>, String>) {
     var liked by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        liked = (Feed["likes"] as List<String>).contains(FirebaseAuth.getInstance().currentUser?.uid.toString())
+    }
 
     Spacer(modifier = Modifier.height(10.dp))
     Card(
@@ -200,31 +205,59 @@ fun UserFeedComposable(context: Context, Feed: Map<String, Any>, FeedAuthors: Pa
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Card (
-                colors = CardColors(
-                    containerColor = lightText.copy(0.1f),
-                    contentColor = Color.White,
-                    disabledContentColor = Color.White,
-                    disabledContainerColor = Color.Red
-                ),
-                    modifier = Modifier.padding(horizontal = 10.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .clickable(indication = LocalIndication.current, interactionSource = remember { MutableInteractionSource() }) {
-                        liked = !liked
-                        manageLikeStatus(FeedAuthors.second, FirebaseAuth.getInstance().currentUser!!.uid)
-
-                    }
+            Row (
+                verticalAlignment = Alignment.CenterVertically
             ){
-                Row (
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
 
-                ) {
-                    Icon(painter = if(!liked) painterResource(id = R.drawable.hand_unliked) else painterResource(id = R.drawable.hand_like), tint = lightText,contentDescription = "", modifier = Modifier.padding(10.dp)
-                        .size(18.dp)
-                        .align(Alignment.CenterVertically))
-                    Text(if (!liked) "Like" else "Liked", fontSize = 15.sp, color = lightText, fontWeight = FontWeight.Bold, modifier = Modifier.padding(end = 10.dp))
+                Card (
+                    colors = CardColors(
+                        containerColor = lightText.copy(0.1f),
+                        contentColor = Color.White,
+                        disabledContentColor = Color.White,
+                        disabledContainerColor = Color.Red
+                    ),
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .clickable(
+                            indication = LocalIndication.current,
+                            interactionSource = remember { MutableInteractionSource() }) {
+                            liked = !liked
+                            println(FeedAuthors.second)
+                            manageLikeStatus(
+                                FeedAuthors.second,
+                                FirebaseAuth.getInstance().currentUser!!.uid
+                            )
+
+                        }
+                ){
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center,
+
+                        ) {
+                        Icon(painter = if(!liked) painterResource(id = R.drawable.hand_unliked) else painterResource(id = R.drawable.hand_like), tint = lightText,contentDescription = "", modifier = Modifier
+                            .padding(10.dp)
+                            .size(18.dp)
+                            .align(Alignment.CenterVertically))
+                        Text(if (!liked) "Like" else "Liked", fontSize = 15.sp, color = lightText, fontWeight = FontWeight.Bold, modifier = Modifier.padding(end = 10.dp))
+                    }
                 }
+
+                Card (
+                    colors = CardColors(
+                        containerColor = lightText.copy(0.1f),
+                        contentColor = Color.White,
+                        disabledContentColor = Color.White,
+                        disabledContainerColor = Color.Red
+                    ),
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                ){
+                    Text(text = "${(Feed["likes"] as List<String>).size}", fontSize = 15.sp, color = lightText, fontWeight = FontWeight.Bold, modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp), textAlign = TextAlign.Center)
+
+                }
+
             }
 
         }

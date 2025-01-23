@@ -137,6 +137,7 @@ fun ProfileBuddy(navController: NavController,context:Context,editEnabled:Boolea
                     else{
                         Button(
                             onClick = {
+                                navController.navigate("userChat/${userData["userId"].toString()}")
 
                             },
                             contentPadding = PaddingValues(10.dp),
@@ -149,14 +150,14 @@ fun ProfileBuddy(navController: NavController,context:Context,editEnabled:Boolea
                             border = BorderStroke(0.5.dp, Color.White)
                         ) {
                             Icon(
-                                imageVector = Icons.Filled.Add,
-                                contentDescription = "Follow",
+                                painter = painterResource(id = R.drawable.chat_group),
+                                contentDescription = "Chat",
                                 modifier = Modifier
-                                    .size(23.dp)
+                                    .size(18.dp)
                                     , tint = Color.White
                             )
-                            Spacer(modifier = Modifier.width(3.dp))
-                            Text(text = "Follow", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(text = "Chat", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold)
                         }
                     }
 
@@ -328,7 +329,9 @@ fun ProfileBuddy(navController: NavController,context:Context,editEnabled:Boolea
 
                         Spacer(modifier = Modifier.height(5.dp))
                         Card (
-                            modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 150.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .defaultMinSize(minHeight = 150.dp),
                             shape = RoundedCornerShape(12.dp),
                             colors = CardDefaults.cardColors(
                                 containerColor = lightText.copy(0.1f)

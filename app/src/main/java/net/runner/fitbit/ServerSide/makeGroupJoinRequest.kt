@@ -14,7 +14,7 @@ fun makeGroupJoinRequest(userId:String,groupId:String,onResponse:(String)->Unit)
     }.toString().toRequestBody("application/json; charset=utf-8".toMediaType())
 
     val request = Request.Builder()
-        .url("https://fitbit-api-server.vercel.app/api/")
+        .url("https://fitbit-api-server.vercel.app/api/GroupJoinRequest/")
         .post(requestBody)
         .build()
 
