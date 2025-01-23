@@ -6,7 +6,7 @@ fun getUserChat(uId: String,toUser:String, callback: (List<Map<String, Any>>) ->
     val db = FirebaseFirestore.getInstance()
     val userDocRef = db.collection("UserChats")
 
-    userDocRef.whereEqualTo("participants", listOf(uId, toUser))
+    userDocRef.whereEqualTo("participants", listOf(uId, toUser).sorted())
         .addSnapshotListener { chatSnapshot, e ->
             if (e != null) {
                 println("Error fetching chat: ${e.message}")

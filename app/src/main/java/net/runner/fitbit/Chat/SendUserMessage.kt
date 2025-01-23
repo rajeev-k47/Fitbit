@@ -14,7 +14,7 @@ fun SendUserMessage( uId: String, toUser: String, content: String) {
         "timestamp" to System.currentTimeMillis()
     )
 
-    userDocRef.whereEqualTo("participants", listOf(uId, toUser))
+    userDocRef.whereEqualTo("participants", listOf(uId, toUser).sorted())
         .get()
         .addOnSuccessListener { querySnapshot ->
             if (!querySnapshot.isEmpty) {
@@ -30,7 +30,7 @@ fun SendUserMessage( uId: String, toUser: String, content: String) {
                     }
             } else {
                 val newChatData = mapOf(
-                    "participants" to listOf(uId, toUser),
+                    "participants" to listOf(uId, toUser).sorted(),
                     "createdAt" to System.currentTimeMillis()
                 )
                 userDocRef.add(newChatData)
