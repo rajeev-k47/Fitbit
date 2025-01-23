@@ -2,7 +2,6 @@ package net.runner.fitbit
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -44,23 +43,21 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.runner.fitbit.Chat.ChatManager
-import net.runner.fitbit.Chat.SocketManager
 import net.runner.fitbit.Firebase.fcmTokenSave
 import net.runner.fitbit.GroupPanel.GroupInfo
 import net.runner.fitbit.GroupPanel.GroupProfile
-import net.runner.fitbit.WorkoutBuddyDashBoard.TopAppBar.Chatbot.ChatbotPanel
 import net.runner.fitbit.OrganizerDashboard.OrganizerDashBoard
 import net.runner.fitbit.Profiles.EditOrgProfileScreen
 import net.runner.fitbit.Profiles.EditProfileBuddy
 import net.runner.fitbit.Profiles.ProfileBuddy
 import net.runner.fitbit.Profiles.ProfileOrganizer
 import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.CreateFragment.CreatePostComposable
+import net.runner.fitbit.WorkoutBuddyDashBoard.TopAppBar.Chatbot.ChatbotPanel
 import net.runner.fitbit.WorkoutBuddyDashBoard.WorkoutBuddyDashBoard
 import net.runner.fitbit.auth.SignUpComposable
 import net.runner.fitbit.auth.database.checkIfAccountExists
 import net.runner.fitbit.sharedPreference.getTempEmail
 import net.runner.fitbit.sharedPreference.removeTempEmail
-import net.runner.fitbit.sharedPreference.tempEmailSignUp
 import net.runner.fitbit.splashScreen.splashScreen
 import net.runner.fitbit.ui.theme.FitbitTheme
 import net.runner.fitbit.ui.theme.background

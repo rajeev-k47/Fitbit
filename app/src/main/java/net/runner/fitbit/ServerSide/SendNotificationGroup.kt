@@ -10,11 +10,11 @@ import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
 
-fun SendNotificationGroup(groupId:String,senderName:String,Message:String,onResponse: (String)->Unit){
+fun SendNotificationGroup(groupId:String,userId:String,Message:String,onResponse: (String)->Unit){
     val client = OkHttpClient()
     val requestBody = JSONObject().apply {
         put("groupId", groupId)
-            .put("senderName",senderName)
+            .put("senderId",userId)
             .put("Message",Message)
     }.toString().toRequestBody("application/json; charset=utf-8".toMediaType())
 

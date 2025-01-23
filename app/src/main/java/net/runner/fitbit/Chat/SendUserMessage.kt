@@ -2,6 +2,7 @@ package net.runner.fitbit.Chat
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import net.runner.fitbit.ServerSide.SendNotificationUser
 
 fun SendUserMessage( uId: String, toUser: String, content: String) {
     val db = FirebaseFirestore.getInstance()
@@ -21,6 +22,9 @@ fun SendUserMessage( uId: String, toUser: String, content: String) {
                 chatDocument.reference.collection("messages")
                     .add(messageData)
                     .addOnSuccessListener {
+                        SendNotificationUser(uId,toUser,content){
+
+                        }
                     }
                     .addOnFailureListener { ex ->
                     }
@@ -34,6 +38,9 @@ fun SendUserMessage( uId: String, toUser: String, content: String) {
                         newChatDoc.collection("messages")
                             .add(messageData)
                             .addOnSuccessListener {
+                                SendNotificationUser(uId,toUser,content){
+
+                                }
                             }
                             .addOnFailureListener { ex ->
                             }
