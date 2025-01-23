@@ -47,6 +47,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
             .setContentTitle(title)
             .setContentText(message)
             .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
             .setSmallIcon(R.drawable.fitbit_logo)
             .build()
 
