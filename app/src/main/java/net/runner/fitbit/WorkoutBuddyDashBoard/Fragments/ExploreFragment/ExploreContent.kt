@@ -1,6 +1,7 @@
 package net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ExploreFragment
 
 import android.os.Parcelable
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -46,7 +47,9 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.parcel.Parcelize
+import net.runner.fitbit.BuildConfig
 import net.runner.fitbit.Database.getData
+import net.runner.fitbit.GoogleAPis.fetchDistanceMatrix
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightText
@@ -117,32 +120,33 @@ fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean,navCont
             val groupL = group.first["userLocation"] as MutableMap<String, String>
             val groupLatitude = groupL["latitude"].toString()
             val groupLongitude = groupL["longitude"].toString()
-//                        fetchDistanceMatrix(group.first["email"].toString(),"$latitude,$longitude","$groupLatitude,$groupLongitude",BuildConfig.DISTANCE_MATRIX_API_KEY, onSuccess = {
-//                    gdistance, _,groupemail ->
-//                groupNearFeed = groupNearFeed.map{
-//                    if (it.GroupData.first["email"].toString() == groupemail) {
-//                        it.copy(distance = gdistance)
-//                    } else {
-//                        it
-//                    }
-//                }.sortedBy { group ->
-//                    val distanceString = group.distance.trim()
-//                    when {
-//                        distanceString.endsWith("km") -> {
-//                            distanceString.replace(" km", "").toDoubleOrNull()?.times(1000)
-//                        }
-//                        distanceString.endsWith("m") -> {
-//                            distanceString.replace(" m", "").toDoubleOrNull()
-//                        }
-//                        else -> {
-//                            Double.MAX_VALUE
-//                        }
-//                    } ?: Double.MAX_VALUE
-//                }
-//            }
-//            ){
-//                println(it)
-//            }
+                        fetchDistanceMatrix(group.first["email"].toString(),"$latitude,$longitude","$groupLatitude,$groupLongitude",
+                            BuildConfig.DISTANCE_MATRIX_API_KEY, onSuccess = {
+                    gdistance, _,groupemail ->
+                groupNearFeed = groupNearFeed.map{
+                    if (it.GroupData.first["email"].toString() == groupemail) {
+                        it.copy(distance = gdistance)
+                    } else {
+                        it
+                    }
+                }.sortedBy { group ->
+                    val distanceString = group.distance.trim()
+                    when {
+                        distanceString.endsWith("km") -> {
+                            distanceString.replace(" km", "").toDoubleOrNull()?.times(1000)
+                        }
+                        distanceString.endsWith("m") -> {
+                            distanceString.replace(" m", "").toDoubleOrNull()
+                        }
+                        else -> {
+                            Double.MAX_VALUE
+                        }
+                    } ?: Double.MAX_VALUE
+                }
+            }
+            ){
+                println(it)
+            }
         }
     }
 
@@ -153,34 +157,34 @@ fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean,navCont
             val personL = person.first["userLocation"] as MutableMap<String, String>
             val personLatitude = personL["latitude"].toString()
             val personLongitude = personL["longitude"].toString()
-//            fetchDistanceMatrix(person.first["email"].toString(),"$latitude,$longitude","$personLatitude,$personLongitude",BuildConfig.DISTANCE_MATRIX_API_KEY, onSuccess = {
-//                    pdistance, _,personemail ->
-//                Log.d("gtr",pdistance)
-//                peopleNearFeed = peopleNearFeed.map{
-//                    if (it.personData.first["email"].toString() == personemail) {
-//                        it.copy(distance = pdistance)
-//                    } else {
-//                        it
-//                    }
-//                }.sortedBy { person ->
-//                    val distanceString = person.distance.trim()
-//                    when {
-//                        distanceString.endsWith("km") -> {
-//                            distanceString.replace(" km", "").toDoubleOrNull()?.times(1000)
-//                        }
-//                        distanceString.endsWith("m") -> {
-//                            distanceString.replace(" m", "").toDoubleOrNull()
-//                        }
-//                        else -> {
-//                            Double.MAX_VALUE
-//                        }
-//                    } ?: Double.MAX_VALUE
-//                }
-//                Log.d("gtr", "Updated list: $peopleNearFeed")
-//            }
-//            ){
-//                println(it)
-//            }
+            fetchDistanceMatrix(person.first["email"].toString(),"$latitude,$longitude","$personLatitude,$personLongitude",BuildConfig.DISTANCE_MATRIX_API_KEY, onSuccess = {
+                    pdistance, _,personemail ->
+                Log.d("gtr",pdistance)
+                peopleNearFeed = peopleNearFeed.map{
+                    if (it.personData.first["email"].toString() == personemail) {
+                        it.copy(distance = pdistance)
+                    } else {
+                        it
+                    }
+                }.sortedBy { person ->
+                    val distanceString = person.distance.trim()
+                    when {
+                        distanceString.endsWith("km") -> {
+                            distanceString.replace(" km", "").toDoubleOrNull()?.times(1000)
+                        }
+                        distanceString.endsWith("m") -> {
+                            distanceString.replace(" m", "").toDoubleOrNull()
+                        }
+                        else -> {
+                            Double.MAX_VALUE
+                        }
+                    } ?: Double.MAX_VALUE
+                }
+                Log.d("gtr", "Updated list: $peopleNearFeed")
+            }
+            ){
+                println(it)
+            }
         }
 
     }
