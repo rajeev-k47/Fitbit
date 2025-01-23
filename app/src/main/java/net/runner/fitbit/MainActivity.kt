@@ -32,6 +32,7 @@ import com.onesignal.debug.LogLevel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import net.runner.fitbit.Chat.ChatManager
 import net.runner.fitbit.Chat.SocketManager
 import net.runner.fitbit.Firebase.fcmTokenSave
 import net.runner.fitbit.GroupPanel.GroupInfo
@@ -173,6 +174,17 @@ class MainActivity : ComponentActivity() {
                         backStackEntry ->
                         val groupId = backStackEntry.arguments?.getString("groupId")
                         GroupInfo(navController,groupId!!)
+                    }
+                    //for chat only
+                    composable(route="groupChat/{groupId}",arguments = listOf(navArgument("groupId") { type = NavType.StringType })) {
+                        backStackEntry ->
+                        val groupId = backStackEntry.arguments?.getString("groupId")!!
+                        ChatManager(uId = groupId, groupChat = true,navController)
+                    }
+                    composable(route="userChat/{userId}",arguments = listOf(navArgument("userId") { type = NavType.StringType })) {
+                        backStackEntry ->
+                        val uId = backStackEntry.arguments?.getString("userId")!!
+                        ChatManager(uId = uId, groupChat = false,navController)
                     }
 
                 }

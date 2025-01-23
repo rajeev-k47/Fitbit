@@ -90,17 +90,8 @@ fun TopAppBarComposable(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 AsyncImage(
-                    model = if(imageUrl == null)auth.currentUser?.photoUrl else ImageRequest.Builder(context)
-                        .data(imageUrl)
-                        .build(),
-
-                    imageLoader = ImageLoader.Builder(context)
-                        .memoryCachePolicy(CachePolicy.ENABLED)
-                        .diskCachePolicy(CachePolicy.ENABLED)
-                        .build(),
+                    model = if(imageUrl == null)auth.currentUser?.photoUrl else imageUrl,
                     contentDescription = "Profile Picture",
-                    placeholder = rememberAsyncImagePainter(R.drawable.user),
-                    error = rememberAsyncImagePainter(R.drawable.user),
                     modifier = Modifier
                         .padding(10.dp)
                         .size(35.dp)

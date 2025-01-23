@@ -89,6 +89,12 @@ fun createContent(modalStatus:Boolean,navController: NavController,onDismiss:(Bo
                             Button(
                                 onClick = {
                                     if(label=="Create Post"){
+                                        coroutineScope.launch {
+
+                                            sheetState.hide()
+                                            onDismiss(false)
+                                        }
+
                                         navController.navigate("CreatePost")
                                     }
 //                                    item.onclick()

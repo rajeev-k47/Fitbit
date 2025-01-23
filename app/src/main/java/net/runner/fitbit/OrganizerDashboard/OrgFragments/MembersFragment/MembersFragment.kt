@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import net.runner.fitbit.OrganizerDashboard.OrgFragments.RequestsFragment.ApproveRequest
@@ -44,7 +45,7 @@ import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
 
 @Composable
-fun MembersFragmentComposable() {
+fun MembersFragmentComposable(navController: NavController) {
     var searchPendingQuery by rememberSaveable { mutableStateOf("") }
     var Users by rememberSaveable {
         mutableStateOf(listOf<String>())
@@ -170,6 +171,7 @@ fun MembersFragmentComposable() {
 
                     Button(
                         onClick = {
+                            navController.navigate("profileBuddy/${GroupUsersData[index]["userId"].toString()}")
 
                         },
                         modifier = Modifier.padding(end = 14.dp),

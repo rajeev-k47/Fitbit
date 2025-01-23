@@ -117,7 +117,6 @@ fun OrgBottomNavigationBarComposable(modifier: Modifier,onselected:(String)->Uni
             .padding(horizontal = 10.dp)
             .border(0.5.dp, lightText, shape = RoundedCornerShape(20.dp))
             .shadow(5.dp, shape = RoundedCornerShape(20.dp), spotColor = lightText)
-            .navigationBarsPadding()
         ,
         colors = CardDefaults.cardColors(
             containerColor = background

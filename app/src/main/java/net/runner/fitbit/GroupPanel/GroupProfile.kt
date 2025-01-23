@@ -127,6 +127,7 @@ fun GroupProfile(navController: NavController,groupId:String) {
                     ) {
                         Button(
                             onClick = {
+                                navController.navigate("groupChat/${groupId}")
                             },
                             shape = RoundedCornerShape(12.dp),
                             colors = ButtonDefaults.buttonColors(
