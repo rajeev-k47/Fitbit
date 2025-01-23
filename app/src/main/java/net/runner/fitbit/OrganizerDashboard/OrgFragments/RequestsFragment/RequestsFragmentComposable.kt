@@ -44,7 +44,6 @@ import net.runner.fitbit.ui.theme.lightText
 
 @Composable
 fun RequestsFragmentComposable(navController: NavController) {
-    var text by rememberSaveable { mutableStateOf("Approve") }
     var searchPendingQuery by rememberSaveable { mutableStateOf("") }
     var GroupPendingData by rememberSaveable {
         mutableStateOf(listOf<String>())
@@ -121,6 +120,8 @@ fun RequestsFragmentComposable(navController: NavController) {
         ) {
             items(filteredPendingData.size)
             {index->
+                var text by rememberSaveable { mutableStateOf("Approve") }
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start,
