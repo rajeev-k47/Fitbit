@@ -117,9 +117,12 @@ fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean,navCont
         val latitude = userLocation["latitude"].toString()
         val longitude = userLocation["longitude"].toString()
         groupRelatedFeed.forEach { group->
-            val groupL = group.first["userLocation"] as MutableMap<String, String>
+            val groupL = group.first["userLocation"] as? MutableMap<String, Double>
+            if(groupL==null){ return@forEach }
+            println(groupL)
+
             val groupLatitude = groupL["latitude"].toString()
-            val groupLongitude = groupL["longitude"].toString()
+            val groupLongitude = groupL["longitude"]?.toString()
                         fetchDistanceMatrix(group.first["email"].toString(),"$latitude,$longitude","$groupLatitude,$groupLongitude",
                             BuildConfig.DISTANCE_MATRIX_API_KEY, onSuccess = {
                     gdistance, _,groupemail ->
@@ -154,9 +157,9 @@ fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean,navCont
         val latitude = userLocation["latitude"].toString()
         val longitude = userLocation["longitude"].toString()
         peopleRelatedFeed.forEach {person->
-            val personL = person.first["userLocation"] as MutableMap<String, String>
-            val personLatitude = personL["latitude"].toString()
-            val personLongitude = personL["longitude"].toString()
+            val personL = person.first["userLocation"] as? MutableMap<String, Double>
+            val personLatitude = personL?.get("latitude").toString()
+            val personLongitude = personL?.get("longitude").toString()
             fetchDistanceMatrix(person.first["email"].toString(),"$latitude,$longitude","$personLatitude,$personLongitude",BuildConfig.DISTANCE_MATRIX_API_KEY, onSuccess = {
                     pdistance, _,personemail ->
                 Log.d("gtr",pdistance)
