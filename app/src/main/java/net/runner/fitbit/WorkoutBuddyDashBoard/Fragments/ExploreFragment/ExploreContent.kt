@@ -166,34 +166,34 @@ fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean,navCont
             val personL = person.first["userLocation"] as? MutableMap<String, Double>
             val personLatitude = personL?.get("latitude").toString()
             val personLongitude = personL?.get("longitude").toString()
-//            fetchDistanceMatrix(person.first["email"].toString(),"$latitude,$longitude","$personLatitude,$personLongitude",BuildConfig.DISTANCE_MATRIX_API_KEY, onSuccess = {
-//                    pdistance, _,personemail ->
-//                Log.d("gtr",pdistance)
-//                peopleNearFeed = peopleNearFeed.map{
-//                    if (it.personData.first["email"].toString() == personemail) {
-//                        it.copy(distance = pdistance)
-//                    } else {
-//                        it
-//                    }
-//                }.sortedBy { person ->
-//                    val distanceString = person.distance.trim()
-//                    when {
-//                        distanceString.endsWith("km") -> {
-//                            distanceString.replace(" km", "").toDoubleOrNull()?.times(1000)
-//                        }
-//                        distanceString.endsWith("m") -> {
-//                            distanceString.replace(" m", "").toDoubleOrNull()
-//                        }
-//                        else -> {
-//                            Double.MAX_VALUE
-//                        }
-//                    } ?: Double.MAX_VALUE
-//                }
-//                Log.d("gtr", "Updated list: $peopleNearFeed")
-//            }
-//            ){
-//                println(it)
-//            }
+            fetchDistanceMatrix(person.first["email"].toString(),"$latitude,$longitude","$personLatitude,$personLongitude",BuildConfig.DISTANCE_MATRIX_API_KEY, onSuccess = {
+                    pdistance, _,personemail ->
+                Log.d("gtr",pdistance)
+                peopleNearFeed = peopleNearFeed.map{
+                    if (it.personData.first["email"].toString() == personemail) {
+                        it.copy(distance = pdistance)
+                    } else {
+                        it
+                    }
+                }.sortedBy { person ->
+                    val distanceString = person.distance.trim()
+                    when {
+                        distanceString.endsWith("km") -> {
+                            distanceString.replace(" km", "").toDoubleOrNull()?.times(1000)
+                        }
+                        distanceString.endsWith("m") -> {
+                            distanceString.replace(" m", "").toDoubleOrNull()
+                        }
+                        else -> {
+                            Double.MAX_VALUE
+                        }
+                    } ?: Double.MAX_VALUE
+                }
+                Log.d("gtr", "Updated list: $peopleNearFeed")
+            }
+            ){
+                println(it)
+            }
         }
 
     }
@@ -353,8 +353,8 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
 
                             Row(modifier = Modifier.align(Alignment.CenterEnd), verticalAlignment = Alignment.CenterVertically){
                                 Icon(painter = painterResource(id = R.drawable.privacy), contentDescription = "",Modifier.size(20.dp))
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(text = "Private", color = lightText, fontSize = 13.sp, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
+                                Spacer(modifier = Modifier.width(5.dp))
+                                Text(text = "Private", color = Color.Red, fontSize = 13.sp, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
                                     .padding(end = 5.dp))
                             }
                         }
@@ -695,8 +695,8 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
                         if(groupPrivacy){
                             Row(modifier = Modifier.align(Alignment.CenterEnd), verticalAlignment = Alignment.CenterVertically){
                                 Icon(painter = painterResource(id = R.drawable.privacy), contentDescription = "",Modifier.size(20.dp))
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(text = "Private", color = lightText, fontSize = 13.sp, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
+                                Spacer(modifier = Modifier.width(5.dp))
+                                Text(text = "Private", color = Color.Red, fontSize = 13.sp, fontWeight = FontWeight.Bold, overflow = TextOverflow.Ellipsis, maxLines = 1, modifier = Modifier
                                     .padding(end = 5.dp))
                             }
                         }
