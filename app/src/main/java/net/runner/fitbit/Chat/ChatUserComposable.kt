@@ -24,6 +24,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -57,6 +58,13 @@ fun ChatUserComposable(
     )
     {
         val scrollState = rememberLazyListState()
+
+        LaunchedEffect(UserChatData.size) {
+            if (UserChatData.size > 0){
+
+                scrollState.scrollToItem(UserChatData.size-1)
+            }
+        }
 
         LazyColumn(
             modifier = Modifier

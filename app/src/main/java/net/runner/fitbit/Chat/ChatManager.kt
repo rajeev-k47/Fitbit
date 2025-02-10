@@ -122,6 +122,8 @@ fun ChatManager(uId:String,groupChat:Boolean,navController:NavController) {
 
 
         if (groupChat) {
+            if(groupData.isNotEmpty()){
+
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -249,7 +251,7 @@ fun ChatManager(uId:String,groupChat:Boolean,navController:NavController) {
 
                     ChatGroupComposable(groupChatData, groupChatPeopleData, uId)
 
-
+                }
             }
         } else {
                 Column(
