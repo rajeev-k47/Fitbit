@@ -24,7 +24,10 @@ fun sendGroupMessage(groupUid: String, content: String) {
         .add(message)
         .addOnSuccessListener { documentReference ->
             SendNotificationGroup(groupUid,userId,content){
-            db.collection("users")
+
+        }
+            val ndb = FirebaseFirestore.getInstance()
+            ndb.collection("users")
                 .document(groupUid)
                 .get()
                 .addOnSuccessListener { document ->
@@ -32,11 +35,12 @@ fun sendGroupMessage(groupUid: String, content: String) {
                     val currentDate = sdf.format(System.currentTimeMillis())
                     val users = document.data?.get("users") as? List<String> ?: emptyList()
                     users.forEach { user ->
-                        saveNotification(Notification("New Message in Group",content,currentDate,userId,groupUid),user)
+                        if(user != userId){
+                            saveNotification(Notification("New Message in Group",content,currentDate,userId,groupUid),user)
+
+                        }
                     }
-            }
-            println("Message  ${documentReference.id}")
-        }
+                }
         }
 }
 
