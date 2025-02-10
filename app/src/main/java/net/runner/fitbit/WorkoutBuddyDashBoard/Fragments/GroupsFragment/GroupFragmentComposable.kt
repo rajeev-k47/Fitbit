@@ -45,6 +45,7 @@ import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
 import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
 import com.toolsforfools.shimmery.shimmerIndividual.shimmer
 import net.runner.fitbit.R
+import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ExploreFragment.GroupNearData
 import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
 
@@ -61,6 +62,9 @@ fun GroupFragmentComposable(navController: NavController) {
     var filteredGroupData by rememberSaveable {
         mutableStateOf(listOf<Map<String, Any>>())
     }
+    var emptystate by rememberSaveable {
+        mutableStateOf(false)
+    }
     var isLoaded by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect (Unit){
         val userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -68,6 +72,9 @@ fun GroupFragmentComposable(navController: NavController) {
 
             GetUserGroups(userId.toString()){
                 userGroups=it
+                if(userGroups.isEmpty()){
+                    emptystate=true
+                }
             }
         }
     }
@@ -78,6 +85,8 @@ fun GroupFragmentComposable(navController: NavController) {
             GetGroupData(groupId.toString()){
                 userGroupsData = (userGroupsData + it)
                 filteredGroupData = userGroupsData
+                println(userGroupsData)
+
             }
         }
         if(userGroups.isNotEmpty()){
@@ -131,6 +140,19 @@ fun GroupFragmentComposable(navController: NavController) {
         LazyColumn(
             Modifier.fillMaxWidth()
         ) {
+            if(emptystate){
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 10.dp, vertical = 40.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "No Joined groups found", color = Color.White, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                        Text(text = "Explore and join groups", color = lightText, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
             items(filteredGroupData.size)
             {index->
                 val groupId = filteredGroupData[index]["groupId"]

@@ -3,6 +3,9 @@ package net.runner.fitbit.OrganizerDashboard.OrgFragments.RequestsFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import net.runner.fitbit.Database.GroupStatus
+import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ActivityFragment.Notification
+import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ActivityFragment.saveNotification
+import java.text.SimpleDateFormat
 
 fun ApproveRequest(userId:String){
 
@@ -19,12 +22,14 @@ fun ApproveRequest(userId:String){
             userDocRef.update("pending", updatedUsers)
                 .addOnSuccessListener {
                     println("success")
+                    val sdf = SimpleDateFormat("dd MMM, hh:mm aa")
+                    val currentDate = sdf.format(System.currentTimeMillis())
+                    saveNotification(Notification("Request status","Group Request Accepted",currentDate,groupId,groupId),userId)
                 }
                 .addOnFailureListener { e ->
                     e.printStackTrace()
                     println("Error: ${e.message}")
                 }
-            println(userId)
             updateUsers(userId, groupId)
 
         }

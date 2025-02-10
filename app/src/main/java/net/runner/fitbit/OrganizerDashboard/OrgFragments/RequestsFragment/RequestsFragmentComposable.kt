@@ -173,8 +173,8 @@ fun RequestsFragmentComposable(navController: NavController) {
 
                     Button(
                         onClick = {
+                            if(text!="Approved") ApproveRequest(filteredPendingData[index]["userId"].toString())
                             text = "Approved"
-                            ApproveRequest(filteredPendingData[index]["userId"].toString())
                         },
                         modifier = Modifier.padding(end = 14.dp),
                         shape = RoundedCornerShape(10.dp),

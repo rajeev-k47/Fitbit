@@ -3,6 +3,9 @@ package net.runner.fitbit.Chat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import net.runner.fitbit.ServerSide.SendNotificationUser
+import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ActivityFragment.Notification
+import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ActivityFragment.saveNotification
+import java.text.SimpleDateFormat
 
 fun SendUserMessage( uId: String, toUser: String, content: String) {
     val db = FirebaseFirestore.getInstance()
@@ -23,7 +26,9 @@ fun SendUserMessage( uId: String, toUser: String, content: String) {
                     .add(messageData)
                     .addOnSuccessListener {
                         SendNotificationUser(uId,toUser,content){
-
+                            val sdf = SimpleDateFormat("dd MMM, hh:mm aa")
+                            val currentDate = sdf.format(System.currentTimeMillis())
+                            saveNotification(Notification("New Message",content,currentDate,uId,""),toUser)
                         }
                     }
                     .addOnFailureListener { ex ->
@@ -39,7 +44,9 @@ fun SendUserMessage( uId: String, toUser: String, content: String) {
                             .add(messageData)
                             .addOnSuccessListener {
                                 SendNotificationUser(uId,toUser,content){
-
+                                    val sdf = SimpleDateFormat("dd MMM, hh:mm aa")
+                                    val currentDate = sdf.format(System.currentTimeMillis())
+                                    saveNotification(Notification("New Message",content,currentDate,uId,""),toUser)
                                 }
                             }
                             .addOnFailureListener { ex ->
