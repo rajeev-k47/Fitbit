@@ -110,6 +110,6 @@ dependencies {
     implementation ("com.onesignal:OneSignal:[5.0.0, 5.99.99]")
         implementation("io.socket:socket.io-client:2.0.1")
         implementation("com.squareup.okhttp3:okhttp:4.12.0")
-
+    implementation("io.github.hussein-al-zuhile:Shimmery:1.2.1")
 
 }

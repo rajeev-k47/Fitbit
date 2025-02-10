@@ -1,5 +1,7 @@
 package net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.GroupsFragment
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,8 +38,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.google.firebase.auth.FirebaseAuth
+import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
+import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
+import com.toolsforfools.shimmery.shimmerIndividual.shimmer
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
@@ -137,11 +143,32 @@ fun GroupFragmentComposable(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                 ){
-                    AsyncImage(
+                    SubcomposeAsyncImage(
                         model = filteredGroupData[index]["profileImageUrl"],
                         contentDescription = "avatar",
-                        placeholder = rememberAsyncImagePainter(R.drawable.user),
-                        error = rememberAsyncImagePainter(R.drawable.user),
+                        loading = {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .shimmer(true) {
+                                        shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                        gradientType = GradientType.LINEAR
+                                        shape = RoundedCornerShape(15.dp)
+                                        gradientAnimationSpec = tween(1000)
+                                        alphaAnimationSpec = tween(1300)
+                                    },
+                            )
+
+                        },
+                        error = {
+                            Image(
+                                painter = painterResource(id = R.drawable.user),
+                                contentDescription = "avatar",
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(15.dp)),
+                                contentScale = ContentScale.Crop
+                            )
+                        },
                         modifier = Modifier
                             .padding(10.dp)
                             .size(58.dp)

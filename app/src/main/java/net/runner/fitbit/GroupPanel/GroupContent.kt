@@ -1,8 +1,11 @@
 package net.runner.fitbit.GroupPanel
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,13 +22,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberAsyncImagePainter
+import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
+import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
+import com.toolsforfools.shimmery.shimmerIndividual.shimmer
 import net.runner.fitbit.Profiles.getFormatedTime
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.lightText
@@ -46,11 +54,32 @@ fun GroupContent(groupData: Map<String, Any>) {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
-                AsyncImage(
+                SubcomposeAsyncImage(
                     model = groupData["profileImageUrl"],
                     contentDescription = "Profile Picture",
-                    placeholder = rememberAsyncImagePainter(R.drawable.user),
-                    error = rememberAsyncImagePainter(R.drawable.user),
+                    loading = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .shimmer(true) {
+                                    shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                    gradientType = GradientType.LINEAR
+                                    shape = RoundedCornerShape(25.dp)
+                                    gradientAnimationSpec = tween(1000)
+                                    alphaAnimationSpec = tween(1300)
+                                },
+                        )
+
+                    },
+                    error = {
+                        Image(
+                            painter = painterResource(id = R.drawable.user),
+                            contentDescription = "avatar",
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(25.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+                    },
                     modifier = Modifier
                         .padding(10.dp)
                         .size(105.dp)

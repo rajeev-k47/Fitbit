@@ -2,6 +2,7 @@ package net.runner.fitbit.WorkoutBuddyDashBoard.TopAppBar
 
 import android.net.Uri
 import android.util.Log
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -47,7 +49,11 @@ import net.runner.fitbit.auth.database.getProfileImageUrl
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightBlueText
 import coil.ImageLoader
+import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
+import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
+import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
+import com.toolsforfools.shimmery.shimmerIndividual.shimmer
 
 @Composable
 fun TopAppBarComposable(navController: NavController) {
@@ -82,16 +88,36 @@ fun TopAppBarComposable(navController: NavController) {
                 Icon(
                     painter = painterResource(id = R.drawable.ai),
                     contentDescription = "ai",
-                    modifier = Modifier.size(26.dp).clip(CircleShape).padding(1.dp).clickable {
-                        navController.navigate("chatBot")
+                    modifier = Modifier
+                        .size(26.dp)
+                        .clip(CircleShape)
+                        .padding(1.dp)
+                        .clickable {
+                            navController.navigate("chatBot")
 
-                    }
+                        }
                     , tint = lightBlueText
                 )
                 Spacer(modifier = Modifier.width(6.dp))
-                AsyncImage(
+                SubcomposeAsyncImage(
                     model = if(imageUrl == null)auth.currentUser?.photoUrl else imageUrl,
                     contentDescription = "Profile Picture",
+                    loading = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .size(35.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .shimmer(true) {
+                                    shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                    gradientType = GradientType.LINEAR
+                                    shape = RoundedCornerShape(12.dp)
+                                    gradientAnimationSpec = tween(1000)
+                                    alphaAnimationSpec = tween(1300)
+                                },
+                        )
+
+                    },
                     modifier = Modifier
                         .padding(10.dp)
                         .size(35.dp)

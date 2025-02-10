@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.google.firebase.auth.FirebaseAuth
@@ -63,13 +65,16 @@ fun OrgTopAppBarComposable(navController: NavController) {
             ,
             verticalAlignment = Alignment.CenterVertically
         ){
-            AsyncImage(
+            SubcomposeAsyncImage(
                 model = if(imageUrl == null)auth.currentUser?.photoUrl else ImageRequest.Builder(context)
                     .data(imageUrl)
                     .build(),
                 contentDescription = "Profile Picture",
-                placeholder = rememberAsyncImagePainter(R.drawable.user),
-                error = rememberAsyncImagePainter(R.drawable.user),
+//                placeholder = rememberAsyncImagePainter(R.drawable.user),
+//                error = rememberAsyncImagePainter(R.drawable.user),
+                loading = {
+                    CircularProgressIndicator()
+                },
                 modifier = Modifier
                     .padding(10.dp)
                     .size(35.dp)

@@ -1,5 +1,7 @@
 package net.runner.fitbit.Chat
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,7 +41,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.google.firebase.auth.FirebaseAuth
+import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
+import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
+import com.toolsforfools.shimmery.shimmerIndividual.shimmer
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
@@ -77,10 +83,33 @@ fun ChatGroupComposable(groupChats: List<Map<String, Any>>, groupChatPeopleData:
                     if (groupChats[index]["userId"] == FirebaseAuth.getInstance().currentUser?.uid ) {
                         if(index==0){
 
-                            AsyncImage(
+                            SubcomposeAsyncImage(
                                 model = groupChatPeopleData.find { it["userId"] == groupChats[index]["userId"] }
                                     ?.get("profileImageUrl"),
                                 contentDescription = "Profile Picture",
+                                loading = {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .shimmer(true) {
+                                                shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                                gradientType = GradientType.LINEAR
+                                                shape = RoundedCornerShape(15.dp)
+                                                gradientAnimationSpec = tween(1000)
+                                                alphaAnimationSpec = tween(1300)
+                                            },
+                                    )
+
+                                },
+                                error = {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.user),
+                                        contentDescription = "avatar",
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(15.dp)),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                },
                                 modifier = Modifier
                                     .padding(10.dp)
                                     .size(35.dp)
@@ -88,9 +117,32 @@ fun ChatGroupComposable(groupChats: List<Map<String, Any>>, groupChatPeopleData:
                                 contentScale = ContentScale.Crop
                             )
                         }else if( groupChats[index-1]["userId"] != FirebaseAuth.getInstance().currentUser?.uid){
-                            AsyncImage(
+                            SubcomposeAsyncImage(
                                 model = groupChatPeopleData.find { it["userId"] == groupChats[index]["userId"] }
                                     ?.get("profileImageUrl"),
+                                loading = {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .shimmer(true) {
+                                                shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                                gradientType = GradientType.LINEAR
+                                                shape = RoundedCornerShape(15.dp)
+                                                gradientAnimationSpec = tween(1000)
+                                                alphaAnimationSpec = tween(1300)
+                                            },
+                                    )
+
+                                },
+                                error = {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.user),
+                                        contentDescription = "avatar",
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(15.dp)),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                },
                                 contentDescription = "Profile Picture",
                                 modifier = Modifier
                                     .padding(10.dp)
@@ -122,8 +174,31 @@ fun ChatGroupComposable(groupChats: List<Map<String, Any>>, groupChatPeopleData:
                     if (groupChats[index]["userId"] != FirebaseAuth.getInstance().currentUser?.uid ) {
                         if(index==0){
 
-                            AsyncImage(
+                            SubcomposeAsyncImage(
                                 model = groupChatPeopleData.find { it["userId"] == groupChats[index]["userId"] }?.get("profileImageUrl"),
+                                loading = {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .shimmer(true) {
+                                                shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                                gradientType = GradientType.LINEAR
+                                                shape = RoundedCornerShape(15.dp)
+                                                gradientAnimationSpec = tween(1000)
+                                                alphaAnimationSpec = tween(1300)
+                                            },
+                                    )
+
+                                },
+                                error = {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.user),
+                                        contentDescription = "avatar",
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(15.dp)),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                },
                                 contentDescription = "Profile Picture",
                                 modifier = Modifier
                                     .padding(10.dp)
@@ -132,8 +207,31 @@ fun ChatGroupComposable(groupChats: List<Map<String, Any>>, groupChatPeopleData:
                                 contentScale = ContentScale.Crop
                             )
                         }else if(groupChats[index]["userId"] != groupChats[index-1]["userId"]){
-                            AsyncImage(
+                            SubcomposeAsyncImage(
                                 model = groupChatPeopleData.find { it["userId"] == groupChats[index]["userId"] }?.get("profileImageUrl"),
+                                loading = {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .shimmer(true) {
+                                                shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                                gradientType = GradientType.LINEAR
+                                                shape = RoundedCornerShape(15.dp)
+                                                gradientAnimationSpec = tween(1000)
+                                                alphaAnimationSpec = tween(1300)
+                                            },
+                                    )
+
+                                },
+                                error = {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.user),
+                                        contentDescription = "avatar",
+                                        modifier = Modifier
+                                            .clip(RoundedCornerShape(15.dp)),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                },
                                 contentDescription = "Profile Picture",
                                 modifier = Modifier
                                     .padding(10.dp)
@@ -196,7 +294,8 @@ fun ChatGroupComposable(groupChats: List<Map<String, Any>>, groupChatPeopleData:
                             myChatText = ""
                         }
                     },
-                    Modifier.size(35.dp)
+                    Modifier
+                        .size(35.dp)
                         .clip(CircleShape)
                 ) {
 

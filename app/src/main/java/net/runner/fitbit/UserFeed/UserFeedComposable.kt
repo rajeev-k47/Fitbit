@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.border
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -50,7 +52,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.google.firebase.auth.FirebaseAuth
+import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
+import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerConfiguration
+import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
+import com.toolsforfools.shimmery.shimmerIndividual.shimmer
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightText
@@ -93,10 +100,25 @@ fun UserFeedComposable(context: Context, Feed: Map<String, Any>, FeedAuthors: Pa
                 modifier = Modifier.fillMaxWidth()
             ){
 
-                AsyncImage(
+                SubcomposeAsyncImage(
                     model = FeedAuthors.first["profileImageUrl"],
-                    error = painterResource(id = R.drawable.user),
                     contentDescription = "avatar",
+                    loading = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .size(35.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                                .shimmer(true) {
+                                    shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                    gradientType = GradientType.LINEAR
+                                    shape = RoundedCornerShape(12.dp)
+                                    gradientAnimationSpec = tween(1000)
+                                    alphaAnimationSpec = tween(1300)
+                                },
+                        )
+
+                    },
                     modifier = Modifier
                         .padding(10.dp)
                         .size(48.dp)
@@ -192,9 +214,25 @@ fun UserFeedComposable(context: Context, Feed: Map<String, Any>, FeedAuthors: Pa
             }
             Spacer(modifier = Modifier.height(10.dp))
 
-            AsyncImage(
+            SubcomposeAsyncImage(
                 model = "${Feed["bannerImageUri"]}",
                 contentDescription = "banner",
+                loading = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .size(35.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .shimmer(true) {
+                                shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                gradientType = GradientType.LINEAR
+                                shape = RoundedCornerShape(12.dp)
+                                gradientAnimationSpec = tween(1000)
+                                alphaAnimationSpec = tween(1300)
+                            },
+                    )
+
+                },
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
                     .fillMaxWidth()

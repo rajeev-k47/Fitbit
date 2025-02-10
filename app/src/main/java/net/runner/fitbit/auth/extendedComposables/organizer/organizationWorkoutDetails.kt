@@ -3,6 +3,7 @@ package net.runner.fitbit.auth.extendedComposables.organizer
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,9 +12,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -40,6 +43,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
+import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
+import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
+import com.toolsforfools.shimmery.shimmerIndividual.shimmer
 import net.runner.fitbit.auth.database.DataBaseEntryOrganizer
 import net.runner.fitbit.auth.database.DatabaseEntryBuddy
 import net.runner.fitbit.auth.extendedComposables.workoutBuddy.DropdownMenuGoals
@@ -93,9 +100,24 @@ fun organizationWorkoutDetails(groupData: OrganizerGroupData,imageUri: Uri,navCo
     ){
         if(orgBanner != Uri.EMPTY){
 
-            AsyncImage(
+            SubcomposeAsyncImage(
                 model = orgBanner,
                 contentDescription = "banner",
+                loading = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .size(35.dp)
+                            .shimmer(true) {
+                                shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                gradientType = GradientType.LINEAR
+                                shape = RoundedCornerShape(15.dp)
+                                gradientAnimationSpec = tween(1000)
+                                alphaAnimationSpec = tween(1300)
+                            },
+                    )
+
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(140.dp)

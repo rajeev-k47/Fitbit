@@ -1,7 +1,9 @@
 package net.runner.fitbit.Profiles
 
 import android.content.Context
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -48,8 +50,12 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import com.google.firebase.auth.FirebaseAuth
+import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
+import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
+import com.toolsforfools.shimmery.shimmerIndividual.shimmer
 import net.runner.fitbit.Database.getData
 import net.runner.fitbit.Firebase.fcmTokenSave
 import net.runner.fitbit.R
@@ -146,11 +152,34 @@ fun ProfileOrganizer(navController: NavController,orgId:String) {
                         containerColor = lightText.copy(alpha = 0.1f)
                     )
                 ) {
-                    AsyncImage(
+                    SubcomposeAsyncImage(
                         model = OrganizerData["profileImageUrl"].toString().toUri() ,
 //                            ?: auth.currentUser?.photoUrl,
                         contentDescription = "",
                         contentScale = ContentScale.Crop,
+                        loading = {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .shimmer(true) {
+                                        shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                        gradientType = GradientType.LINEAR
+                                        shape = RoundedCornerShape(20.dp)
+                                        gradientAnimationSpec = tween(1000)
+                                        alphaAnimationSpec = tween(1300)
+                                    },
+                            )
+
+                        },
+                        error = {
+                            Image(
+                                painter = painterResource(id = R.drawable.user),
+                                contentDescription = "avatar",
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(20.dp)),
+                                contentScale = ContentScale.Crop
+                            )
+                        },
                         modifier = Modifier
                             .width(100.dp)
                             .fillMaxHeight()
@@ -256,9 +285,23 @@ fun ProfileOrganizer(navController: NavController,orgId:String) {
                             color = Color.White,
                         )
                         Spacer(modifier = Modifier.height(10.dp))
-                        AsyncImage(
+                        SubcomposeAsyncImage(
                             model = OrganizerData["banner"],
                             contentDescription = "avatar",
+                            loading = {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .shimmer(true) {
+                                            shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                            gradientType = GradientType.LINEAR
+                                            shape = RoundedCornerShape(15.dp)
+                                            gradientAnimationSpec = tween(1000)
+                                            alphaAnimationSpec = tween(1300)
+                                        },
+                                )
+
+                            },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(140.dp)

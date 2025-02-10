@@ -2,7 +2,9 @@ package net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.ExploreFragment
 
 import android.os.Parcelable
 import android.util.Log
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,8 +46,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.google.firebase.auth.FirebaseAuth
+import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
+import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
+import com.toolsforfools.shimmery.shimmerIndividual.shimmer
 import kotlinx.android.parcel.Parcelize
 import net.runner.fitbit.BuildConfig
 import net.runner.fitbit.Database.getData
@@ -160,34 +166,34 @@ fun ExploreContent(selectedFilter:String,typeFilerPeopleSelected:Boolean,navCont
             val personL = person.first["userLocation"] as? MutableMap<String, Double>
             val personLatitude = personL?.get("latitude").toString()
             val personLongitude = personL?.get("longitude").toString()
-            fetchDistanceMatrix(person.first["email"].toString(),"$latitude,$longitude","$personLatitude,$personLongitude",BuildConfig.DISTANCE_MATRIX_API_KEY, onSuccess = {
-                    pdistance, _,personemail ->
-                Log.d("gtr",pdistance)
-                peopleNearFeed = peopleNearFeed.map{
-                    if (it.personData.first["email"].toString() == personemail) {
-                        it.copy(distance = pdistance)
-                    } else {
-                        it
-                    }
-                }.sortedBy { person ->
-                    val distanceString = person.distance.trim()
-                    when {
-                        distanceString.endsWith("km") -> {
-                            distanceString.replace(" km", "").toDoubleOrNull()?.times(1000)
-                        }
-                        distanceString.endsWith("m") -> {
-                            distanceString.replace(" m", "").toDoubleOrNull()
-                        }
-                        else -> {
-                            Double.MAX_VALUE
-                        }
-                    } ?: Double.MAX_VALUE
-                }
-                Log.d("gtr", "Updated list: $peopleNearFeed")
-            }
-            ){
-                println(it)
-            }
+//            fetchDistanceMatrix(person.first["email"].toString(),"$latitude,$longitude","$personLatitude,$personLongitude",BuildConfig.DISTANCE_MATRIX_API_KEY, onSuccess = {
+//                    pdistance, _,personemail ->
+//                Log.d("gtr",pdistance)
+//                peopleNearFeed = peopleNearFeed.map{
+//                    if (it.personData.first["email"].toString() == personemail) {
+//                        it.copy(distance = pdistance)
+//                    } else {
+//                        it
+//                    }
+//                }.sortedBy { person ->
+//                    val distanceString = person.distance.trim()
+//                    when {
+//                        distanceString.endsWith("km") -> {
+//                            distanceString.replace(" km", "").toDoubleOrNull()?.times(1000)
+//                        }
+//                        distanceString.endsWith("m") -> {
+//                            distanceString.replace(" m", "").toDoubleOrNull()
+//                        }
+//                        else -> {
+//                            Double.MAX_VALUE
+//                        }
+//                    } ?: Double.MAX_VALUE
+//                }
+//                Log.d("gtr", "Updated list: $peopleNearFeed")
+//            }
+//            ){
+//                println(it)
+//            }
         }
 
     }
@@ -283,9 +289,31 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
                 modifier = Modifier.fillMaxWidth()
             ){
 
-                AsyncImage(
+                SubcomposeAsyncImage(
                     model = groupNearData.GroupData.first["profileImageUrl"],
-                    error = painterResource(id = R.drawable.user),
+                    loading = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .shimmer(true) {
+                                    shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                    gradientType = GradientType.LINEAR
+                                    shape = RoundedCornerShape(15.dp)
+                                    gradientAnimationSpec = tween(1000)
+                                    alphaAnimationSpec = tween(1300)
+                                },
+                        )
+
+                    },
+                    error = {
+                        Image(
+                            painter = painterResource(id = R.drawable.user),
+                            contentDescription = "avatar",
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(15.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+                    },
                     contentDescription = "avatar",
                     modifier = Modifier
                         .padding(10.dp)
@@ -342,8 +370,22 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
                 .padding(horizontal = 10.dp))
             Spacer(modifier = Modifier.height(10.dp))
 
-            AsyncImage(
+            SubcomposeAsyncImage(
                 model = groupNearData.GroupData.first["banner"],
+                loading = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .shimmer(true) {
+                                shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                gradientType = GradientType.LINEAR
+                                shape = RoundedCornerShape(15.dp)
+                                gradientAnimationSpec = tween(1000)
+                                alphaAnimationSpec = tween(1300)
+                            },
+                    )
+
+                },
                 contentDescription = "avatar",
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
@@ -394,11 +436,32 @@ fun PeopleExploreNearFeedCard(peopleNearData: PeopleNearData,navController: NavC
         modifier = Modifier
             .fillMaxWidth()
     ){
-        AsyncImage(
+        SubcomposeAsyncImage(
             model = peopleNearData.personData.first["profileImageUrl"],
             contentDescription = "avatar",
-            placeholder = rememberAsyncImagePainter(R.drawable.user),
-            error = rememberAsyncImagePainter(R.drawable.user),
+            loading = {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .shimmer(true) {
+                            shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                            gradientType = GradientType.LINEAR
+                            shape = RoundedCornerShape(15.dp)
+                            gradientAnimationSpec = tween(1000)
+                            alphaAnimationSpec = tween(1300)
+                        },
+                )
+
+            },
+            error = {
+                Image(
+                    painter = painterResource(id = R.drawable.user),
+                    contentDescription = "avatar",
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(15.dp)),
+                    contentScale = ContentScale.Crop
+                )
+            },
             modifier = Modifier
                 .padding(10.dp)
                 .size(58.dp)
@@ -458,11 +521,24 @@ fun PeopleExploreRelatedFeedCard(peopleData:List<Pair<Map<String, Any>, Int>>,in
             modifier = Modifier
                 .fillMaxWidth()
         ){
-            AsyncImage(
+            SubcomposeAsyncImage(
                 model = peopleData[index].first["profileImageUrl"],
                 contentDescription = "avatar",
-                placeholder = rememberAsyncImagePainter(R.drawable.user),
-                error = rememberAsyncImagePainter(R.drawable.user),
+                loading = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .size(35.dp)
+                            .shimmer(true) {
+                                shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                gradientType = GradientType.LINEAR
+                                shape = RoundedCornerShape(15.dp)
+                                gradientAnimationSpec = tween(1000)
+                                alphaAnimationSpec = tween(1300)
+                            },
+                    )
+
+                },
                 modifier = Modifier
                     .padding(10.dp)
                     .size(58.dp)
@@ -556,9 +632,31 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
               modifier = Modifier.fillMaxWidth()
             ){
 
-                AsyncImage(
+                SubcomposeAsyncImage(
                     model = groupData.first["profileImageUrl"],
-                    error = painterResource(id = R.drawable.user),
+                    loading = {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .shimmer(true) {
+                                    shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                    gradientType = GradientType.LINEAR
+                                    shape = RoundedCornerShape(15.dp)
+                                    gradientAnimationSpec = tween(1000)
+                                    alphaAnimationSpec = tween(1300)
+                                },
+                        )
+
+                    },
+                    error = {
+                        Image(
+                            painter = painterResource(id = R.drawable.user),
+                            contentDescription = "avatar",
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(15.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+                    },
                     contentDescription = "avatar",
                     modifier = Modifier
                         .padding(10.dp)
@@ -614,9 +712,23 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
                 .padding(horizontal = 10.dp))
             Spacer(modifier = Modifier.height(10.dp))
 
-            AsyncImage(
+            SubcomposeAsyncImage(
                 model = groupData.first["banner"],
                 contentDescription = "avatar",
+                loading = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .shimmer(true) {
+                                shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                gradientType = GradientType.LINEAR
+                                shape = RoundedCornerShape(15.dp)
+                                gradientAnimationSpec = tween(1000)
+                                alphaAnimationSpec = tween(1300)
+                            },
+                    )
+
+                },
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
                     .fillMaxWidth()

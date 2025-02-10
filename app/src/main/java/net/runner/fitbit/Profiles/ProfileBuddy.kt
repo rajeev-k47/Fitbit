@@ -3,6 +3,7 @@ package net.runner.fitbit.Profiles
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -55,8 +56,12 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import coil.ImageLoader
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.request.CachePolicy
 import com.google.firebase.auth.FirebaseAuth
+import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
+import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
+import com.toolsforfools.shimmery.shimmerIndividual.shimmer
 import net.runner.fitbit.Database.getData
 import net.runner.fitbit.Firebase.fcmTokenSave
 import net.runner.fitbit.R
@@ -182,7 +187,7 @@ fun ProfileBuddy(navController: NavController,context:Context,editEnabled:Boolea
                         containerColor = lightText.copy(alpha = 0.1f)
                     )
                 ) {
-                    AsyncImage(
+                    SubcomposeAsyncImage(
                         model = userData["profileImageUrl"].toString().toUri() ,
 //                            ?: auth.currentUser?.photoUrl,
                         contentDescription = "",
@@ -191,6 +196,21 @@ fun ProfileBuddy(navController: NavController,context:Context,editEnabled:Boolea
                             .memoryCachePolicy(CachePolicy.ENABLED)
                             .diskCachePolicy(CachePolicy.ENABLED)
                             .build(),
+                        loading = {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .size(35.dp)
+                                    .shimmer(true) {
+                                        shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                        gradientType = GradientType.LINEAR
+                                        shape = RoundedCornerShape(20.dp)
+                                        gradientAnimationSpec = tween(1000)
+                                        alphaAnimationSpec = tween(1300)
+                                    },
+                            )
+
+                        },
                         modifier = Modifier
                             .width(100.dp)
                             .fillMaxHeight()
