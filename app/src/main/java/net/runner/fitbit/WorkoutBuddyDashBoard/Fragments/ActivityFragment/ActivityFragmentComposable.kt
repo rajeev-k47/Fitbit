@@ -42,7 +42,7 @@ import androidx.navigation.NavController
 import com.google.firebase.firestore.FirebaseFirestore
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.lightText
-
+import java.text.SimpleDateFormat
 
 
 @Composable
@@ -57,8 +57,8 @@ fun ActivityFragmentComposable(navController: NavController) {
 
     LaunchedEffect(Unit) {
         fetchNotifications { it ->
-            notifications = it.sortedBy{
-                it.date
+            notifications = it.sortedByDescending{
+                SimpleDateFormat("dd MMM, hh:mm aa").parse(it.date)?.time
             }
             if(notifications.isEmpty()){
                 notificationstate=true
@@ -118,10 +118,9 @@ fun NotificationCard(notification: Notification,navController: NavController) {
             val db = FirebaseFirestore.getInstance()
             db.collection("users").document(notification.sender).get()
                 .addOnSuccessListener { document ->
-                    if(notification.redirection != ""){
+                    if(notification.redirection != "" && notification.redirection==notification.sender){
                         name= (document["groupData"] as Map<*, *>?)?.get("organizationName") as String
                     }else{
-
                         name = document.getString("username") ?: ""
                     }
                 }
