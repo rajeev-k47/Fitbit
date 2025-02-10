@@ -1,11 +1,13 @@
 package net.runner.fitbit.OrganizerDashboard.TopAppBar
 
 import android.util.Log
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -32,6 +34,9 @@ import coil.compose.SubcomposeAsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.google.firebase.auth.FirebaseAuth
+import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
+import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
+import com.toolsforfools.shimmery.shimmerIndividual.shimmer
 import net.runner.fitbit.R
 import net.runner.fitbit.auth.database.getProfileImageUrl
 
@@ -73,7 +78,27 @@ fun OrgTopAppBarComposable(navController: NavController) {
 //                placeholder = rememberAsyncImagePainter(R.drawable.user),
 //                error = rememberAsyncImagePainter(R.drawable.user),
                 loading = {
-                    CircularProgressIndicator()
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .shimmer(true) {
+                                shimmerType = ShimmerType.WITH_ALPHA_AND_GRADIANT
+                                gradientType = GradientType.LINEAR
+                                shape = RoundedCornerShape(15.dp)
+                                gradientAnimationSpec = tween(1000)
+                                alphaAnimationSpec = tween(1300)
+                            },
+                    )
+
+                },
+                error = {
+                    Image(
+                        painter = painterResource(id = R.drawable.user),
+                        contentDescription = "avatar",
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(15.dp)),
+                        contentScale = ContentScale.Crop
+                    )
                 },
                 modifier = Modifier
                     .padding(10.dp)

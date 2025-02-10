@@ -113,10 +113,10 @@ fun ProfileBuddy(navController: NavController,context:Context,editEnabled:Boolea
                         Button(
                             onClick = {
                                 fcmTokenSave(false)
-                                auth.signOut()
                                 navController.navigate("signUpScreen"){
                                     popUpTo("profileBuddy"){ inclusive = true }
                                 }
+                                auth.signOut()
 
                             },
                             contentPadding = PaddingValues(0.dp),

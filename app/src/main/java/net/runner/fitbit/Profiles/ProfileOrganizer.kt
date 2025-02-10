@@ -104,10 +104,10 @@ fun ProfileOrganizer(navController: NavController,orgId:String) {
                         Button(
                             onClick = {
                                 fcmTokenSave(false)
-                                auth.signOut()
                                 navController.navigate("signUpScreen"){
                                     popUpTo("ProfileOrganizer"){ inclusive = true }
                                 }
+                                auth.signOut()
 
                             },
                             contentPadding = PaddingValues(0.dp),
