@@ -48,8 +48,7 @@ import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
 
 @Composable
-fun OrgBottomNavigationBarComposable(modifier: Modifier,onselected:(String)->Unit) {
-    var selectedItem by rememberSaveable { mutableStateOf("Home") }
+fun OrgBottomNavigationBarComposable(modifier: Modifier,selectedItem:String,onselected:(String)->Unit) {
     var isPrivate by rememberSaveable {
         mutableStateOf(false)
     }
@@ -138,7 +137,8 @@ fun OrgBottomNavigationBarComposable(modifier: Modifier,onselected:(String)->Uni
                     Box(
                         modifier = Modifier.size(55.dp).clickable(
                             onClick = {
-                                selectedItem = item.label
+//                                selectedItem = item.
+                                onselected(item.label)
                                 item.onclick()
                             },
                             indication = null,

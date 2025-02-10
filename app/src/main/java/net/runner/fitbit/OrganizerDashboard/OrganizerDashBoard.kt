@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import net.runner.fitbit.OrganizerDashboard.BottomNavigationBar.OrgBottomNavigationBarComposable
 import net.runner.fitbit.OrganizerDashboard.OrgFragments.MembersFragment.MembersFragmentComposable
+import net.runner.fitbit.OrganizerDashboard.OrgFragments.OrgActivityFragment.OrgActivityComposable
 import net.runner.fitbit.OrganizerDashboard.OrgFragments.OrgHomeFragment.OrgHomeFragment
 import net.runner.fitbit.OrganizerDashboard.OrgFragments.RequestsFragment.RequestsFragmentComposable
 import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.CreateFragment.createContent
@@ -39,7 +40,9 @@ fun OrganizerDashBoard(navController: NavController){
                 MembersFragmentComposable(navController)
             }
             "Activity" -> {
-//                ActivityFragmentComposable()
+                OrgActivityComposable(navController){
+                    currentFragment = "Requests"
+                }
             }
             "Requests" -> {
                 RequestsFragmentComposable(navController)
@@ -53,7 +56,7 @@ fun OrganizerDashBoard(navController: NavController){
         }
 
 
-        OrgBottomNavigationBarComposable(Modifier.align(Alignment.BottomCenter)){
+        OrgBottomNavigationBarComposable(Modifier.align(Alignment.BottomCenter), selectedItem = currentFragment) {
             if(it!="Create"){
                 currentFragment = it
             }else{
