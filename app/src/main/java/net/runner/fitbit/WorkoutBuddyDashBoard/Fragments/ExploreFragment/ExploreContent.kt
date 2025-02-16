@@ -56,6 +56,7 @@ import kotlinx.android.parcel.Parcelize
 import net.runner.fitbit.BuildConfig
 import net.runner.fitbit.Database.getData
 import net.runner.fitbit.GoogleAPis.fetchDistanceMatrix
+import net.runner.fitbit.ImageCaching
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightText
@@ -290,7 +291,9 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
             ){
 
                 SubcomposeAsyncImage(
-                    model = groupNearData.GroupData.first["profileImageUrl"],
+                    model = ImageCaching().CacheBuilder(LocalContext.current,
+                        groupNearData.GroupData.first["profileImageUrl"].toString()
+                    ).build(),
                     loading = {
                         Box(
                             modifier = Modifier
@@ -371,7 +374,7 @@ fun GroupExploreNearFeedCard(groupNearData: GroupNearData,navController: NavCont
             Spacer(modifier = Modifier.height(10.dp))
 
             SubcomposeAsyncImage(
-                model = groupNearData.GroupData.first["banner"],
+                model = ImageCaching().CacheBuilder(LocalContext.current,groupNearData.GroupData.first["banner"].toString()).build(),
                 loading = {
                     Box(
                         modifier = Modifier
@@ -437,7 +440,7 @@ fun PeopleExploreNearFeedCard(peopleNearData: PeopleNearData,navController: NavC
             .fillMaxWidth()
     ){
         SubcomposeAsyncImage(
-            model = peopleNearData.personData.first["profileImageUrl"],
+            model = ImageCaching().CacheBuilder(LocalContext.current,peopleNearData.personData.first["profileImageUrl"].toString()).build(),
             contentDescription = "avatar",
             loading = {
                 Box(
@@ -522,7 +525,7 @@ fun PeopleExploreRelatedFeedCard(peopleData:List<Pair<Map<String, Any>, Int>>,in
                 .fillMaxWidth()
         ){
             SubcomposeAsyncImage(
-                model = peopleData[index].first["profileImageUrl"],
+                model = ImageCaching().CacheBuilder(LocalContext.current, peopleData[index].first["profileImageUrl"].toString()).build(),
                 contentDescription = "avatar",
                 loading = {
                     Box(
@@ -633,7 +636,7 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
             ){
 
                 SubcomposeAsyncImage(
-                    model = groupData.first["profileImageUrl"],
+                    model = ImageCaching().CacheBuilder(LocalContext.current,groupData.first["profileImageUrl"].toString()).build(),
                     loading = {
                         Box(
                             modifier = Modifier
@@ -713,7 +716,7 @@ fun GroupExploreRelatedFeedCard(groupData :Pair<Map<String, Any>, Int>,navContro
             Spacer(modifier = Modifier.height(10.dp))
 
             SubcomposeAsyncImage(
-                model = groupData.first["banner"],
+                model = ImageCaching().CacheBuilder(LocalContext.current,groupData.first["banner"].toString()).build(),
                 contentDescription = "avatar",
                 loading = {
                     Box(
