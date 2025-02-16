@@ -54,6 +54,7 @@ import coil.request.CachePolicy
 import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
 import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
 import com.toolsforfools.shimmery.shimmerIndividual.shimmer
+import net.runner.fitbit.ImageCaching
 
 @Composable
 fun TopAppBarComposable(navController: NavController) {
@@ -100,7 +101,9 @@ fun TopAppBarComposable(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.width(6.dp))
                 SubcomposeAsyncImage(
-                    model = if(imageUrl == null)auth.currentUser?.photoUrl else imageUrl,
+                    model = if(imageUrl == null)auth.currentUser?.photoUrl else
+                        ImageCaching().CacheBuilder(LocalContext.current, imageUrl.toString()).build()
+                    ,
                     contentDescription = "Profile Picture",
                     loading = {
                         Box(

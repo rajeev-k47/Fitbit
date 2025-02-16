@@ -47,6 +47,7 @@ import coil.compose.SubcomposeAsyncImage
 import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
 import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
 import com.toolsforfools.shimmery.shimmerIndividual.shimmer
+import net.runner.fitbit.ImageCaching
 import net.runner.fitbit.auth.database.DataBaseEntryOrganizer
 import net.runner.fitbit.auth.database.DatabaseEntryBuddy
 import net.runner.fitbit.auth.extendedComposables.workoutBuddy.DropdownMenuGoals
@@ -101,7 +102,7 @@ fun organizationWorkoutDetails(groupData: OrganizerGroupData,imageUri: Uri,navCo
         if(orgBanner != Uri.EMPTY){
 
             SubcomposeAsyncImage(
-                model = orgBanner,
+                model = ImageCaching().CacheBuilder(LocalContext.current, orgBanner.toString()).build(),
                 contentDescription = "banner",
                 loading = {
                     Box(

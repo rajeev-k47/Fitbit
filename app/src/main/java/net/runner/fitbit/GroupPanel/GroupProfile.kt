@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,6 +47,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
 import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
 import com.toolsforfools.shimmery.shimmerIndividual.shimmer
+import net.runner.fitbit.ImageCaching
 import net.runner.fitbit.R
 import net.runner.fitbit.WorkoutBuddyDashBoard.Fragments.GroupsFragment.GetGroupData
 import net.runner.fitbit.ui.theme.background
@@ -103,7 +105,7 @@ fun GroupProfile(navController: NavController,groupId:String) {
                     Spacer(modifier = Modifier.width(15.dp))
 
                     SubcomposeAsyncImage(
-                        model = groupData["profileImageUrl"],
+                        model = ImageCaching().CacheBuilder(LocalContext.current, groupData["profileImageUrl"].toString()).build(),
                         contentDescription = "avatar",
                         loading = {
                             Box(

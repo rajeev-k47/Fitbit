@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -58,6 +59,7 @@ import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
 import com.toolsforfools.shimmery.shimmerIndividual.shimmer
 import net.runner.fitbit.Database.getData
 import net.runner.fitbit.Firebase.fcmTokenSave
+import net.runner.fitbit.ImageCaching
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightBlueText
@@ -153,7 +155,7 @@ fun ProfileOrganizer(navController: NavController,orgId:String) {
                     )
                 ) {
                     SubcomposeAsyncImage(
-                        model = OrganizerData["profileImageUrl"].toString().toUri() ,
+                        model = ImageCaching().CacheBuilder(LocalContext.current, OrganizerData["profileImageUrl"].toString()).build() ,
 //                            ?: auth.currentUser?.photoUrl,
                         contentDescription = "",
                         contentScale = ContentScale.Crop,
@@ -286,7 +288,7 @@ fun ProfileOrganizer(navController: NavController,orgId:String) {
                         )
                         Spacer(modifier = Modifier.height(10.dp))
                         SubcomposeAsyncImage(
-                            model = OrganizerData["banner"],
+                            model = ImageCaching().CacheBuilder(LocalContext.current, OrganizerData["banner"].toString()).build(),
                             contentDescription = "avatar",
                             loading = {
                                 Box(

@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
+import net.runner.fitbit.ImageCaching
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
@@ -131,7 +133,7 @@ fun RequestsFragmentComposable(navController: NavController) {
                         }
                 ){
                     AsyncImage(
-                        model = filteredPendingData[index]["profileImageUrl"],
+                        model = ImageCaching().CacheBuilder(LocalContext.current, filteredPendingData[index]["profileImageUrl"].toString()).build(),
                         contentDescription = "avatar",
                         placeholder = rememberAsyncImagePainter(R.drawable.user),
                         error = rememberAsyncImagePainter(R.drawable.user),

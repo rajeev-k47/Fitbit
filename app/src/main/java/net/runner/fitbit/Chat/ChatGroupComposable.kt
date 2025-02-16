@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -47,6 +48,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
 import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
 import com.toolsforfools.shimmery.shimmerIndividual.shimmer
+import net.runner.fitbit.ImageCaching
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
@@ -91,8 +93,8 @@ fun ChatGroupComposable(groupChats: List<Map<String, Any>>, groupChatPeopleData:
                         if(index==0){
 
                             SubcomposeAsyncImage(
-                                model = groupChatPeopleData.find { it["userId"] == groupChats[index]["userId"] }
-                                    ?.get("profileImageUrl"),
+                                model = ImageCaching().CacheBuilder(LocalContext.current, groupChatPeopleData.find { it["userId"] == groupChats[index]["userId"] }
+                                    ?.get("profileImageUrl").toString()).build(),
                                 contentDescription = "Profile Picture",
                                 loading = {
                                     Box(
@@ -125,8 +127,8 @@ fun ChatGroupComposable(groupChats: List<Map<String, Any>>, groupChatPeopleData:
                             )
                         }else if( groupChats[index-1]["userId"] != FirebaseAuth.getInstance().currentUser?.uid){
                             SubcomposeAsyncImage(
-                                model = groupChatPeopleData.find { it["userId"] == groupChats[index]["userId"] }
-                                    ?.get("profileImageUrl"),
+                                model = ImageCaching().CacheBuilder(LocalContext.current,  groupChatPeopleData.find { it["userId"] == groupChats[index]["userId"] }
+                                    ?.get("profileImageUrl").toString()).build(),
                                 loading = {
                                     Box(
                                         modifier = Modifier
@@ -182,7 +184,7 @@ fun ChatGroupComposable(groupChats: List<Map<String, Any>>, groupChatPeopleData:
                         if(index==0){
 
                             SubcomposeAsyncImage(
-                                model = groupChatPeopleData.find { it["userId"] == groupChats[index]["userId"] }?.get("profileImageUrl"),
+                                model = ImageCaching().CacheBuilder(LocalContext.current,groupChatPeopleData.find { it["userId"] == groupChats[index]["userId"] }?.get("profileImageUrl").toString()).build(),
                                 loading = {
                                     Box(
                                         modifier = Modifier
@@ -215,7 +217,7 @@ fun ChatGroupComposable(groupChats: List<Map<String, Any>>, groupChatPeopleData:
                             )
                         }else if(groupChats[index]["userId"] != groupChats[index-1]["userId"]){
                             SubcomposeAsyncImage(
-                                model = groupChatPeopleData.find { it["userId"] == groupChats[index]["userId"] }?.get("profileImageUrl"),
+                                model = ImageCaching().CacheBuilder(LocalContext.current, groupChatPeopleData.find { it["userId"] == groupChats[index]["userId"] }?.get("profileImageUrl").toString()).build(),
                                 loading = {
                                     Box(
                                         modifier = Modifier

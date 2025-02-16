@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -41,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.google.firebase.auth.FirebaseAuth
+import net.runner.fitbit.ImageCaching
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.lightBlueText
 import net.runner.fitbit.ui.theme.lightText
@@ -89,8 +91,8 @@ fun ChatUserComposable(
                         if(index==0){
 
                             AsyncImage(
-                                model = participantsData.find { it["userId"] == UserChatData[index]["userId"] }
-                                    ?.get("profileImageUrl"),
+                                model = ImageCaching().CacheBuilder(LocalContext.current, participantsData.find { it["userId"] == UserChatData[index]["userId"] }
+                                    ?.get("profileImageUrl").toString()).build(),
                                 contentDescription = "Profile Picture",
                                 modifier = Modifier
                                     .padding(10.dp)
@@ -100,8 +102,8 @@ fun ChatUserComposable(
                             )
                         }else if( UserChatData[index-1]["userId"] != FirebaseAuth.getInstance().currentUser?.uid){
                             AsyncImage(
-                                model = participantsData.find { it["userId"] == UserChatData[index]["userId"] }
-                                    ?.get("profileImageUrl"),
+                                model = ImageCaching().CacheBuilder(LocalContext.current,participantsData.find { it["userId"] == UserChatData[index]["userId"] }
+                                    ?.get("profileImageUrl").toString()).build(),
                                 contentDescription = "Profile Picture",
                                 modifier = Modifier
                                     .padding(10.dp)
@@ -134,7 +136,7 @@ fun ChatUserComposable(
                         if(index==0){
 
                             AsyncImage(
-                                model = participantsData.find { it["userId"] == UserChatData[index]["userId"] }?.get("profileImageUrl"),
+                                model = ImageCaching().CacheBuilder(LocalContext.current, participantsData.find { it["userId"] == UserChatData[index]["userId"] }?.get("profileImageUrl").toString()).build(),
                                 contentDescription = "Profile Picture",
                                 modifier = Modifier
                                     .padding(10.dp)
@@ -144,7 +146,7 @@ fun ChatUserComposable(
                             )
                         }else if(UserChatData[index]["userId"] != UserChatData[index-1]["userId"]){
                             AsyncImage(
-                                model = participantsData.find { it["userId"] == UserChatData[index]["userId"] }?.get("profileImageUrl"),
+                                model = ImageCaching().CacheBuilder(LocalContext.current,participantsData.find { it["userId"] == UserChatData[index]["userId"] }?.get("profileImageUrl").toString()).build(),
                                 contentDescription = "Profile Picture",
                                 modifier = Modifier
                                     .padding(10.dp)

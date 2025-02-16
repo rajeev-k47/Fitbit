@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -43,6 +44,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
 import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
 import com.toolsforfools.shimmery.shimmerIndividual.shimmer
+import net.runner.fitbit.ImageCaching
 import net.runner.fitbit.OrganizerDashboard.OrgFragments.RequestsFragment.ApproveRequest
 import net.runner.fitbit.OrganizerDashboard.OrgFragments.RequestsFragment.getPendingRequests
 import net.runner.fitbit.OrganizerDashboard.OrgFragments.RequestsFragment.getPendingUserData
@@ -135,7 +137,7 @@ fun MembersFragmentComposable(navController: NavController) {
                         .fillMaxWidth()
                 ){
                     SubcomposeAsyncImage(
-                        model = filteredUsersData[index]["profileImageUrl"],
+                        model = ImageCaching().CacheBuilder(LocalContext.current, filteredUsersData[index]["profileImageUrl"].toString()).build(),
                         contentDescription = "avatar",
                         loading = {
                             Box(

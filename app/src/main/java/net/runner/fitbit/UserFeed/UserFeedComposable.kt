@@ -45,6 +45,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -58,6 +59,7 @@ import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
 import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerConfiguration
 import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
 import com.toolsforfools.shimmery.shimmerIndividual.shimmer
+import net.runner.fitbit.ImageCaching
 import net.runner.fitbit.R
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.ui.theme.lightText
@@ -101,7 +103,7 @@ fun UserFeedComposable(context: Context, Feed: Map<String, Any>, FeedAuthors: Pa
             ){
 
                 SubcomposeAsyncImage(
-                    model = FeedAuthors.first["profileImageUrl"],
+                    model = ImageCaching().CacheBuilder(LocalContext.current, FeedAuthors.first["profileImageUrl"].toString()).build(),
                     contentDescription = "avatar",
                     loading = {
                         Box(
@@ -215,7 +217,7 @@ fun UserFeedComposable(context: Context, Feed: Map<String, Any>, FeedAuthors: Pa
             Spacer(modifier = Modifier.height(10.dp))
 
             SubcomposeAsyncImage(
-                model = "${Feed["bannerImageUri"]}",
+                model = ImageCaching().CacheBuilder(LocalContext.current, Feed["bannerImageUri"].toString()).build(),
                 contentDescription = "banner",
                 loading = {
                     Box(

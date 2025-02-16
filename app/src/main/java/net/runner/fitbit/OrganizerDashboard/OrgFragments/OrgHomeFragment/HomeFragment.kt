@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -56,6 +57,7 @@ import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
 import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
 import com.toolsforfools.shimmery.shimmerIndividual.shimmer
 import net.runner.fitbit.GroupPanel.GroupContent
+import net.runner.fitbit.ImageCaching
 import net.runner.fitbit.OrganizerDashboard.TopAppBar.OrgTopAppBarComposable
 import net.runner.fitbit.Profiles.getFormatedTime
 import net.runner.fitbit.R
@@ -107,7 +109,7 @@ fun OrgHomeFragment(navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
                     SubcomposeAsyncImage(
-                        model = groupData["profileImageUrl"],
+                        model = ImageCaching().CacheBuilder(LocalContext.current, groupData["profileImageUrl"].toString()).build(),
                         contentDescription = "Profile Picture",
                         loading = {
                             Box(

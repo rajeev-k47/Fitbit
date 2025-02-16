@@ -50,6 +50,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -59,6 +60,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import net.runner.fitbit.Database.getData
+import net.runner.fitbit.ImageCaching
 import net.runner.fitbit.R
 import net.runner.fitbit.auth.extendedComposables.organizer.OrganizerGroupData
 import net.runner.fitbit.auth.extendedComposables.organizer.OrganizerGroupDataSaver
@@ -289,7 +291,7 @@ fun EditOrgProfileScreen(navController: NavController) {
                 if(bannerImageUri != Uri.EMPTY){
 
                     AsyncImage(
-                        model = bannerImageUri,
+                        model = ImageCaching().CacheBuilder(LocalContext.current, bannerImageUri.toString()).build(),
                         contentDescription = "banner",
                         modifier = Modifier
                             .fillMaxWidth()

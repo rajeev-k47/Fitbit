@@ -48,6 +48,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -64,6 +65,7 @@ import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
 import com.toolsforfools.shimmery.shimmerIndividual.shimmer
 import net.runner.fitbit.Database.getData
 import net.runner.fitbit.Firebase.fcmTokenSave
+import net.runner.fitbit.ImageCaching
 import net.runner.fitbit.R
 import net.runner.fitbit.supportedconnections
 import net.runner.fitbit.ui.theme.background
@@ -188,7 +190,7 @@ fun ProfileBuddy(navController: NavController,context:Context,editEnabled:Boolea
                     )
                 ) {
                     SubcomposeAsyncImage(
-                        model = userData["profileImageUrl"].toString().toUri() ,
+                        model = ImageCaching().CacheBuilder(LocalContext.current,userData["profileImageUrl"].toString()).build() ,
 //                            ?: auth.currentUser?.photoUrl,
                         contentDescription = "",
                         contentScale = ContentScale.Crop,
