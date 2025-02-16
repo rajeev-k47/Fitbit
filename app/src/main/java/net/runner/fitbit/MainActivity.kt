@@ -2,6 +2,7 @@ package net.runner.fitbit
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -30,7 +31,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import coil.Coil
 import coil.ImageLoader
+import coil.ImageLoaderFactory
+import coil.disk.DiskCache
+import coil.key.Keyer
+import coil.memory.MemoryCache
 import coil.request.CachePolicy
+import coil.request.Options
+import coil.util.DebugLogger
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.Firebase
@@ -62,10 +69,12 @@ import net.runner.fitbit.splashScreen.splashScreen
 import net.runner.fitbit.ui.theme.FitbitTheme
 import net.runner.fitbit.ui.theme.background
 import net.runner.fitbit.userDetails.UserDetailComposable
+import okhttp3.Cache
+import okhttp3.OkHttpClient
 
 val ONESIGNAL_APP_ID = BuildConfig.ONESIGNAL_APP_ID
 
-class MainActivity : ComponentActivity() {
+class MainActivity : ComponentActivity(),ImageLoaderFactory {
     private lateinit var auth: FirebaseAuth
     private var email =""
 
@@ -228,6 +237,28 @@ class MainActivity : ComponentActivity() {
                 Log.e("SignIn","Sign-in failed",e)
             }
         }
+    }
+
+    override fun newImageLoader(): ImageLoader {
+        val okHttpClient = OkHttpClient.Builder()
+            .cache(Cache(filesDir.resolve("image_cache"), 100L * 1024 * 1024))
+            .build()
+
+        return ImageLoader.Builder(this)
+            .okHttpClient(okHttpClient)
+            .memoryCache {
+                MemoryCache.Builder(this)
+                    .maxSizePercent(0.25)
+                    .build()
+            }
+            .components {
+                add(object : Keyer<Uri> {
+                    override fun key(data: Uri, options: Options): String {
+                        return data.toString().substringBefore("?")
+                    }
+                })
+            }
+            .build()
     }
 
 }
