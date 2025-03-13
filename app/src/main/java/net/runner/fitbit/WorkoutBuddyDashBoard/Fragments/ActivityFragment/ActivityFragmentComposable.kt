@@ -143,9 +143,10 @@ fun NotificationCard(notification: Notification,navController: NavController) {
             Icon(painter = painterResource(id = R.drawable.ringing), contentDescription = "", modifier = Modifier
                 .weight(0.2f)
                 .height(25.dp), tint = lightText)
+            val bweight = if(notification.redirection != "") 0.7f else 0.8f
             Column(
                 modifier = Modifier
-                    .weight(0.7f),
+                    .weight(bweight),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center
             ) {
