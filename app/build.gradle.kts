@@ -2,16 +2,15 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.compose)
+    kotlin("plugin.parcelize")
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
-    id("kotlin-parcelize")
-
 }
 
 android {
     namespace = "net.runner.fitbit"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "net.runner.fitbit"
@@ -48,18 +47,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true
         buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
     }
     packaging {
         resources {
@@ -78,12 +71,13 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation("androidx.compose.material:material-icons-core")
     implementation(libs.firebase.crashlytics)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.auth)
     implementation(libs.material)
     implementation(libs.firebase.firestore)
-    implementation(libs.firebase.storage.ktx)
+    implementation(libs.firebase.storage)
     implementation(libs.play.services.location)
     implementation(libs.generativeai)
     implementation(libs.firebase.messaging)
@@ -96,20 +90,15 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
 
-    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation(platform("com.google.firebase:firebase-bom:34.14.1"))
 
-    // Add the dependency for the Firebase Authentication library
-    // When using the BoM, you don't specify versions in Firebase library dependencies
-    implementation("com.google.firebase:firebase-auth")
-
-    // Also add the dependency for the Google Play services library and specify its version
-    implementation("com.google.android.gms:play-services-auth:21.3.0")
+    implementation("com.google.android.gms:play-services-auth:21.6.0")
     implementation("io.coil-kt:coil-compose:2.7.0")
-    implementation ("io.github.shashank02051997:FancyToast:2.0.2")
-    implementation (libs.play.services.maps)
-    implementation ("com.onesignal:OneSignal:[5.0.0, 5.99.99]")
-        implementation("io.socket:socket.io-client:2.0.1")
-        implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("io.github.shashank02051997:FancyToast:2.0.2")
+    implementation(libs.play.services.maps)
+    implementation("com.onesignal:OneSignal:[5.6.1, 5.99.99]")
+    implementation("io.socket:socket.io-client:2.1.2")
+    implementation("com.squareup.okhttp3:okhttp:5.4.0")
     implementation("io.github.hussein-al-zuhile:Shimmery:1.2.1")
 
 }
