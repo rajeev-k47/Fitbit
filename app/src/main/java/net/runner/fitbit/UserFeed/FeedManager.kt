@@ -3,7 +3,7 @@ package net.runner.fitbit.UserFeed
 import android.os.Parcelable
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 
 //@Parcelize

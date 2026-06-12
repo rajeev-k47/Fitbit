@@ -210,7 +210,7 @@ fun ProfileOrganizer(navController: NavController,orgId:String) {
                     {
 
                         Text(
-                            text = "${(OrganizerData["groupData"] as Map<*, *>?)?.get("organizerName").toString().toUpperCase()}",
+                            text = "${(OrganizerData["groupData"] as Map<*, *>?)?.get("organizerName").toString().uppercase()}",
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White

@@ -52,7 +52,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.toolsforfools.shimmery.shimmerConfiguration.GradientType
 import com.toolsforfools.shimmery.shimmerConfiguration.ShimmerType
 import com.toolsforfools.shimmery.shimmerIndividual.shimmer
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import net.runner.fitbit.BuildConfig
 import net.runner.fitbit.Database.getData
 import net.runner.fitbit.GoogleAPis.fetchDistanceMatrix
